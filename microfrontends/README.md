@@ -173,5 +173,3 @@ Isso garante que os módulos remotos estejam disponíveis quando o container ten
 - Certifique-se de que não há proxy bloqueando as requisições
 
 ---
-
-**Desenvolvido com ❤️ usando Module Federation**
