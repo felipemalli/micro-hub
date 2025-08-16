@@ -2,7 +2,7 @@
   "name": "@felipemalli-libs/microhub-ui",
   "version": "1.0.1",
   "type": "module",
-  "description": "Biblioteca de componentes UI reutilizáveis para o projeto MicroHub.",
+  "description": "Reusable UI component library for the MicroHub project.",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
@@ -21,9 +21,9 @@
     "type-check": "tsc --noEmit",
     "prepublishOnly": "pnpm run test && pnpm run type-check && pnpm run build",
     "deploy": "pnpm publish --access public",
-    "release:patch": "pnpm run test && pnpm run build && pnpm version patch",
-    "release:minor": "pnpm run test && pnpm run build && pnpm version minor",
-    "release:major": "pnpm run test && pnpm run build && pnpm version major"
+    "release:patch": "pnpm run test && pnpm run build && pnpm version patch && pnpm run deploy",
+    "release:minor": "pnpm run test && pnpm run build && pnpm version minor && pnpm run deploy",
+    "release:major": "pnpm run test && pnpm run build && pnpm version major && pnpm run deploy"
   },
   "keywords": [
     "react",
@@ -45,6 +45,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-typescript": "^11.1.5",
     "@testing-library/jest-dom": "^6.1.4",

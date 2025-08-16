@@ -2,9 +2,11 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from '@rollup/plugin-typescript';
 import postcss from 'rollup-plugin-postcss';
-import { readFileSync } from 'fs';
+import json from '@rollup/plugin-json';
+import { createRequire } from 'module';
 
-const pkg = JSON.parse(readFileSync('./package.json', 'utf8'));
+const require = createRequire(import.meta.url);
+const pkg = require('./package.json');
 
 export default {
   input: 'src/index.ts',
@@ -25,13 +27,11 @@ export default {
     'react/jsx-runtime',
   ],
   plugins: [
-    resolve({
-      browser: true,
-    }),
+    json(),
+    resolve({ browser: true }),
     commonjs(),
     typescript({
-      tsconfig: './tsconfig.json',
-      exclude: ['**/*.test.ts', '**/*.test.tsx'],
+      exclude: ['**/*.test.*', '**/*.spec.*'],
     }),
     postcss({
       extract: true,

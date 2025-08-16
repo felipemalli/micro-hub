@@ -7,17 +7,11 @@ export interface ButtonProps
          ComponentState, 
          ClickableProps,
          Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {
-  /** Variante visual do botão */
   variant?: Variant;
-  /** Tamanho do botão */
   size?: Size;
-  /** Se o botão deve ocupar toda a largura disponível */
   fullWidth?: boolean;
-  /** Ícone a ser exibido antes do texto */
   startIcon?: React.ReactNode;
-  /** Ícone a ser exibido após o texto */
   endIcon?: React.ReactNode;
-  /** Tipo do botão HTML */
   type?: 'button' | 'submit' | 'reset';
 }
 
@@ -37,7 +31,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
   ...props
 }, ref) => {
   const baseClasses = [
-    // Base styles
     'microhub-component',
     'inline-flex items-center justify-center',
     'font-medium rounded-lg',
@@ -45,10 +38,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
     'border border-transparent',
     'select-none',
     
-    // Disabled state
     'disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none',
     
-    // Loading state
     loading && 'cursor-wait',
   ];
 
