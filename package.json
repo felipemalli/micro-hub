@@ -1,0 +1,20 @@
+{
+  "name": "microfrontends-module-federation",
+  "version": "1.0.0",
+  "description": "Projeto de microfrontends usando Module Federation com TypeScript e Tailwind CSS",
+  "scripts": {
+    "start": "node start-sequential.js",
+    "dev": "node start-sequential.js",
+    "start-parallel": "node start-dev.js",
+    "start-simple": "./start-simple.sh",
+    "stop": "./stop-all.sh",
+    "test-setup": "node test-setup.js",
+    "convert-typescript": "./convert-to-typescript.sh",
+    "install-all": "cd shell-app && npm install && cd ../auth-microfrontend && npm install && cd ../rick-morty-microfrontend && npm install && cd ..",
+    "clean": "rm -rf */node_modules */package-lock.json",
+    "build-all": "cd shell-app && npm run build && cd ../auth-microfrontend && npm run build && cd ../rick-morty-microfrontend && npm run build && cd .."
+  },
+  "keywords": ["microfrontends", "module-federation", "react", "webpack", "typescript", "tailwindcss"],
+  "author": "Seu Nome",
+  "license": "MIT"
+}
