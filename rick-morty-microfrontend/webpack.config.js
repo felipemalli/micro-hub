@@ -5,9 +5,12 @@ module.exports = {
   mode: 'development',
   devServer: {
     port: 3002,
+    allowedHosts: ['localhost', '127.0.0.1'],
     headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Headers': '*',
+      'Access-Control-Allow-Origin': 'http://localhost:3000 http://localhost:3001 http://localhost:3002 http://localhost:3003',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
+      'Access-Control-Allow-Credentials': 'true',
     },
   },
   resolve: {
@@ -52,6 +55,9 @@ module.exports = {
     new ModuleFederationPlugin({
       name: 'rickmorty',
       filename: 'remoteEntry.js',
+      remotes: {
+        sharedComponents: 'sharedComponents@http://localhost:3003/remoteEntry.js',
+      },
       exposes: {
         './RickMortyApp': './src/RickMortyApp',
       },

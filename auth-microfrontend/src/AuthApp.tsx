@@ -5,6 +5,9 @@ import Register from './components/Register';
 import Profile from './components/Profile';
 import { User, MockUser, AuthAppProps } from './types/auth';
 
+// @ts-ignore
+const Button = React.lazy(() => import('sharedComponents/Button'));
+
 // Mock dos usuários para simular um backend
 const mockUsers: MockUser[] = [
   { id: 1, email: 'admin@teste.com', password: '123456', name: 'Administrador' },
@@ -106,12 +109,20 @@ const AuthApp: React.FC<AuthAppProps> = ({ onAuthChange }) => {
             {user && (
               <div className="mt-2 flex items-center justify-between">
                 <span className="text-sm opacity-90">Olá, {user.name}!</span>
-                <button 
+                {/* <button 
                   onClick={handleLogout} 
                   className="text-sm bg-white/20 hover:bg-white/30 px-3 py-1 rounded-lg transition-colors"
                 >
                   Sair
-                </button>
+                </button> */}
+                <Button
+            onClick={handleLogout}
+            variant="success"
+            size="lg"
+            className="w-full"
+          >
+            Sair
+          </Button>
               </div>
             )}
           </div>

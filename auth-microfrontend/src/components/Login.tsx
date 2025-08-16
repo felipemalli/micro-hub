@@ -1,6 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LoginProps, FormData, FormErrors } from '../types/auth';
+
+// @ts-ignore
+const Button = React.lazy(() => import('sharedComponents/Button'));
+// @ts-ignore
+const Card = React.lazy(() => import('sharedComponents/Card'));
 
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const [formData, setFormData] = useState<FormData>({
@@ -65,72 +70,80 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="auth-form">
-      <h3 className="text-xl font-bold text-gray-800 mb-6 text-center">Entrar na sua conta</h3>
-      
-      {errors.general && (
-        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm text-center">
-          {errors.general}
-        </div>
-      )}
+    <Suspense fallback={<div className="flex justify-center p-4"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div></div>}>
+      <Card variant="elevated" padding="lg" className="max-w-md mx-auto">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <h3 className="text-xl font-bold text-gray-800 mb-6 text-center">Entrar na sua conta</h3>
+          
+          {errors.general && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm text-center">
+              {errors.general}
+            </div>
+          )}
 
-      <div className="form-group">
-        <label htmlFor="email" className="form-label">Email</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          className={`form-input ${errors.email ? 'error' : ''}`}
-          placeholder="seu@email.com"
-        />
-        {errors.email && <div className="error-message">{errors.email}</div>}
-      </div>
+          <div className="form-group">
+            <label htmlFor="email" className="form-label">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className={`form-input ${errors.email ? 'error' : ''}`}
+              placeholder="seu@email.com"
+            />
+            {errors.email && <div className="error-message">{errors.email}</div>}
+          </div>
 
-      <div className="form-group">
-        <label htmlFor="password" className="form-label">Senha</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          className={`form-input ${errors.password ? 'error' : ''}`}
-          placeholder="Sua senha"
-        />
-        {errors.password && <div className="error-message">{errors.password}</div>}
-      </div>
+          <div className="form-group">
+            <label htmlFor="password" className="form-label">Senha</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className={`form-input ${errors.password ? 'error' : ''}`}
+              placeholder="Sua senha"
+            />
+            {errors.password && <div className="error-message">{errors.password}</div>}
+          </div>
 
-      <button
-        type="submit"
-        className="btn-auth"
-        disabled={isLoading}
-      >
-        {isLoading ? 'Entrando...' : 'Entrar'}
-      </button>
-
-      <div className="text-center mt-4 pt-4 border-t border-gray-200">
-        <p className="text-gray-600">
-          Não tem uma conta?{' '}
-          <button 
-            type="button" 
-            onClick={() => navigate('/auth/register')}
-            className="btn-link"
+          <Button
+            type="submit"
+            variant="primary"
+            size="lg"
+            loading={isLoading}
+            disabled={isLoading}
+            className="w-full"
           >
-            Cadastre-se aqui
-          </button>
-        </p>
-      </div>
+            {isLoading ? 'Entrando...' : 'Entrar'}
+          </Button>
 
-      <div className="info-card mt-4">
-        <h4 className="font-semibold text-blue-800 mb-2">🔑 Contas de teste:</h4>
-        <div className="text-sm text-blue-700 space-y-1">
-          <div><strong>Admin:</strong> admin@teste.com / 123456</div>
-          <div><strong>User:</strong> user@teste.com / 123456</div>
-        </div>
-      </div>
-    </form>
+          <div className="text-center mt-4 pt-4 border-t border-gray-200">
+            <p className="text-gray-600">
+              Não tem uma conta?{' '}
+              <Button 
+                variant="secondary"
+                size="sm"
+                onClick={() => navigate('/auth/register')}
+                className="inline-block"
+              >
+                Cadastre-se aqui
+              </Button>
+            </p>
+          </div>
+
+          <div className="info-card mt-4">
+            <h4 className="font-semibold text-blue-800 mb-2">🔑 Contas de teste:</h4>
+            <div className="text-sm text-blue-700 space-y-1">
+              <div><strong>Admin:</strong> admin@teste.com / 123456</div>
+              <div><strong>User:</strong> user@teste.com / 123456</div>
+            </div>
+          </div>
+        </form>
+      </Card>
+    </Suspense>
   );
 };
 

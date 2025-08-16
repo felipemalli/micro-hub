@@ -1,6 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RegisterProps, FormData, FormErrors } from '../types/auth';
+
+// Lazy load dos componentes compartilhados
+// @ts-ignore
+const Button = React.lazy(() => import('sharedComponents/Button'));
+// @ts-ignore
+const Card = React.lazy(() => import('sharedComponents/Card'));
 
 interface RegisterFormData extends FormData {
   name: string;
@@ -84,92 +90,100 @@ const Register: React.FC<RegisterProps> = ({ onRegister }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="auth-form">
-      <h3 className="text-xl font-bold text-gray-800 mb-6 text-center">Criar nova conta</h3>
-      
-      {errors.general && (
-        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm text-center">
-          {errors.general}
-        </div>
-      )}
+    <Suspense fallback={<div className="flex justify-center p-4"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div></div>}>
+      <Card variant="elevated" padding="lg" className="max-w-md mx-auto">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <h3 className="text-xl font-bold text-gray-800 mb-6 text-center">Criar nova conta</h3>
+          
+          {errors.general && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm text-center">
+              {errors.general}
+            </div>
+          )}
 
-      <div className="form-group">
-        <label htmlFor="name" className="form-label">Nome completo</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          className={`form-input ${errors.name ? 'error' : ''}`}
-          placeholder="Seu nome completo"
-        />
-        {errors.name && <div className="error-message">{errors.name}</div>}
-      </div>
+          <div className="form-group">
+            <label htmlFor="name" className="form-label">Nome completo</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className={`form-input ${errors.name ? 'error' : ''}`}
+              placeholder="Seu nome completo"
+            />
+            {errors.name && <div className="error-message">{errors.name}</div>}
+          </div>
 
-      <div className="form-group">
-        <label htmlFor="email" className="form-label">Email</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          className={`form-input ${errors.email ? 'error' : ''}`}
-          placeholder="seu@email.com"
-        />
-        {errors.email && <div className="error-message">{errors.email}</div>}
-      </div>
+          <div className="form-group">
+            <label htmlFor="email" className="form-label">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className={`form-input ${errors.email ? 'error' : ''}`}
+              placeholder="seu@email.com"
+            />
+            {errors.email && <div className="error-message">{errors.email}</div>}
+          </div>
 
-      <div className="form-group">
-        <label htmlFor="password" className="form-label">Senha</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          className={`form-input ${errors.password ? 'error' : ''}`}
-          placeholder="Mínimo 6 caracteres"
-        />
-        {errors.password && <div className="error-message">{errors.password}</div>}
-      </div>
+          <div className="form-group">
+            <label htmlFor="password" className="form-label">Senha</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className={`form-input ${errors.password ? 'error' : ''}`}
+              placeholder="Mínimo 6 caracteres"
+            />
+            {errors.password && <div className="error-message">{errors.password}</div>}
+          </div>
 
-      <div className="form-group">
-        <label htmlFor="confirmPassword" className="form-label">Confirmar senha</label>
-        <input
-          type="password"
-          id="confirmPassword"
-          name="confirmPassword"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          className={`form-input ${errors.confirmPassword ? 'error' : ''}`}
-          placeholder="Digite a senha novamente"
-        />
-        {errors.confirmPassword && <div className="error-message">{errors.confirmPassword}</div>}
-      </div>
+          <div className="form-group">
+            <label htmlFor="confirmPassword" className="form-label">Confirmar senha</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              className={`form-input ${errors.confirmPassword ? 'error' : ''}`}
+              placeholder="Digite a senha novamente"
+            />
+            {errors.confirmPassword && <div className="error-message">{errors.confirmPassword}</div>}
+          </div>
 
-      <button
-        type="submit"
-        className="btn-auth"
-        disabled={isLoading}
-      >
-        {isLoading ? 'Criando conta...' : 'Criar conta'}
-      </button>
-
-      <div className="text-center mt-4 pt-4 border-t border-gray-200">
-        <p className="text-gray-600">
-          Já tem uma conta?{' '}
-          <button 
-            type="button" 
-            onClick={() => navigate('/auth/login')}
-            className="btn-link"
+          <Button
+            type="submit"
+            variant="success"
+            size="lg"
+            loading={isLoading}
+            disabled={isLoading}
+            className="w-full"
           >
-            Faça login aqui
-          </button>
-        </p>
-      </div>
-    </form>
+            {isLoading ? 'Criando conta...' : 'Criar conta'}
+          </Button>
+
+          <div className="text-center mt-4 pt-4 border-t border-gray-200">
+            <p className="text-gray-600">
+              Já tem uma conta?{' '}
+              <Button 
+                variant="secondary"
+                size="sm"
+                onClick={() => navigate('/auth/login')}
+                className="inline-block"
+              >
+                Faça login aqui
+              </Button>
+            </p>
+          </div>
+        </form>
+      </Card>
+    </Suspense>
   );
 };
 

@@ -6,9 +6,17 @@ module.exports = {
   devServer: {
     port: 3001,
     headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Headers': '*',
+      'Access-Control-Allow-Origin': 'http://localhost:3000',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+      'Access-Control-Allow-Credentials': 'true',
     },
+    allowedHosts: [
+      'localhost',
+      '.localhost',
+      '127.0.0.1',
+      '[::1]'
+    ],
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
@@ -52,6 +60,9 @@ module.exports = {
     new ModuleFederationPlugin({
       name: 'auth',
       filename: 'remoteEntry.js',
+      remotes: {
+        sharedComponents: 'sharedComponents@http://localhost:3003/remoteEntry.js',
+      },
       exposes: {
         './AuthApp': './src/AuthApp',
       },

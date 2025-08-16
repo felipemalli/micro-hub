@@ -18,9 +18,19 @@ echo "🔍 Verificando portas..."
 check_port 3000 || { echo "❌ Porta 3000 ocupada. Finalize o processo antes de continuar."; exit 1; }
 check_port 3001 || { echo "❌ Porta 3001 ocupada. Finalize o processo antes de continuar."; exit 1; }
 check_port 3002 || { echo "❌ Porta 3002 ocupada. Finalize o processo antes de continuar."; exit 1; }
+check_port 3003 || { echo "❌ Porta 3003 ocupada. Finalize o processo antes de continuar."; exit 1; }
 
 echo "✅ Todas as portas estão disponíveis!"
 echo ""
+
+# Iniciar Shared Components PRIMEIRO (porta 3003)
+echo "🧩 Iniciando Shared Components (porta 3003)..."
+cd shared-components
+gnome-terminal --tab --title="Shared-3003" --command="bash -c 'npm start; read'" &
+cd ..
+
+# Aguardar shared components iniciar
+sleep 3
 
 # Iniciar Rick and Morty Microfrontend (porta 3002)
 echo "🛸 Iniciando Rick and Morty Microfrontend (porta 3002)..."
@@ -50,6 +60,7 @@ echo ""
 echo "🎉 Todos os microfrontends foram iniciados!"
 echo ""
 echo "📋 Status dos serviços:"
+echo "   🧩 Shared Components: http://localhost:3003"
 echo "   🏠 Shell App:         http://localhost:3000"
 echo "   🔐 Auth Micro:        http://localhost:3001"  
 echo "   🛸 Rick&Morty Micro:  http://localhost:3002"

@@ -48,6 +48,7 @@ fi
 stop_by_port 3000 "Shell App"
 stop_by_port 3001 "Auth Microfrontend" 
 stop_by_port 3002 "Rick & Morty Microfrontend"
+stop_by_port 3003 "Shared Components"
 
 # Limpar processos webpack restantes
 echo ""
@@ -66,7 +67,7 @@ echo "🎉 Todos os microfrontends foram parados!"
 echo "🔍 Verificando portas..."
 
 # Verificar se as portas estão livres
-for port in 3000 3001 3002; do
+for port in 3000 3001 3002 3003; do
     if command -v lsof >/dev/null 2>&1; then
         if lsof -Pi :$port -sTCP:LISTEN -t >/dev/null 2>&1; then
             echo "⚠️  Porta $port ainda está em uso"
