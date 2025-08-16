@@ -1,6 +1,6 @@
 {
   "name": "@felipemalli-libs/microhub-ui",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "Biblioteca de componentes UI reutilizáveis para o projeto MicroHub.",
   "main": "dist/index.js",
@@ -31,7 +31,8 @@
     "ui",
     "microfrontends",
     "typescript",
-    "design-system"
+    "design-system",
+    "Felipe Vahia Malliagros"
   ],
   "author": "Felipe Vahia Malliagros",
   "license": "MIT",
