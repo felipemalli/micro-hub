@@ -17,7 +17,8 @@
     "declaration": true,
     "declarationMap": true,
     "outDir": "dist",
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "importHelpers": true
   },
   "include": [
     "src"

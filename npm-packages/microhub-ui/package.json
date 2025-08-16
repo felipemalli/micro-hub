@@ -1,8 +1,8 @@
 {
-  "name": "@microhub-ui/components",
+  "name": "@felipemalli-libs/microhub-ui",
   "version": "1.0.0",
   "type": "module",
-  "description": "Biblioteca de componentes UI reutilizáveis para microfrontends",
+  "description": "Biblioteca de componentes UI reutilizáveis para o projeto MicroHub.",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
@@ -20,6 +20,7 @@
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "type-check": "tsc --noEmit",
     "prepublishOnly": "pnpm run test && pnpm run type-check && pnpm run build",
+    "deploy": "pnpm publish --access public",
     "release:patch": "pnpm run test && pnpm run build && pnpm version patch",
     "release:minor": "pnpm run test && pnpm run build && pnpm version minor",
     "release:major": "pnpm run test && pnpm run build && pnpm version major"
@@ -35,8 +36,8 @@
   "author": "Felipe Vahia Malliagros",
   "license": "MIT",
   "peerDependencies": {
-    "react": ">=17.0.0",
-    "react-dom": ">=17.0.0"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "dependencies": {
     "clsx": "^2.0.0"
