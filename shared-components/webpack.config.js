@@ -4,8 +4,7 @@ const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPl
 module.exports = {
   mode: 'development',
   devServer: {
-    port: 3000,
-    historyApiFallback: true,
+    port: 3003,
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': '*',
@@ -51,11 +50,11 @@ module.exports = {
   },
   plugins: [
     new ModuleFederationPlugin({
-      name: 'shell',
-      remotes: {
-        auth: 'auth@http://localhost:3001/remoteEntry.js',
-        rickmorty: 'rickmorty@http://localhost:3002/remoteEntry.js',
-        sharedComponents: 'sharedComponents@http://localhost:3003/remoteEntry.js',
+      name: 'sharedComponents',
+      filename: 'remoteEntry.js',
+      exposes: {
+        './Button': './src/components/Button/index.ts',
+        './Card': './src/components/Card/index.ts',
       },
       shared: {
         react: { 
@@ -66,11 +65,6 @@ module.exports = {
         'react-dom': { 
           singleton: true,
           requiredVersion: '^18.2.0',
-          eager: false
-        },
-        'react-router-dom': { 
-          singleton: true,
-          requiredVersion: '^6.8.0',
           eager: false
         },
       },
