@@ -10,13 +10,13 @@ A reusable UI component library for the MicroHub project, built with React, Type
 - **Tailwind CSS**: Utility-first and customizable styling
 - **Tests**: Coverage with Jest and Testing Library
 
-## 📦 Installation
+## Installation
 
 ```bash
 npm install @felipemalli-libs/microhub-ui
 ```
 
-## 🎯 Basic Usage
+## Basic Usage
 
 ```tsx
 import { Button } from "@felipemalli-libs/microhub-ui";
@@ -30,7 +30,7 @@ function App() {
 }
 ```
 
-## 📚 Components
+## Components
 
 ### Button
 
@@ -53,7 +53,7 @@ A versatile button component with multiple variants and states.
 <Button disabled>Disabled</Button>
 ```
 
-## 🛠️ Development
+## Development
 
 ```bash
 # Install dependencies
@@ -67,15 +67,4 @@ npm run build
 
 # Development with watch mode
 npm run build:watch
-```
-
-## 📁 Project Structure
-
-```
-src/
-├── components/
-│   └── Button/
-├── types/
-├── utils/
-└── index.ts
 ```
