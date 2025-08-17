@@ -1,0 +1,41 @@
+const { merge } = require('webpack-merge');
+const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
+const commonConfig = require('./webpack.common');
+const packageJson = require('../package.json');
+
+const prodConfig = {
+  mode: 'production',
+  output: {
+    filename: '[name].[contenthash].js',
+    publicPath: '/rickmorty/latest/',
+  },
+  plugins: [
+    new ModuleFederationPlugin({
+      name: 'rickmorty',
+      filename: 'remoteEntry.js',
+      remotes: {
+        sharedComponents: 'sharedComponents@/shared/latest/remoteEntry.js',
+      },
+      exposes: {
+        './RickMortyApp': './src/bootstrap',
+      },
+      shared: {
+        ...packageJson.dependencies,
+        react: {
+          singleton: true,
+          requiredVersion: packageJson.dependencies.react,
+        },
+        'react-dom': {
+          singleton: true,
+          requiredVersion: packageJson.dependencies['react-dom'],
+        },
+        'react-router-dom': {
+          singleton: true,
+          requiredVersion: packageJson.dependencies['react-router-dom'],
+        },
+      },
+    }),
+  ],
+};
+
+module.exports = merge(commonConfig, prodConfig);

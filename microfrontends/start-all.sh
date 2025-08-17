@@ -1,12 +1,14 @@
 #!/bin/bash
 
-echo "🚀 Iniciando todos os microfrontends..."
-echo "=================================="
+# Script para iniciar todos os microfrontends em paralelo
+# Ordem: shared-components -> auth -> rickmorty -> shell
 
-# Função para verificar se uma porta está em uso
+echo "🚀 Iniciando todos os microfrontends..."
+
+# Função para verificar se uma porta está ocupada
 check_port() {
     if lsof -Pi :$1 -sTCP:LISTEN -t >/dev/null ; then
-        echo "⚠️  Porta $1 já está em uso!"
+        echo "⚠️  Porta $1 já está em uso"
         return 1
     else
         return 0
@@ -15,57 +17,74 @@ check_port() {
 
 # Verificar portas
 echo "🔍 Verificando portas..."
-check_port 3000 || { echo "❌ Porta 3000 ocupada. Finalize o processo antes de continuar."; exit 1; }
-check_port 3001 || { echo "❌ Porta 3001 ocupada. Finalize o processo antes de continuar."; exit 1; }
-check_port 3002 || { echo "❌ Porta 3002 ocupada. Finalize o processo antes de continuar."; exit 1; }
-check_port 3003 || { echo "❌ Porta 3003 ocupada. Finalize o processo antes de continuar."; exit 1; }
+check_port 3000 || exit 1
+check_port 3001 || exit 1
+check_port 3002 || exit 1
+check_port 3003 || exit 1
 
-echo "✅ Todas as portas estão disponíveis!"
-echo ""
+# Criar logs directory se não existir
+mkdir -p logs
 
-# Iniciar Shared Components PRIMEIRO (porta 3003)
-echo "🧩 Iniciando Shared Components (porta 3003)..."
+# Iniciar shared-components (porta 3003)
+echo "📦 Iniciando shared-components na porta 3003..."
 cd shared-components
-gnome-terminal --tab --title="Shared-3003" --command="bash -c 'npm start; read'" &
+npm start > ../logs/shared-components.log 2>&1 &
+SHARED_PID=$!
 cd ..
 
-# Aguardar shared components iniciar
-sleep 3
+# Aguardar shared-components inicializar
+echo "⏳ Aguardando shared-components inicializar..."
+sleep 5
 
-# Iniciar Rick and Morty Microfrontend (porta 3002)
-echo "🛸 Iniciando Rick and Morty Microfrontend (porta 3002)..."
-cd rick-morty-microfrontend
-gnome-terminal --tab --title="Rick&Morty-3002" --command="bash -c 'npm start; read'" &
-cd ..
-
-# Aguardar um pouco antes de iniciar o próximo
-sleep 2
-
-# Iniciar Auth Microfrontend (porta 3001)
-echo "🔐 Iniciando Auth Microfrontend (porta 3001)..."
+# Iniciar auth-microfrontend (porta 3001)
+echo "🔐 Iniciando auth-microfrontend na porta 3001..."
 cd auth-microfrontend
-gnome-terminal --tab --title="Auth-3001" --command="bash -c 'npm start; read'" &
+npm start > ../logs/auth.log 2>&1 &
+AUTH_PID=$!
 cd ..
 
-# Aguardar um pouco antes de iniciar o shell
-sleep 3
+# Iniciar rick-morty-microfrontend (porta 3002)
+echo "👽 Iniciando rick-morty-microfrontend na porta 3002..."
+cd rick-morty-microfrontend
+npm start > ../logs/rickmorty.log 2>&1 &
+RICKMORTY_PID=$!
+cd ..
 
-# Iniciar Shell App (porta 3000)
-echo "🏠 Iniciando Shell App (porta 3000)..."
+# Aguardar microfrontends inicializarem
+echo "⏳ Aguardando microfrontends inicializarem..."
+sleep 8
+
+# Iniciar shell-app (porta 3000)
+echo "🏠 Iniciando shell-app na porta 3000..."
 cd shell-app
-gnome-terminal --tab --title="Shell-3000" --command="bash -c 'npm start; read'" &
+npm start > ../logs/shell.log 2>&1 &
+SHELL_PID=$!
 cd ..
+
+# Salvar PIDs para poder parar depois
+echo "$SHARED_PID" > logs/shared.pid
+echo "$AUTH_PID" > logs/auth.pid
+echo "$RICKMORTY_PID" > logs/rickmorty.pid
+echo "$SHELL_PID" > logs/shell.pid
 
 echo ""
-echo "🎉 Todos os microfrontends foram iniciados!"
+echo "✅ Todos os microfrontends foram iniciados!"
 echo ""
 echo "📋 Status dos serviços:"
-echo "   🧩 Shared Components: http://localhost:3003"
-echo "   🏠 Shell App:         http://localhost:3000"
-echo "   🔐 Auth Micro:        http://localhost:3001"  
-echo "   🛸 Rick&Morty Micro:  http://localhost:3002"
+echo "   📦 Shared Components: http://localhost:3003 (PID: $SHARED_PID)"
+echo "   🔐 Auth Microfrontend: http://localhost:3001 (PID: $AUTH_PID)"
+echo "   👽 Rick & Morty: http://localhost:3002 (PID: $RICKMORTY_PID)"
+echo "   🏠 Shell App: http://localhost:3000 (PID: $SHELL_PID)"
 echo ""
-echo "⏰ Aguarde alguns segundos para todos os serviços iniciarem completamente."
-echo "🌐 Acesse: http://localhost:3000"
+echo "🌐 Acesse a aplicação em: http://localhost:3000"
 echo ""
-echo "💡 Para parar todos os serviços, feche as abas do terminal ou use Ctrl+C"
+echo "📝 Logs disponíveis em:"
+echo "   - logs/shared-components.log"
+echo "   - logs/auth.log"
+echo "   - logs/rickmorty.log"
+echo "   - logs/shell.log"
+echo ""
+echo "⏹️  Para parar todos os serviços, execute: npm run stop"
+
+# Aguardar todos os processos
+wait

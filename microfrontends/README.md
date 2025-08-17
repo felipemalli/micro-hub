@@ -144,14 +144,6 @@ Configuração de exposição de módulos:
 - `npm start` - Executa microfrontend individual
 - `npm run build` - Cria build de produção
 
-## 📱 Responsividade
-
-A aplicação é totalmente responsiva e funciona em:
-
-- Desktop (1200px+)
-- Tablet (768px - 1199px)
-- Mobile (< 768px)
-
 ## 🚨 Ordem de Execução Importante
 
 1. **SEMPRE** execute primeiro os microfrontends remotos (portas 3001 e 3002)

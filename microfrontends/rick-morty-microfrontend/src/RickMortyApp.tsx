@@ -1,40 +1,40 @@
 import React, { useState } from 'react';
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { Routes, Route, useNavigate, BrowserRouter } from 'react-router-dom';
 import CharacterList from './components/CharacterList';
 import CharacterDetail from './components/CharacterDetail';
 import EpisodeList from './components/EpisodeList';
 import LocationList from './components/LocationList';
 import { Character, Episode, Location, RickMortyAppProps } from './types/rickmorty';
 
-const RickMortyApp: React.FC<RickMortyAppProps> = ({ initialView = 'characters' }) => {
+const RickMortyApp: React.FC<RickMortyAppProps> = ({ history }: any) => {
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [selectedEpisode, setSelectedEpisode] = useState<Episode | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
   const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
 
   const currentPath = location.pathname.split('/').pop() || 'characters';
 
   const handleCharacterSelect = (character: Character) => {
     setSelectedCharacter(character);
-    navigate(`/rickmorty/character/${character.id}`);
+    navigate(`/character/${character.id}`);
   };
 
   const handleEpisodeSelect = (episode: Episode) => {
     setSelectedEpisode(episode);
-    navigate(`/rickmorty/episode/${episode.id}`);
+    navigate(`/episode/${episode.id}`);
   };
 
   const handleLocationSelect = (location: Location) => {
     setSelectedLocation(location);
-    navigate(`/rickmorty/location/${location.id}`);
+    navigate(`/location/${location.id}`);
   };
 
   const handleBackToList = () => {
     setSelectedCharacter(null);
     setSelectedEpisode(null);
     setSelectedLocation(null);
-    navigate('/rickmorty');
+    navigate('/');
   };
 
   const getActiveTabClass = (tab: string) => {
@@ -60,19 +60,19 @@ const RickMortyApp: React.FC<RickMortyAppProps> = ({ initialView = 'characters' 
         <div className="flex justify-center mb-8">
           <div className="bg-white rounded-2xl shadow-lg p-2 flex space-x-2">
             <button
-              onClick={() => navigate('/rickmorty')}
+              onClick={() => navigate('/')}
               className={getActiveTabClass('characters')}
             >
               👥 Personagens
             </button>
             <button
-              onClick={() => navigate('/rickmorty/episodes')}
+              onClick={() => navigate('/episodes')}
               className={getActiveTabClass('episodes')}
             >
               📺 Episódios
             </button>
             <button
-              onClick={() => navigate('/rickmorty/locations')}
+              onClick={() => navigate('/locations')}
               className={getActiveTabClass('locations')}
             >
               🌍 Localizações
@@ -182,4 +182,10 @@ const RickMortyApp: React.FC<RickMortyAppProps> = ({ initialView = 'characters' 
   );
 };
 
-export default RickMortyApp;
+export default () => {
+  return (
+    <BrowserRouter>
+      <RickMortyApp />
+    </BrowserRouter>
+  );
+};

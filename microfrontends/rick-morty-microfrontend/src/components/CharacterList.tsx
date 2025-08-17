@@ -2,10 +2,10 @@ import React, { useState, useEffect, Suspense } from 'react';
 import axios from 'axios';
 import { Character, ApiResponse, CharacterListProps, CharacterFilters, LoadingState } from '../types/rickmorty';
 
-// @ts-ignore
-const Button = React.lazy(() => import('sharedComponents/Button'));
-// @ts-ignore
-const Card = React.lazy(() => import('sharedComponents/Card'));
+// // @ts-ignore
+// const Button = React.lazy(() => import('sharedComponents/Button'));
+// // @ts-ignore
+// const Card = React.lazy(() => import('sharedComponents/Card'));
 
 const CharacterList: React.FC<CharacterListProps> = ({ onCharacterSelect }) => {
   const [characters, setCharacters] = useState<Character[]>([]);
@@ -34,6 +34,8 @@ const CharacterList: React.FC<CharacterListProps> = ({ onCharacterSelect }) => {
       const response = await axios.get<ApiResponse<Character>>(
         `https://rickandmortyapi.com/api/character?${params.toString()}`
       );
+
+      console.log(response);
       
       setCharacters(response.data.results);
       setTotalPages(response.data.info.pages);
@@ -101,17 +103,18 @@ const CharacterList: React.FC<CharacterListProps> = ({ onCharacterSelect }) => {
   if (loading.error) {
     return (
       <Suspense fallback={<div>Loading...</div>}>
-        <Card variant="elevated" padding="lg" className="text-center max-w-md mx-auto">
+        {/* <Card variant="elevated" padding="lg" className="text-center max-w-md mx-auto"> */}
           <div className="text-red-500 text-6xl mb-4">⚠️</div>
           <h3 className="text-xl font-bold text-gray-800 mb-2">Ops! Algo deu errado</h3>
           <p className="text-gray-600 mb-4">{loading.error}</p>
-          <Button 
+          <button onClick={() => fetchCharacters(currentPage, filters)}>Tentar novamente</button>
+          {/* <Button 
             variant="primary"
             onClick={() => fetchCharacters(currentPage, filters)}
           >
             Tentar novamente
-          </Button>
-        </Card>
+          </Button> */}
+        {/* </Card> */}
       </Suspense>
     );
   }
@@ -120,7 +123,7 @@ const CharacterList: React.FC<CharacterListProps> = ({ onCharacterSelect }) => {
     <Suspense fallback={<div className="flex justify-center p-4"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div></div>}>
       <div className="space-y-6">
         {/* Filtros */}
-        <Card variant="glass" padding="md">
+        {/* <Card variant="glass" padding="md"> */}
           <h2 className="text-xl font-bold text-gray-800 mb-4">🔍 Filtros</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
@@ -178,19 +181,20 @@ const CharacterList: React.FC<CharacterListProps> = ({ onCharacterSelect }) => {
               </select>
             </div>
           </div>
-        </Card>
+        {/* </Card> */}
 
         {/* Lista de personagens */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {characters.map((character) => (
-            <Card 
-              key={character.id}
-              variant="elevated"
-              padding="none"
-              hover={true}
-              onClick={() => onCharacterSelect(character)}
-              className="overflow-hidden cursor-pointer transform hover:scale-105 transition-all duration-200"
-            >
+            // <Card 
+            //   key={character.id}
+            //   variant="elevated"
+            //   padding="none"
+            //   hover={true}
+            //   onClick={() => onCharacterSelect(character)}
+            //   className="overflow-hidden cursor-pointer transform hover:scale-105 transition-all duration-200"
+            // >
+            <>
               <div className="relative">
                 <img 
                   src={character.image} 
@@ -231,53 +235,60 @@ const CharacterList: React.FC<CharacterListProps> = ({ onCharacterSelect }) => {
                   </div>
                 </div>
               </div>
-            </Card>
+              </>
+            // </Card>
           ))}
         </div>
 
         {/* Paginação */}
         {totalPages > 1 && (
-          <Card variant="glass" padding="md">
+          // <Card variant="glass" padding="md">
+          <>
             <div className="flex items-center justify-center space-x-2">
-              <Button
+              {/* <Button
                 variant="secondary"
                 size="sm"
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
               >
                 ← Anterior
-              </Button>
+              </Button> */}
               
               <div className="flex space-x-1">
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                   const pageNum = Math.max(1, Math.min(totalPages - 4, currentPage - 2)) + i;
                   return (
-                    <Button
+                  
+                      <div>
+                    {/* <Button
                       key={pageNum}
                       variant={currentPage === pageNum ? "primary" : "secondary"}
                       size="sm"
                       onClick={() => handlePageChange(pageNum)}
                     >
                       {pageNum}
-                    </Button>
+                    </Button> */}
+                    </div>
                   );
                 })}
               </div>
               
-              <Button
+              {/* <Button
                 variant="secondary"
                 size="sm"
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
               >
                 Próxima →
-              </Button>
+              </Button> */}
             </div>
             
             <div className="text-center mt-3 text-sm text-gray-600">
               Página {currentPage} de {totalPages}
             </div>
-          </Card>
+
+          </>
+          // </Card>
         )}
       </div>
     </Suspense>
