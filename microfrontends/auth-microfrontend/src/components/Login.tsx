@@ -1,6 +1,7 @@
 import React, { useState, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LoginProps, FormData, FormErrors } from '../types/auth';
+import { Button } from "@felipemalli-libs/microhub-ui";
 
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const [formData, setFormData] = useState<FormData>({
@@ -66,10 +67,10 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
   return (
     <Suspense fallback={<div className="flex justify-center p-4"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div></div>}>
-      <div className="max-w-md mx-auto">
+      <div className="max-w-md mx-auto">         
         <form onSubmit={handleSubmit} className="space-y-6 p-8">
           <h3 className="text-xl font-bold text-gray-800 mb-6 text-center">Entrar na sua conta</h3>
-          
+      
           {errors.general && (
             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm text-center">
               {errors.general}
@@ -104,6 +105,10 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             {errors.password && <div className="error-message">{errors.password}</div>}
           </div>
 
+          <Button variant="primary" size="md" onClick={() => console.log("Clicked!")}>
+            Click me
+          </Button>
+          
           <button
             type="submit"
             disabled={isLoading}
