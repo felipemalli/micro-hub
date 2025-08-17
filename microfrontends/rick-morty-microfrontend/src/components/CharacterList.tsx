@@ -121,7 +121,7 @@ const CharacterList: React.FC<CharacterListProps> = ({ onCharacterSelect }) => {
 
   return (
     <Suspense fallback={<div className="flex justify-center p-4"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div></div>}>
-      <div className="space-y-6">
+      <div className="space-y-6 p-6">
         {/* Filtros */}
         {/* <Card variant="glass" padding="md"> */}
           <h2 className="text-xl font-bold text-gray-800 mb-4">🔍 Filtros</h2>
