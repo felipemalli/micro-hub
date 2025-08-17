@@ -3,46 +3,34 @@ import { createMemoryHistory, createBrowserHistory } from 'history';
 import AuthApp from './AuthApp';
 import './index.css';
 
-const mount = (el: HTMLElement, { onNavigate, defaultHistory, initialPath }: any = {}) => {
+const mount = (el: HTMLElement, options: any = {}) => {
+  const { onNavigate, defaultHistory, initialPath } = options;
+  
   const history = defaultHistory || createMemoryHistory({
     initialEntries: [initialPath || '/'],
   });
 
   if (onNavigate) {
-    history.listen((update: any) => {
-      onNavigate({ pathname: update.location.pathname });
-    });
+    history.listen(({ location }) => onNavigate({ pathname: location.pathname }));
   }
 
   const root = createRoot(el);
-  root.render(
-    // @ts-ignore
-      <AuthApp history={history} />
-  );
+  root.render(<AuthApp history={history} />);
 
   return {
-    onParentNavigate({ pathname: nextPathname }: { pathname: string }) {
-      const { pathname } = history.location;
-
-      if (pathname !== nextPathname) {
-        history.push(nextPathname);
+    onParentNavigate: ({ pathname }) => {
+      if (history.location.pathname !== pathname) {
+        history.push(pathname);
       }
     },
   };
 };
 
-// If we are in development and in isolation,
-// call mount immediately
 if (process.env.NODE_ENV === 'development') {
   const devRoot = document.querySelector('#_auth-dev-root');
-
-  console.log('Em desenvolvimento!');
-
   if (devRoot) {
     mount(devRoot as HTMLElement, { defaultHistory: createBrowserHistory() });
   }
 }
 
-// We are running through container
-// and we should export the mount function
 export { mount };

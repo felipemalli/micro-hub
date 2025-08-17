@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, useNavigate, BrowserRouter } from 'react-router-dom';
+import { Routes, Route, Router, BrowserRouter } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
 import Profile from './components/Profile';
 import { User, MockUser, AuthAppProps } from './types/auth';
+import { History } from 'history';
 
 // Mock dos usuários para simular um backend
 const mockUsers: MockUser[] = [
@@ -11,10 +12,19 @@ const mockUsers: MockUser[] = [
   { id: 2, email: 'user@teste.com', password: '123456', name: 'Usuário Teste' }
 ];
 
-const AuthApp: React.FC<AuthAppProps> = ({ onAuthChange }) => {
+const AuthApp: React.FC<AuthAppProps & { history?: History }> = ({ onAuthChange, history }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const [location, setLocation] = useState(history?.location || { pathname: '/auth' });
+
+  useEffect(() => {
+    if (history) {
+      const unlisten = history.listen((update: any) => {
+        setLocation(update.location);
+      });
+      return unlisten;
+    }
+  }, [history]);
 
   // Verificar se há sessão salva
   useEffect(() => {
@@ -83,7 +93,7 @@ const AuthApp: React.FC<AuthAppProps> = ({ onAuthChange }) => {
     localStorage.removeItem('currentUser');
     localStorage.removeItem('authToken');
     onAuthChange?.(false);
-    navigate('/auth ');
+    history?.push('/auth ');
   };
 
   if (loading) {
@@ -98,78 +108,83 @@ const AuthApp: React.FC<AuthAppProps> = ({ onAuthChange }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-8">
-      <div className="max-w-md mx-auto">
-        <div className="auth-card">
-          <div className="auth-header">
-            <h2 className="text-2xl font-bold">🔐 Sistema de Autenticação</h2>
-            {user && (
-              <div className="mt-2 flex items-center justify-between">
-                <span className="text-sm opacity-90">Olá, {user.name}!</span>
-                <React.Suspense fallback={<button onClick={handleLogout} className="text-sm bg-white/20 hover:bg-white/30 px-3 py-1 rounded-lg transition-colors">Sair</button>}>
-                  <button
-                    onClick={handleLogout}
-                  >
-                    Sair
-                  </button>
-                </React.Suspense>
-              </div>
-            )}
-          </div>
+    <Router location={location} navigator={history}>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-8">
+        <div className="max-w-md mx-auto">
+          <div className="auth-card">
+            <div className="auth-header">
+              <h2 className="text-2xl font-bold">🔐 Sistema de Autenticação</h2>
+              {user && (
+                <div className="mt-2 flex items-center justify-between">
+                  <span className="text-sm opacity-90">Olá, {user.name}!</span>
+                  <React.Suspense fallback={<button onClick={handleLogout} className="text-sm bg-white/20 hover:bg-white/30 px-3 py-1 rounded-lg transition-colors">Sair</button>}>
+                    <button
+                      onClick={handleLogout}
+                    >
+                      Sair
+                    </button>
+                  </React.Suspense>
+                </div>
+              )}
+            </div>
 
-          <Routes>
-            <Route 
-              path="/auth" 
-              element={
-                user ? (
-                  <Profile user={user} onLogout={handleLogout} />
-                ) : (
-                  <Login onLogin={handleLogin} />
-                )
-              } 
-            />
-            <Route 
-              path="/auth/login" 
-              element={
-                user ? (
-                  <Profile user={user} onLogout={handleLogout} />
-                ) : (
-                  <Login onLogin={handleLogin} />
-                )
-              } 
-            />
-            <Route 
-              path="/auth/register" 
-              element={
-                user ? (
-                  <Profile user={user} onLogout={handleLogout} />
-                ) : (
-                  <Register onRegister={handleRegister} />
-                )
-              } 
-            />
-            <Route 
-              path="/auth/profile" 
-              element={
-                user ? (
-                  <Profile user={user} onLogout={handleLogout} />
-                ) : (
-                  <Login onLogin={handleLogin} />
-                )
-              } 
-            />
-          </Routes>
+            <Routes>
+              <Route 
+                path="/auth" 
+                element={
+                  user ? (
+                    <Profile user={user} onLogout={handleLogout} />
+                  ) : (
+                    <Login onLogin={handleLogin} />
+                  )
+                } 
+              />
+              <Route 
+                path="/auth/login" 
+                element={
+                  user ? (
+                    <Profile user={user} onLogout={handleLogout} />
+                  ) : (
+                    <Login onLogin={handleLogin} />
+                  )
+                } 
+              />
+              <Route 
+                path="/auth/register" 
+                element={
+                  user ? (
+                    <Profile user={user} onLogout={handleLogout} />
+                  ) : (
+                    <Register onRegister={handleRegister} />
+                  )
+                } 
+              />
+              <Route 
+                path="/auth/profile" 
+                element={
+                  user ? (
+                    <Profile user={user} onLogout={handleLogout} />
+                  ) : (
+                    <Login onLogin={handleLogin} />
+                  )
+                } 
+              />
+            </Routes>
+          </div>
         </div>
       </div>
-    </div>
+    </Router>
   );
 };
 
+// // Para desenvolvimento standalone
+// export default () => {
+//   return (
+//     <BrowserRouter>
+//       <AuthApp />
+//     </BrowserRouter>
+//   );
+// };
 
-export default () => {
-  return (
-    <BrowserRouter>
-      <AuthApp />
-    </BrowserRouter>
-  );
-};
+// Para uso no container
+export default AuthApp;

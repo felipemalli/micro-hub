@@ -104,15 +104,8 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             />
             {errors.password && <div className="error-message">{errors.password}</div>}
           </div>
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full"
-          >
-            {isLoading ? 'Entrando...' : 'Entrar'}
-          </button>
-          <Button variant="primary" size="md" onClick={() => console.log("Clicked!")}>
-            Click me
+          <Button type="submit" disabled={isLoading} variant="primary" size="md" onClick={() => console.log("Clicked!")} className="w-full">
+          {isLoading ? 'Entrando...' : 'Entrar'}
           </Button>
           <div className="text-center mt-4 pt-4 border-t border-gray-200">
             <p className="text-gray-600">

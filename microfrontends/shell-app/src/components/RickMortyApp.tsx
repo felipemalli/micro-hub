@@ -6,10 +6,15 @@ interface RickMortyAppProps {
 }
 
 const RickMortyApp: React.FC<RickMortyAppProps> = ({ isAuthenticated }) => {
+  const mountRickMorty = async (el: HTMLElement, options: any) => {
+
+    const { mount } = await import('rickmorty/RickMortyApp');
+    return mount(el, options);
+  };
+
   return (
     <MicrofrontendWrapper
-      moduleName="RickMortyApp"
-      moduleScope="rickmorty"
+      mount={mountRickMorty}
       isAuthenticated={isAuthenticated}
     />
   );
