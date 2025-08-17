@@ -104,11 +104,6 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             />
             {errors.password && <div className="error-message">{errors.password}</div>}
           </div>
-
-          <Button variant="primary" size="md" onClick={() => console.log("Clicked!")}>
-            Click me
-          </Button>
-          
           <button
             type="submit"
             disabled={isLoading}
@@ -116,7 +111,9 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
           >
             {isLoading ? 'Entrando...' : 'Entrar'}
           </button>
-
+          <Button variant="primary" size="md" onClick={() => console.log("Clicked!")}>
+            Click me
+          </Button>
           <div className="text-center mt-4 pt-4 border-t border-gray-200">
             <p className="text-gray-600">
               Não tem uma conta?{' '}

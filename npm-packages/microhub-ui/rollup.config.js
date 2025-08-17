@@ -34,7 +34,8 @@ export default {
       exclude: ['**/*.test.*', '**/*.spec.*'],
     }),
     postcss({
-      extract: true,
+      extract: false,
+      inject: true,
       minimize: true,
     }),
   ],

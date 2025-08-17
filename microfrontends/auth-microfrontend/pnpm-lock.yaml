@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@felipemalli-libs/microhub-ui':
-        specifier: ^1.0.3
-        version: 1.0.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+        specifier: ^1.0.4
+        version: 1.0.4(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       history:
         specifier: ^5.3.0
         version: 5.3.0
@@ -265,8 +265,8 @@ packages:
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}
     engines: {node: '>=10.0.0'}
 
-  '@felipemalli-libs/microhub-ui@1.0.3':
-    resolution: {integrity: sha512-PbccDMJV9IPdTkyYrDmOBdG8AOZB2MRGpUG09/MiHi+pMU7mEjbnDQEV+aLRWcU1/NehT0lmk97TLi/xFiZRSQ==}
+  '@felipemalli-libs/microhub-ui@1.0.4':
+    resolution: {integrity: sha512-c9Q8g0H+kdeQcSvOpDH1zfYh9mmf14rWMimCb8nuygw4D78e0GTBDk2p8A/JGUmJmGFYoGzyPJDz0VjbxVKR2Q==}
     engines: {pnpm: '>=10.14.0'}
     peerDependencies:
       react: ^19.0.0
@@ -2366,7 +2366,7 @@ snapshots:
 
   '@discoveryjs/json-ext@0.5.7': {}
 
-  '@felipemalli-libs/microhub-ui@1.0.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
+  '@felipemalli-libs/microhub-ui@1.0.4(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
     dependencies:
       clsx: 2.1.1
       react: 19.1.1
