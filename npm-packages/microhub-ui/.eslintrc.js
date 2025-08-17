@@ -27,4 +27,17 @@ module.exports = {
       version: 'detect',
     },
   },
+  overrides: [
+    {
+      files: [
+        '**/*.test.ts',
+        '**/*.test.tsx',
+        '**/*.spec.ts',
+        '**/*.spec.tsx',
+      ],
+      parserOptions: {
+        project: ['tsconfig.test.json'],
+      },
+    },
+  ],
 };

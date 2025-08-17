@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Button } from './Button';
 
-describe('Button', () => {
+describe('Button', () => { 
   it('renders correctly', () => {
     render(<Button>Test Button</Button>);
     expect(screen.getByRole('button', { name: 'Test Button' })).toBeInTheDocument();
