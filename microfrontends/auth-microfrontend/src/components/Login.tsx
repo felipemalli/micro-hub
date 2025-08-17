@@ -2,11 +2,6 @@ import React, { useState, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LoginProps, FormData, FormErrors } from '../types/auth';
 
-// @ts-ignore
-const Button = React.lazy(() => import('sharedComponents/Button'));
-// @ts-ignore
-const Card = React.lazy(() => import('sharedComponents/Card'));
-
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const [formData, setFormData] = useState<FormData>({
     email: '',
@@ -71,7 +66,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
   return (
     <Suspense fallback={<div className="flex justify-center p-4"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div></div>}>
-      <Card variant="elevated" padding="lg" className="max-w-md mx-auto">
+      <div className="max-w-md mx-auto">
         <form onSubmit={handleSubmit} className="space-y-6">
           <h3 className="text-xl font-bold text-gray-800 mb-6 text-center">Entrar na sua conta</h3>
           
@@ -109,28 +104,23 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             {errors.password && <div className="error-message">{errors.password}</div>}
           </div>
 
-          <Button
+          <button
             type="submit"
-            variant="primary"
-            size="lg"
-            loading={isLoading}
             disabled={isLoading}
             className="w-full"
           >
             {isLoading ? 'Entrando...' : 'Entrar'}
-          </Button>
+          </button>
 
           <div className="text-center mt-4 pt-4 border-t border-gray-200">
             <p className="text-gray-600">
               Não tem uma conta?{' '}
-              <Button 
-                variant="secondary"
-                size="sm"
+              <button 
                 onClick={() => navigate('/auth/register')}
                 className="inline-block"
               >
                 Cadastre-se aqui
-              </Button>
+              </button>
             </p>
           </div>
 
@@ -142,7 +132,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             </div>
           </div>
         </form>
-      </Card>
+      </div>
     </Suspense>
   );
 };

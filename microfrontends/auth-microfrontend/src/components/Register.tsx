@@ -2,12 +2,6 @@ import React, { useState, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RegisterProps, FormData, FormErrors } from '../types/auth';
 
-// Lazy load dos componentes compartilhados
-// @ts-ignore
-const Button = React.lazy(() => import('sharedComponents/Button'));
-// @ts-ignore
-const Card = React.lazy(() => import('sharedComponents/Card'));
-
 interface RegisterFormData extends FormData {
   name: string;
   confirmPassword: string;
@@ -91,7 +85,7 @@ const Register: React.FC<RegisterProps> = ({ onRegister }) => {
 
   return (
     <Suspense fallback={<div className="flex justify-center p-4"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div></div>}>
-      <Card variant="elevated" padding="lg" className="max-w-md mx-auto">
+      <div className="max-w-md mx-auto">
         <form onSubmit={handleSubmit} className="space-y-6">
           <h3 className="text-xl font-bold text-gray-800 mb-6 text-center">Criar nova conta</h3>
           
@@ -157,32 +151,27 @@ const Register: React.FC<RegisterProps> = ({ onRegister }) => {
             {errors.confirmPassword && <div className="error-message">{errors.confirmPassword}</div>}
           </div>
 
-          <Button
+          <button
             type="submit"
-            variant="success"
-            size="lg"
-            loading={isLoading}
             disabled={isLoading}
             className="w-full"
           >
             {isLoading ? 'Criando conta...' : 'Criar conta'}
-          </Button>
+          </button>
 
           <div className="text-center mt-4 pt-4 border-t border-gray-200">
             <p className="text-gray-600">
               Já tem uma conta?{' '}
-              <Button 
-                variant="secondary"
-                size="sm"
+              <button 
                 onClick={() => navigate('/auth/login')}
                 className="inline-block"
               >
                 Faça login aqui
-              </Button>
+              </button>
             </p>
           </div>
         </form>
-      </Card>
+      </div>
     </Suspense>
   );
 };

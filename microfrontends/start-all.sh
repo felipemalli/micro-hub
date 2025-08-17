@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Script para iniciar todos os microfrontends em paralelo
-# Ordem: shared-components -> auth -> rickmorty -> shell
+# Ordem:  auth -> rickmorty -> shell
 
 echo "🚀 Iniciando todos os microfrontends..."
 
@@ -24,17 +24,6 @@ check_port 3003 || exit 1
 
 # Criar logs directory se não existir
 mkdir -p logs
-
-# Iniciar shared-components (porta 3003)
-echo "📦 Iniciando shared-components na porta 3003..."
-cd shared-components
-npm start > ../logs/shared-components.log 2>&1 &
-SHARED_PID=$!
-cd ..
-
-# Aguardar shared-components inicializar
-echo "⏳ Aguardando shared-components inicializar..."
-sleep 5
 
 # Iniciar auth-microfrontend (porta 3001)
 echo "🔐 Iniciando auth-microfrontend na porta 3001..."
@@ -79,7 +68,6 @@ echo ""
 echo "🌐 Acesse a aplicação em: http://localhost:3000"
 echo ""
 echo "📝 Logs disponíveis em:"
-echo "   - logs/shared-components.log"
 echo "   - logs/auth.log"
 echo "   - logs/rickmorty.log"
 echo "   - logs/shell.log"
