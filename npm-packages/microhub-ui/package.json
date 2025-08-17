@@ -1,6 +1,6 @@
 {
   "name": "@felipemalli-libs/microhub-ui",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
   "description": "Reusable UI component library for the MicroHub project.",
   "main": "dist/index.js",
