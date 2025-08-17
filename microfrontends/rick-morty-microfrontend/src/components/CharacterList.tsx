@@ -194,7 +194,8 @@ const CharacterList: React.FC<CharacterListProps> = ({ onCharacterSelect }) => {
             //   onClick={() => onCharacterSelect(character)}
             //   className="overflow-hidden cursor-pointer transform hover:scale-105 transition-all duration-200"
             // >
-            <>
+  
+            <div key={character.id} className="card cursor-pointer group" onClick={() => onCharacterSelect(character)}>
               <div className="relative">
                 <img 
                   src={character.image} 
@@ -235,7 +236,7 @@ const CharacterList: React.FC<CharacterListProps> = ({ onCharacterSelect }) => {
                   </div>
                 </div>
               </div>
-              </>
+              </div>
             // </Card>
           ))}
         </div>

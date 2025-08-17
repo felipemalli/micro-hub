@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, BrowserRouter } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
 import Profile from './components/Profile';
@@ -83,7 +83,7 @@ const AuthApp: React.FC<AuthAppProps> = ({ onAuthChange }) => {
     localStorage.removeItem('currentUser');
     localStorage.removeItem('authToken');
     onAuthChange?.(false);
-    navigate('/auth');
+    navigate('/auth ');
   };
 
   if (loading) {
@@ -119,7 +119,7 @@ const AuthApp: React.FC<AuthAppProps> = ({ onAuthChange }) => {
 
           <Routes>
             <Route 
-              path="/" 
+              path="/auth" 
               element={
                 user ? (
                   <Profile user={user} onLogout={handleLogout} />
@@ -129,7 +129,7 @@ const AuthApp: React.FC<AuthAppProps> = ({ onAuthChange }) => {
               } 
             />
             <Route 
-              path="/login" 
+              path="/auth/login" 
               element={
                 user ? (
                   <Profile user={user} onLogout={handleLogout} />
@@ -139,7 +139,7 @@ const AuthApp: React.FC<AuthAppProps> = ({ onAuthChange }) => {
               } 
             />
             <Route 
-              path="/register" 
+              path="/auth/register" 
               element={
                 user ? (
                   <Profile user={user} onLogout={handleLogout} />
@@ -149,7 +149,7 @@ const AuthApp: React.FC<AuthAppProps> = ({ onAuthChange }) => {
               } 
             />
             <Route 
-              path="/profile" 
+              path="/auth/profile" 
               element={
                 user ? (
                   <Profile user={user} onLogout={handleLogout} />
@@ -165,4 +165,11 @@ const AuthApp: React.FC<AuthAppProps> = ({ onAuthChange }) => {
   );
 };
 
-export default AuthApp;
+
+export default () => {
+  return (
+    <BrowserRouter>
+      <AuthApp />
+    </BrowserRouter>
+  );
+};

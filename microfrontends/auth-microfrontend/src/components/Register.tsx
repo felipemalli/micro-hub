@@ -75,7 +75,7 @@ const Register: React.FC<RegisterProps> = ({ onRegister }) => {
 
     try {
       await onRegister(formData.name.trim(), formData.email, formData.password);
-      navigate('/auth/profile');
+      navigate('/profile');
     } catch (error) {
       setErrors({ general: (error as Error).message });
     } finally {

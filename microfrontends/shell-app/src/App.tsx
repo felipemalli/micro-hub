@@ -1,9 +1,8 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useState, useEffect, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
-// Lazy load dos microfrontends
-const AuthApp = React.lazy(() => import('auth/AuthApp'));
-const RickMortyApp = React.lazy(() => import('rickmorty/RickMortyApp'));
+const AuthApp = lazy(() => import('./components/AuthApp'));
+const RickMortyApp = lazy(() => import('./components/RickMortyApp'));
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
@@ -52,97 +51,78 @@ const ErrorFallback: React.FC<{ message: string }> = ({ message }) => (
 );
 
 const App: React.FC = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  useEffect(() => {
+    // Verificar se há sessão salva
+    const savedUser = localStorage.getItem('currentUser');
+    setIsAuthenticated(!!savedUser);
+  }, []);
+
+  const handleAuthChange = (authenticated: boolean) => {
+    setIsAuthenticated(authenticated);
+  };
 
   return (
     <Router>
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
-        <header className="glass-effect border-b border-white/20 sticky top-0 z-50">
-          <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+        <nav className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
-              <div className="flex items-center space-x-2">
-                <div className="text-2xl">🚀</div>
-                <h1 className="text-xl font-bold text-gray-800">
-                  Microfrontends App
-                </h1>
+              <div className="flex items-center space-x-8">
+                <Link to="/" className="text-2xl font-bold text-gray-800">
+                  🚀 Micro Hub
+                </Link>
+                <div className="flex space-x-4">
+                  <Link 
+                    to="/auth" 
+                    className="nav-link"
+                  >
+                    🔐 Autenticação
+                  </Link>
+                  <Link 
+                    to="/rickmorty" 
+                    className="nav-link"
+                  >
+                    👽 Rick & Morty
+                  </Link>
+                </div>
               </div>
-              
-              <div className="flex space-x-1">
-                <Link 
-                  to="/auth" 
-                  className="flex items-center space-x-2 px-4 py-2 rounded-lg text-gray-700 hover:bg-white/20 transition-all duration-200"
-                >
-                  <span>🔐</span>
-                  <span className="font-medium">Autenticação</span>
-                </Link>
-                <Link 
-                  to="/rick-morty" 
-                  className="flex items-center space-x-2 px-4 py-2 rounded-lg text-gray-700 hover:bg-white/20 transition-all duration-200"
-                >
-                  <span>👽</span>
-                  <span className="font-medium">Rick & Morty</span>
-                </Link>
+              <div className="flex items-center space-x-4">
+                {isAuthenticated && (
+                  <span className="text-sm text-green-600 font-medium">
+                    ✅ Autenticado
+                  </span>
+                )}
               </div>
             </div>
-          </nav>
-        </header>
+          </div>
+        </nav>
 
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <main>
           <Routes>
             <Route 
               path="/" 
               element={
-                <div className="text-center animate-fade-in">
-                  <div className="mb-12">
-                    <h2 className="text-4xl font-bold text-gray-800 mb-4">
-                      Bem-vindo ao App de Microfrontends!
-                    </h2>
-                    <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                      Explore nossa arquitetura moderna com Module Federation, 
-                      TypeScript e Tailwind CSS.
+                <div className="flex items-center justify-center min-h-screen">
+                  <div className="text-center p-8 card max-w-2xl">
+                    <h1 className="text-4xl font-bold text-gray-800 mb-4">
+                      🎯 Bem-vindo ao Micro Hub
+                    </h1>
+                    <p className="text-gray-600 mb-8 text-lg">
+                      Uma demonstração de arquitetura de microfrontends usando Module Federation
                     </p>
-                  </div>
-                  
-                  <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                    <div className="card p-8 animate-slide-up">
-                      <div className="text-4xl mb-4">🔐</div>
-                      <h3 className="text-2xl font-bold text-gray-800 mb-4">
-                        Sistema de Autenticação
-                      </h3>
-                      <p className="text-gray-600 mb-6">
-                        Login e registro de usuários com gerenciamento de sessão 
-                        e validação de formulários.
-                      </p>
-                      <Link to="/auth" className="btn-primary inline-block">
-                        Acessar Autenticação
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <Link to="/auth" className="card hover:shadow-lg transition-shadow p-6">
+                        <div className="text-3xl mb-2">🔐</div>
+                        <h3 className="font-semibold text-gray-800">Autenticação</h3>
+                        <p className="text-sm text-gray-600">Sistema de login e registro</p>
                       </Link>
-                    </div>
-                    
-                    <div className="card p-8 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-                      <div className="text-4xl mb-4">👽</div>
-                      <h3 className="text-2xl font-bold text-gray-800 mb-4">
-                        Rick & Morty Universe
-                      </h3>
-                      <p className="text-gray-600 mb-6">
-                        Explore personagens, episódios e localizações da série 
-                        através da API oficial.
-                      </p>
-                      <Link to="/rick-morty" className="btn-primary inline-block">
-                        Explorar Universo
+                      <Link to="/rickmorty" className="card hover:shadow-lg transition-shadow p-6">
+                        <div className="text-3xl mb-2">👽</div>
+                        <h3 className="font-semibold text-gray-800">Rick & Morty</h3>
+                        <p className="text-sm text-gray-600">Explore o universo da série</p>
                       </Link>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-16 p-6 glass-effect rounded-2xl max-w-2xl mx-auto">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                      🛠️ Tecnologias Utilizadas
-                    </h4>
-                    <div className="flex flex-wrap justify-center gap-3 text-sm">
-                      <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full">React 18</span>
-                      <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full">TypeScript</span>
-                      <span className="px-3 py-1 bg-cyan-100 text-cyan-800 rounded-full">Tailwind CSS</span>
-                      <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full">Module Federation</span>
-                      <span className="px-3 py-1 bg-orange-100 text-orange-800 rounded-full">Webpack 5</span>
                     </div>
                   </div>
                 </div>
@@ -151,17 +131,17 @@ const App: React.FC = () => {
             <Route 
               path="/auth/*" 
               element={
-                <ErrorBoundary fallback={<ErrorFallback message="Erro ao carregar módulo de autenticação" />}>
+                <ErrorBoundary fallback={<ErrorFallback message="Erro ao carregar o módulo de autenticação" />}>
                   <Suspense fallback={<LoadingSpinner />}>
-                    <AuthApp onAuthChange={setIsAuthenticated} />
+                    <AuthApp onAuthChange={handleAuthChange} />
                   </Suspense>
                 </ErrorBoundary>
               } 
             />
             <Route 
-              path="/rick-morty/*" 
+              path="/rickmorty/*" 
               element={
-                <ErrorBoundary fallback={<ErrorFallback message="Erro ao carregar módulo Rick & Morty" />}>
+                <ErrorBoundary fallback={<ErrorFallback message="Erro ao carregar o módulo Rick & Morty" />}>
                   <Suspense fallback={<LoadingSpinner />}>
                     <RickMortyApp isAuthenticated={isAuthenticated} />
                   </Suspense>

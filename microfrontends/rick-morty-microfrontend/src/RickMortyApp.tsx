@@ -17,24 +17,24 @@ const RickMortyApp: React.FC<RickMortyAppProps> = ({ history }: any) => {
 
   const handleCharacterSelect = (character: Character) => {
     setSelectedCharacter(character);
-    navigate(`/character/${character.id}`);
+    navigate(`/rickmorty/characters/${character.id}`);
   };
 
   const handleEpisodeSelect = (episode: Episode) => {
     setSelectedEpisode(episode);
-    navigate(`/episode/${episode.id}`);
+    navigate(`/rickmorty/episodes/${episode.id}`);
   };
 
   const handleLocationSelect = (location: Location) => {
     setSelectedLocation(location);
-    navigate(`/location/${location.id}`);
+    navigate(`/rickmorty/locations/${location.id}`);
   };
 
-  const handleBackToList = () => {
+  const handleBackToList = (navigateUrl: string) => {
     setSelectedCharacter(null);
     setSelectedEpisode(null);
     setSelectedLocation(null);
-    navigate('/');
+    navigate(navigateUrl);
   };
 
   const getActiveTabClass = (tab: string) => {
@@ -60,19 +60,19 @@ const RickMortyApp: React.FC<RickMortyAppProps> = ({ history }: any) => {
         <div className="flex justify-center mb-8">
           <div className="bg-white rounded-2xl shadow-lg p-2 flex space-x-2">
             <button
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/rickmorty')}
               className={getActiveTabClass('characters')}
             >
               👥 Personagens
             </button>
             <button
-              onClick={() => navigate('/episodes')}
+              onClick={() => navigate('/rickmorty/episodes')}
               className={getActiveTabClass('episodes')}
             >
               📺 Episódios
             </button>
             <button
-              onClick={() => navigate('/locations')}
+              onClick={() => navigate('/rickmorty/locations')}
               className={getActiveTabClass('locations')}
             >
               🌍 Localizações
@@ -84,28 +84,28 @@ const RickMortyApp: React.FC<RickMortyAppProps> = ({ history }: any) => {
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           <Routes>
             <Route 
-              path="/" 
+              path="/rickmorty" 
               element={<CharacterList onCharacterSelect={handleCharacterSelect} />} 
             />
             <Route 
-              path="/characters" 
+              path="/rickmorty/characters" 
               element={<CharacterList onCharacterSelect={handleCharacterSelect} />} 
             />
             <Route 
-              path="/character/:id" 
+              path="/rickmorty/characters/:id" 
               element={
                 <CharacterDetail 
                   characterId={selectedCharacter?.id || 1} 
-                  onBack={handleBackToList} 
+                  onBack={() => handleBackToList('rickmorty/characters')} 
                 />
               } 
             />
             <Route 
-              path="/episodes" 
+              path="/rickmorty/episodes" 
               element={<EpisodeList onEpisodeSelect={handleEpisodeSelect} />} 
             />
             <Route 
-              path="/episode/:id" 
+              path="/rickmorty/episodes/:id" 
               element={
                 <div className="p-8 text-center">
                   <h2 className="text-2xl font-bold text-gray-800 mb-4">
@@ -122,7 +122,7 @@ const RickMortyApp: React.FC<RickMortyAppProps> = ({ history }: any) => {
                     </div>
                   )}
                   <button 
-                    onClick={handleBackToList}
+                    onClick={() => handleBackToList('rickmorty/episodes')}
                     className="btn-secondary mt-6"
                   >
                     ← Voltar para episódios
@@ -131,11 +131,11 @@ const RickMortyApp: React.FC<RickMortyAppProps> = ({ history }: any) => {
               } 
             />
             <Route 
-              path="/locations" 
+              path="/rickmorty/locations" 
               element={<LocationList onLocationSelect={handleLocationSelect} />} 
             />
             <Route 
-              path="/location/:id" 
+              path="/rickmorty/locations/:id" 
               element={
                 <div className="p-8 text-center">
                   <h2 className="text-2xl font-bold text-gray-800 mb-4">
@@ -152,7 +152,7 @@ const RickMortyApp: React.FC<RickMortyAppProps> = ({ history }: any) => {
                     </div>
                   )}
                   <button 
-                    onClick={handleBackToList}
+                    onClick={() => handleBackToList('rickmorty/locations')}
                     className="btn-secondary mt-6"
                   >
                     ← Voltar para localizações

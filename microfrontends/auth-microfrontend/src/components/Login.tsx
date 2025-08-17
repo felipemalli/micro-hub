@@ -67,7 +67,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
   return (
     <Suspense fallback={<div className="flex justify-center p-4"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div></div>}>
       <div className="max-w-md mx-auto">
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6 p-8">
           <h3 className="text-xl font-bold text-gray-800 mb-6 text-center">Entrar na sua conta</h3>
           
           {errors.general && (

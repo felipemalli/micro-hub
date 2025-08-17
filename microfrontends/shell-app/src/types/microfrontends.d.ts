@@ -1,21 +1,29 @@
 declare module 'auth/AuthApp' {
-  import { ComponentType } from 'react';
-  
-  interface AuthAppProps {
-    onAuthChange?: (isAuthenticated: boolean) => void;
+  interface MountFunction {
+    (el: HTMLElement, options?: {
+      initialPath?: string;
+      onNavigate?: (location: { pathname: string }) => void;
+      onAuthChange?: (isAuthenticated: boolean) => void;
+      defaultHistory?: any;
+    }): {
+      onParentNavigate?: (location: { pathname: string }) => void;
+    };
   }
   
-  const AuthApp: ComponentType<AuthAppProps>;
-  export default AuthApp;
+  export const mount: MountFunction;
 }
 
 declare module 'rickmorty/RickMortyApp' {
-  import { ComponentType } from 'react';
-  
-  interface RickMortyAppProps {
-    isAuthenticated?: boolean;
+  interface MountFunction {
+    (el: HTMLElement, options?: {
+      initialPath?: string;
+      onNavigate?: (location: { pathname: string }) => void;
+      isAuthenticated?: boolean;
+      defaultHistory?: any;
+    }): {
+      onParentNavigate?: (location: { pathname: string }) => void;
+    };
   }
   
-  const RickMortyApp: ComponentType<RickMortyAppProps>;
-  export default RickMortyApp;
+  export const mount: MountFunction;
 }
