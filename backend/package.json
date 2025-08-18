@@ -13,7 +13,20 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "typeorm": "typeorm-ts-node-commonjs"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "typeorm": "typeorm-ts-node-commonjs",
+    "docker:dev": "sudo docker-compose -f docker-compose.dev.yml up -d",
+    "docker:prod": "sudo docker-compose up -d",
+    "docker:down": "sudo docker-compose -f docker-compose.dev.yml down",
+    "docker:down:prod": "sudo docker-compose down",
+    "docker:logs": "sudo docker-compose -f docker-compose.dev.yml logs -f",
+    "docker:logs:prod": "sudo docker-compose logs -f",
+    "db:reset": "sudo docker-compose -f docker-compose.dev.yml down --volumes && npm run docker:dev",
+    "db:reset:prod": "sudo docker-compose down --volumes && npm run docker:prod"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
