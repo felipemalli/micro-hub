@@ -24,7 +24,7 @@ services:
       JWT_SECRET: jwt-secret-123
       NODE_ENV: development
     ports:
-      - "3001:3001"
+      - "4000:4000"
     depends_on:
       - postgres
     volumes:

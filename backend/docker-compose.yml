@@ -24,7 +24,7 @@ services:
       JWT_SECRET: your-production-jwt-secret
       NODE_ENV: production
     ports:
-      - "3001:3001"
+      - "4000:4000"
     depends_on:
       - postgres
 

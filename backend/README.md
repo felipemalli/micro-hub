@@ -64,14 +64,14 @@ npm run db:reset:prod
 
 ### Development
 
-- **Backend**: http://localhost:3001
+- **Backend**: http://localhost:4000
 - **Database**: PostgreSQL on port 5432
 - **Hot Reload**: Enabled
 - **Environment**: `development`
 
 ### Production
 
-- **Backend**: http://localhost:3001
+- **Backend**: http://localhost:4000
 - **Database**: PostgreSQL on port 5432
 - **Environment**: `production`
 - **Security**: Non-root user, optimized build
