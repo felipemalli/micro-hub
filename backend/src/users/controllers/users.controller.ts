@@ -16,12 +16,14 @@ import {
   ApiParam,
 } from '@nestjs/swagger';
 import { UserService } from '../services/user.service';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { UpdateProfileDto } from '../dto/update-profile.dto';
 import { User, UserRole } from '../../entities/user.entity';
 
 @ApiTags('users')
 @Controller('users')
+@UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class UsersController {
   constructor(private userService: UserService) {}
