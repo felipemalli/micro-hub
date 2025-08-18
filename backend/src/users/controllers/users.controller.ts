@@ -15,11 +15,12 @@ import {
   ApiBearerAuth,
   ApiParam,
 } from '@nestjs/swagger';
-import { UserService } from '../services/user.service';
-import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
-import { CurrentUser } from '../../auth/decorators/current-user.decorator';
-import { UpdateProfileDto } from '../dto/update-profile.dto';
-import { User, UserRole } from '../../entities/user.entity';
+import { UserService } from '@/users/services/user.service';
+import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
+import { CurrentUser } from '@/common/decorators/current-user.decorator';
+import { UpdateProfileDto } from '@/users/dto/update-profile.dto';
+import { User, UserRole } from '@/entities/user.entity';
+import { ERROR_MESSAGES } from '@/common/constants/error-messages';
 
 @ApiTags('users')
 @Controller('users')
@@ -40,7 +41,7 @@ export class UsersController {
   })
   async findAll(@CurrentUser() currentUser: User) {
     if (currentUser.role !== UserRole.ADMIN) {
-      throw new ForbiddenException('Admin access required');
+      throw new ForbiddenException(ERROR_MESSAGES.ADMIN_ACCESS_REQUIRED);
     }
 
     const users = await this.userService.findAll();
@@ -66,7 +67,7 @@ export class UsersController {
   })
   async getStats(@CurrentUser() currentUser: User) {
     if (currentUser.role !== UserRole.ADMIN) {
-      throw new ForbiddenException('Admin access required');
+      throw new ForbiddenException(ERROR_MESSAGES.ADMIN_ACCESS_REQUIRED);
     }
 
     const stats = await this.userService.getUserStats();
@@ -90,7 +91,7 @@ export class UsersController {
   })
   async findOne(@Param('id') id: string, @CurrentUser() currentUser: User) {
     if (currentUser.role !== UserRole.ADMIN && currentUser.id !== id) {
-      throw new ForbiddenException('You can only view your own profile');
+      throw new ForbiddenException(ERROR_MESSAGES.PROFILE_ACCESS_DENIED);
     }
 
     const user = await this.userService.findById(id);
@@ -121,7 +122,7 @@ export class UsersController {
     @CurrentUser() currentUser: User,
   ) {
     if (currentUser.role !== UserRole.ADMIN && currentUser.id !== id) {
-      throw new ForbiddenException('You can only update your own profile');
+      throw new ForbiddenException(ERROR_MESSAGES.PROFILE_ACCESS_DENIED);
     }
 
     const user = await this.userService.updateProfile(id, updateProfileDto);
@@ -147,11 +148,11 @@ export class UsersController {
   })
   async deactivate(@Param('id') id: string, @CurrentUser() currentUser: User) {
     if (currentUser.role !== UserRole.ADMIN) {
-      throw new ForbiddenException('Admin access required');
+      throw new ForbiddenException(ERROR_MESSAGES.ADMIN_ACCESS_REQUIRED);
     }
 
     if (currentUser.id === id) {
-      throw new ForbiddenException('You cannot deactivate yourself');
+      throw new ForbiddenException(ERROR_MESSAGES.CANNOT_DELETE_YOURSELF);
     }
 
     await this.userService.deactivate(id);

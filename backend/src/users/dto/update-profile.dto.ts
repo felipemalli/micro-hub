@@ -1,14 +1,6 @@
-import { IsString, IsOptional, MaxLength } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { NameValidation } from '@/common/decorators/validation.decorators';
 
 export class UpdateProfileDto {
-  @ApiProperty({
-    description: 'User full name',
-    example: 'João Silva',
-    required: false,
-  })
-  @IsString()
-  @IsOptional()
-  @MaxLength(100)
+  @NameValidation({ required: false })
   name?: string;
 }

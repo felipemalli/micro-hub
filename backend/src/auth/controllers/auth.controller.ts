@@ -13,13 +13,14 @@ import {
   ApiResponse,
   ApiBearerAuth,
 } from '@nestjs/swagger';
-import { AuthService } from '../services/auth.service';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
-import { Public } from '../decorators/public.decorator';
-import { CurrentUser } from '../decorators/current-user.decorator';
-import { RegisterDto } from '../dto/register.dto';
-import { LoginDto } from '../dto/login.dto';
-import { User } from '../../entities/user.entity';
+import { AuthService } from '@/auth/services/auth.service';
+import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
+import { Public } from '@/auth/decorators/public.decorator';
+import { CurrentUser } from '@/common/decorators/current-user.decorator';
+import { RegisterDto } from '@/auth/dto/register.dto';
+import { LoginDto } from '@/auth/dto/login.dto';
+import { User } from '@/entities/user.entity';
+import { ERROR_MESSAGES } from '@/common/constants/error-messages';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -35,7 +36,7 @@ export class AuthController {
   })
   @ApiResponse({
     status: 409,
-    description: 'User with this email already exists',
+    description: ERROR_MESSAGES.EMAIL_ALREADY_EXISTS,
   })
   async register(@Body() registerDto: RegisterDto) {
     const result = await this.authService.register(registerDto);
@@ -62,7 +63,7 @@ export class AuthController {
   })
   @ApiResponse({
     status: 401,
-    description: 'Invalid credentials',
+    description: ERROR_MESSAGES.INVALID_CREDENTIALS,
   })
   async login(@Body() loginDto: LoginDto) {
     const result = await this.authService.login(loginDto);

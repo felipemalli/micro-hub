@@ -1,31 +1,12 @@
-import { IsEmail, IsString, MinLength, MaxLength, IsNotEmpty } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { EmailValidation, NameValidation, PasswordValidation } from '@/common/decorators/validation.decorators';
 
 export class RegisterDto {
-  @ApiProperty({
-    description: 'User email address',
-    example: 'user@example.com',
-  })
-  @IsEmail()
-  @IsNotEmpty()
+  @EmailValidation()
   email: string;
 
-  @ApiProperty({
-    description: 'User password (minimum 6 characters)',
-    example: 'password123',
-    minLength: 6,
-  })
-  @IsString()
-  @MinLength(6)
-  @MaxLength(50)
+  @PasswordValidation()
   password: string;
 
-  @ApiProperty({
-    description: 'User full name',
-    example: 'João Silva',
-  })
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(100)
+  @NameValidation()
   name: string;
 }

@@ -1,23 +1,26 @@
 import { Injectable, ConflictException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from '../../users/services/user.service';
-import { RegisterDto } from '../dto/register.dto';
-import { LoginDto } from '../dto/login.dto';
-import { User } from '../../entities/user.entity';
-import { JwtPayload } from '../interfaces/jwt-payload.interface';
+import { UserService } from '@/users/services/user.service';
+import { PasswordService } from '@/common/services/password.service';
+import { RegisterDto } from '@/auth/dto/register.dto';
+import { LoginDto } from '@/auth/dto/login.dto';
+import { User } from '@/entities/user.entity';
+import { JwtPayload } from '@/auth/interfaces/jwt-payload.interface';
+import { ERROR_MESSAGES } from '@/common/constants/error-messages';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
+    private passwordService: PasswordService,
   ) {}
 
   async register(registerDto: RegisterDto): Promise<{ user: User; token: string }> {
     const existingUser = await this.userService.findByEmail(registerDto.email);
     
     if (existingUser) {
-      throw new ConflictException('User with this email already exists');
+      throw new ConflictException(ERROR_MESSAGES.EMAIL_ALREADY_EXISTS);
     }
 
     const user = await this.userService.create(registerDto);
@@ -30,17 +33,19 @@ export class AuthService {
     const user = await this.userService.findByEmail(loginDto.email);
     
     if (!user || !user.isActive) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CREDENTIALS);
     }
 
-    const isPasswordValid = await user.validatePassword(loginDto.password);
+    const isPasswordValid = await this.passwordService.validate(
+      loginDto.password, 
+      user.password
+    );
     
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CREDENTIALS);
     }
 
     const token = this.generateToken(user);
-
     return { user, token };
   }
 
@@ -59,7 +64,7 @@ export class AuthService {
       const payload = this.jwtService.verify(token);
       return await this.userService.findById(payload.sub);
     } catch (error) {
-      throw new UnauthorizedException('Invalid token');
+      throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CREDENTIALS);
     }
   }
 }

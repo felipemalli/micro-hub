@@ -1,19 +1,28 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from '../../entities/user.entity';
-import { RegisterDto } from '../../auth/dto/register.dto';
-import { UpdateProfileDto } from '../dto/update-profile.dto';
+import { User } from '@/entities/user.entity';
+import { RegisterDto } from '@/auth/dto/register.dto';
+import { UpdateProfileDto } from '@/users/dto/update-profile.dto';
+import { PasswordService } from '@/common/services/password.service';
+import { ERROR_MESSAGES } from '@/common/constants/error-messages';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private passwordService: PasswordService,
   ) {}
 
   async create(createUserDto: RegisterDto): Promise<User> {
-    const user = this.userRepository.create(createUserDto);
+    const hashedPassword = await this.passwordService.hash(createUserDto.password);
+    
+    const user = this.userRepository.create({
+      ...createUserDto,
+      password: hashedPassword,
+    });
+    
     return this.userRepository.save(user);
   }
 
@@ -30,7 +39,7 @@ export class UserService {
     });
 
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException(ERROR_MESSAGES.USER_NOT_FOUND);
     }
 
     return user;
