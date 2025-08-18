@@ -7,6 +7,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { MESSAGES } from '@/common/constants/error-messages';
 
 interface ErrorResponse {
   statusCode: number;
@@ -15,6 +16,12 @@ interface ErrorResponse {
   method: string;
   error: string;
   message: string | string[];
+}
+
+interface HttpExceptionResponse {
+  error?: string;
+  message?: string | string[];
+  statusCode?: number;
 }
 
 @Catch()
@@ -57,17 +64,16 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
   private handleHttpException(exception: HttpException) {
     const status = exception.getStatus();
-    const exceptionResponse = exception.getResponse();
+    const response = exception.getResponse() as HttpExceptionResponse;
     
-    if (typeof exceptionResponse === 'string') {
+    if (typeof response === 'string') {
       return {
         statusCode: status,
         error: exception.constructor.name,
-        message: exceptionResponse,
+        message: response,
       };
     }
 
-    const response = exceptionResponse as any;
     return {
       statusCode: status,
       error: response.error || exception.constructor.name,
@@ -79,7 +85,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     return {
       statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
       error: 'InternalServerError',
-      message: 'Internal server error',
+      message: MESSAGES.ERROR.INTERNAL_SERVER_ERROR,
     };
   }
 

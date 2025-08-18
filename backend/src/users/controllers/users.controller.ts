@@ -20,7 +20,7 @@ import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 import { CurrentUser } from '@/common/decorators/current-user.decorator';
 import { UpdateProfileDto } from '@/users/dto/update-profile.dto';
 import { User, UserRole } from '@/entities/user.entity';
-import { ERROR_MESSAGES } from '@/common/constants/error-messages';
+import { MESSAGES } from '@/common/constants/error-messages';
 
 @ApiTags('users')
 @Controller('users')
@@ -33,21 +33,21 @@ export class UsersController {
   @ApiOperation({ summary: 'Get all users (admin only)' })
   @ApiResponse({
     status: 200,
-    description: 'Users retrieved successfully',
+    description: MESSAGES.SUCCESS.USERS_RETRIEVED,
   })
   @ApiResponse({
     status: 403,
-    description: 'Forbidden - Admin access required',
+    description: MESSAGES.ERROR.ADMIN_ACCESS_REQUIRED,
   })
   async findAll(@CurrentUser() currentUser: User) {
     if (currentUser.role !== UserRole.ADMIN) {
-      throw new ForbiddenException(ERROR_MESSAGES.ADMIN_ACCESS_REQUIRED);
+      throw new ForbiddenException(MESSAGES.ERROR.ADMIN_ACCESS_REQUIRED);
     }
 
     const users = await this.userService.findAll();
     
     return {
-      message: 'Users retrieved successfully',
+      message: MESSAGES.SUCCESS.USERS_RETRIEVED,
       users: users.map(user => ({
         id: user.id,
         email: user.email,
@@ -63,17 +63,17 @@ export class UsersController {
   @ApiOperation({ summary: 'Get user statistics (admin only)' })
   @ApiResponse({
     status: 200,
-    description: 'User statistics retrieved successfully',
+    description: MESSAGES.SUCCESS.STATS_RETRIEVED,
   })
   async getStats(@CurrentUser() currentUser: User) {
     if (currentUser.role !== UserRole.ADMIN) {
-      throw new ForbiddenException(ERROR_MESSAGES.ADMIN_ACCESS_REQUIRED);
+      throw new ForbiddenException(MESSAGES.ERROR.ADMIN_ACCESS_REQUIRED);
     }
 
     const stats = await this.userService.getUserStats();
     
     return {
-      message: 'User statistics retrieved successfully',
+      message: MESSAGES.SUCCESS.STATS_RETRIEVED,
       stats,
     };
   }
@@ -83,21 +83,21 @@ export class UsersController {
   @ApiParam({ name: 'id', description: 'User ID' })
   @ApiResponse({
     status: 200,
-    description: 'User retrieved successfully',
+    description: MESSAGES.SUCCESS.USER_RETRIEVED,
   })
   @ApiResponse({
     status: 404,
-    description: 'User not found',
+    description: MESSAGES.ERROR.USER_NOT_FOUND,
   })
   async findOne(@Param('id') id: string, @CurrentUser() currentUser: User) {
     if (currentUser.role !== UserRole.ADMIN && currentUser.id !== id) {
-      throw new ForbiddenException(ERROR_MESSAGES.PROFILE_ACCESS_DENIED);
+      throw new ForbiddenException(MESSAGES.ERROR.PROFILE_ACCESS_DENIED);
     }
 
     const user = await this.userService.findById(id);
     
     return {
-      message: 'User retrieved successfully',
+      message: MESSAGES.SUCCESS.USER_RETRIEVED,
       user: {
         id: user.id,
         email: user.email,
@@ -114,7 +114,7 @@ export class UsersController {
   @ApiParam({ name: 'id', description: 'User ID' })
   @ApiResponse({
     status: 200,
-    description: 'User updated successfully',
+    description: MESSAGES.SUCCESS.USER_UPDATED,
   })
   async update(
     @Param('id') id: string,
@@ -122,13 +122,13 @@ export class UsersController {
     @CurrentUser() currentUser: User,
   ) {
     if (currentUser.role !== UserRole.ADMIN && currentUser.id !== id) {
-      throw new ForbiddenException(ERROR_MESSAGES.PROFILE_ACCESS_DENIED);
+      throw new ForbiddenException(MESSAGES.ERROR.PROFILE_ACCESS_DENIED);
     }
 
     const user = await this.userService.updateProfile(id, updateProfileDto);
     
     return {
-      message: 'User updated successfully',
+      message: MESSAGES.SUCCESS.USER_UPDATED,
       user: {
         id: user.id,
         email: user.email,
@@ -144,21 +144,21 @@ export class UsersController {
   @ApiParam({ name: 'id', description: 'User ID' })
   @ApiResponse({
     status: 200,
-    description: 'User deactivated successfully',
+    description: MESSAGES.SUCCESS.USER_DEACTIVATED,
   })
   async deactivate(@Param('id') id: string, @CurrentUser() currentUser: User) {
     if (currentUser.role !== UserRole.ADMIN) {
-      throw new ForbiddenException(ERROR_MESSAGES.ADMIN_ACCESS_REQUIRED);
+      throw new ForbiddenException(MESSAGES.ERROR.ADMIN_ACCESS_REQUIRED);
     }
 
     if (currentUser.id === id) {
-      throw new ForbiddenException(ERROR_MESSAGES.CANNOT_DELETE_YOURSELF);
+      throw new ForbiddenException(MESSAGES.ERROR.CANNOT_DELETE_YOURSELF);
     }
 
     await this.userService.deactivate(id);
     
     return {
-      message: 'User deactivated successfully',
+      message: MESSAGES.SUCCESS.USER_DEACTIVATED,
     };
   }
 }

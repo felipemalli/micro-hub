@@ -20,7 +20,7 @@ import { CurrentUser } from '@/common/decorators/current-user.decorator';
 import { RegisterDto } from '@/auth/dto/register.dto';
 import { LoginDto } from '@/auth/dto/login.dto';
 import { User } from '@/entities/user.entity';
-import { ERROR_MESSAGES } from '@/common/constants/error-messages';
+import { MESSAGES } from '@/common/constants/error-messages';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -32,17 +32,17 @@ export class AuthController {
   @ApiOperation({ summary: 'Register a new user' })
   @ApiResponse({
     status: 201,
-    description: 'User successfully registered',
+    description: MESSAGES.SUCCESS.USER_REGISTERED,
   })
   @ApiResponse({
     status: 409,
-    description: ERROR_MESSAGES.EMAIL_ALREADY_EXISTS,
+    description: MESSAGES.ERROR.EMAIL_ALREADY_EXISTS,
   })
   async register(@Body() registerDto: RegisterDto) {
     const result = await this.authService.register(registerDto);
     
     return {
-      message: 'User registered successfully',
+      message: MESSAGES.SUCCESS.USER_REGISTERED,
       user: {
         id: result.user.id,
         email: result.user.email,
@@ -59,17 +59,17 @@ export class AuthController {
   @ApiOperation({ summary: 'Login user' })
   @ApiResponse({
     status: 200,
-    description: 'User successfully logged in',
+    description: MESSAGES.SUCCESS.LOGIN_SUCCESS,
   })
   @ApiResponse({
     status: 401,
-    description: ERROR_MESSAGES.INVALID_CREDENTIALS,
+    description: MESSAGES.ERROR.INVALID_CREDENTIALS,
   })
   async login(@Body() loginDto: LoginDto) {
     const result = await this.authService.login(loginDto);
     
     return {
-      message: 'Login successful',
+      message: MESSAGES.SUCCESS.LOGIN_SUCCESS,
       user: {
         id: result.user.id,
         email: result.user.email,
@@ -86,15 +86,15 @@ export class AuthController {
   @ApiOperation({ summary: 'Get current user profile' })
   @ApiResponse({
     status: 200,
-    description: 'User profile retrieved successfully',
+    description: MESSAGES.SUCCESS.PROFILE_RETRIEVED,
   })
   @ApiResponse({
     status: 401,
-    description: 'Unauthorized',
+    description: MESSAGES.ERROR.UNAUTHORIZED,
   })
   async getProfile(@CurrentUser() user: User) {
     return {
-      message: 'Profile retrieved successfully',
+      message: MESSAGES.SUCCESS.PROFILE_RETRIEVED,
       user: {
         id: user.id,
         email: user.email,

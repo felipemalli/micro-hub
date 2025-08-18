@@ -6,7 +6,7 @@ import { RegisterDto } from '@/auth/dto/register.dto';
 import { LoginDto } from '@/auth/dto/login.dto';
 import { User } from '@/entities/user.entity';
 import { JwtPayload } from '@/auth/interfaces/jwt-payload.interface';
-import { ERROR_MESSAGES } from '@/common/constants/error-messages';
+import { MESSAGES } from '@/common/constants/error-messages';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +20,7 @@ export class AuthService {
     const existingUser = await this.userService.findByEmail(registerDto.email);
     
     if (existingUser) {
-      throw new ConflictException(ERROR_MESSAGES.EMAIL_ALREADY_EXISTS);
+      throw new ConflictException(MESSAGES.ERROR.EMAIL_ALREADY_EXISTS);
     }
 
     const user = await this.userService.create(registerDto);
@@ -33,7 +33,7 @@ export class AuthService {
     const user = await this.userService.findByEmail(loginDto.email);
     
     if (!user || !user.isActive) {
-      throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CREDENTIALS);
+      throw new UnauthorizedException(MESSAGES.ERROR.INVALID_CREDENTIALS);
     }
 
     const isPasswordValid = await this.passwordService.validate(
@@ -42,7 +42,7 @@ export class AuthService {
     );
     
     if (!isPasswordValid) {
-      throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CREDENTIALS);
+      throw new UnauthorizedException(MESSAGES.ERROR.INVALID_CREDENTIALS);
     }
 
     const token = this.generateToken(user);
@@ -64,7 +64,7 @@ export class AuthService {
       const payload = this.jwtService.verify(token);
       return await this.userService.findById(payload.sub);
     } catch (error) {
-      throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CREDENTIALS);
+      throw new UnauthorizedException(MESSAGES.ERROR.INVALID_CREDENTIALS);
     }
   }
 }

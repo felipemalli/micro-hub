@@ -5,7 +5,7 @@ import { User } from '@/entities/user.entity';
 import { RegisterDto } from '@/auth/dto/register.dto';
 import { UpdateProfileDto } from '@/users/dto/update-profile.dto';
 import { PasswordService } from '@/common/services/password.service';
-import { ERROR_MESSAGES } from '@/common/constants/error-messages';
+import { MESSAGES } from '@/common/constants/error-messages';
 
 @Injectable()
 export class UserService {
@@ -39,7 +39,7 @@ export class UserService {
     });
 
     if (!user) {
-      throw new NotFoundException(ERROR_MESSAGES.USER_NOT_FOUND);
+      throw new NotFoundException(MESSAGES.ERROR.USER_NOT_FOUND);
     }
 
     return user;

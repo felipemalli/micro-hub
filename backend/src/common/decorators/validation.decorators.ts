@@ -13,7 +13,9 @@ export function EmailValidation() {
   );
 }
 
-export function NameValidation({ required }: { required?: boolean } = {}) {
+export function NameValidation(options: { required?: boolean } = {}) {
+  const { required = true } = options;
+
   const decorators = [
     ApiProperty({
       description: 'User full name',
