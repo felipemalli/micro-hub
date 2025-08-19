@@ -13,9 +13,6 @@ const prodConfig = {
     new ModuleFederationPlugin({
       name: 'rickmorty',
       filename: 'remoteEntry.js',
-      remotes: {
-        sharedComponents: 'sharedComponents@/shared/latest/remoteEntry.js',
-      },
       exposes: {
         './RickMortyApp': './src/bootstrap',
       },

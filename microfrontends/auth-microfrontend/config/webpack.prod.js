@@ -13,9 +13,6 @@ const prodConfig = {
     new ModuleFederationPlugin({
       name: 'auth',
       filename: 'remoteEntry.js',
-      remotes: {
-        sharedComponents: 'sharedComponents@/shared/latest/remoteEntry.js',
-      },
       exposes: {
         './AuthApp': './src/bootstrap',
       },
