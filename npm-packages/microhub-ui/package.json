@@ -9,9 +9,34 @@
   "collection": "dist/collection/collection-manifest.json",
   "collection:main": "dist/collection/index.js",
   "unpkg": "dist/microhub-ui/microhub-ui.esm.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./dist/*": {
+      "import": "./dist/*",
+      "types": "./dist/*"
+    },
+    "./components/*": {
+      "import": "./dist/components/*.js",
+      "types": "./dist/components/*.d.ts"
+    },
+    "./loader": {
+      "import": "./loader/index.js",
+      "require": "./loader/index.cjs",
+      "types": "./loader/index.d.ts"
+    },
+    "./react": {
+      "import": "./react/index.ts",
+      "types": "./react/index.ts"
+    }
+  },
   "files": [
     "dist/",
-    "loader/"
+    "loader/",
+    "react/"
   ],
   "scripts": {
     "build": "stencil build",
@@ -23,6 +48,7 @@
   },
   "devDependencies": {
     "@stencil/core": "^4.36.2",
+    "@stencil/react-output-target": "^1.2.0",
     "@types/jest": "^29.5.5",
     "jest": "^29.5.0",
     "jest-cli": "^29.5.0",
