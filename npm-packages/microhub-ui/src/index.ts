@@ -1,4 +1,1 @@
-import './styles/globals.css';
-
-export * from './components';
-export * from './types';
+export type { Components, JSX } from './components';

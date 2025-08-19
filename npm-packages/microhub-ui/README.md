@@ -1,70 +1,54 @@
-# @felipemalli-libs/microhub-ui
+# MicroHub UI
 
-A reusable UI component library for the MicroHub project, built with React, TypeScript, and Tailwind CSS.
-
-> **Note**: This is a simulated private package for demonstrating a microfrontend architecture.
-
-## 🚀 Features
-
-- **TypeScript First**: Fully typed for a better development experience
-- **Tailwind CSS**: Utility-first and customizable styling
-- **Tests**: Coverage with Jest and Testing Library
+Web Components design system built with Stencil.
 
 ## Installation
 
 ```bash
-npm install @felipemalli-libs/microhub-ui
+pnpm install @felipemalli-libs/microhub-ui
 ```
 
-## Basic Usage
+## Usage
 
-```tsx
-import { Button } from "@felipemalli-libs/microhub-ui";
+### Vanilla JS/HTML
 
-function App() {
-	return (
-		<Button variant="primary" size="md" onClick={() => console.log("Clicked!")}>
-			Click me
-		</Button>
-	);
-}
+```html
+<script type="module">
+	import { defineCustomElements } from "@felipemalli-libs/microhub-ui/loader";
+	defineCustomElements();
+</script>
+
+<core-button variant="primary">Click me</core-button>
+```
+
+### React/Vue/Angular
+
+```js
+import { defineCustomElements } from "@felipemalli-libs/microhub-ui/loader";
+defineCustomElements();
 ```
 
 ## Components
 
-### Button
+This part should be improved to use Storybook and make components examples.
 
-A versatile button component with multiple variants and states.
+### `<core-button>`
 
-```tsx
-// Available Variants
-<Button variant="primary">Primary</Button>
-<Button variant="secondary">Secondary</Button>
-<Button variant="success">Success</Button>
-<Button variant="danger">Danger</Button>
+| Prop       | Type                                   | Default     | Description          |
+| ---------- | -------------------------------------- | ----------- | -------------------- |
+| `variant`  | `'primary' \| 'secondary' \| 'danger'` | `'primary'` | Button style variant |
+| `size`     | `'small' \| 'medium' \| 'large'`       | `'medium'`  | Button size          |
+| `type`     | `'button' \| 'submit' \| 'reset'`      | `'button'`  | Button type          |
+| `disabled` | `boolean`                              | `false`     | Disable button       |
 
-// Sizes
-<Button size="sm">Small</Button>
-<Button size="md">Medium</Button>
-<Button size="lg">Large</Button>
-
-// States
-<Button loading>Loading...</Button>
-<Button disabled>Disabled</Button>
-```
+| Event       | Description                  |
+| ----------- | ---------------------------- |
+| `coreClick` | Fired when button is clicked |
 
 ## Development
 
 ```bash
-# Install dependencies
-npm install
-
-# Run tests
-npm run test
-
-# Build the package
-npm run build
-
-# Development with watch mode
-npm run build:watch
+npm run build    # Build components
+npm run start    # Dev server
+npm test         # Run tests
 ```
