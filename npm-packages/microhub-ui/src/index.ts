@@ -1,1 +1,1 @@
-export type { Components, JSX, CoreButtonCustomEvent } from './components';
+export type { Components, JSX } from './components';
