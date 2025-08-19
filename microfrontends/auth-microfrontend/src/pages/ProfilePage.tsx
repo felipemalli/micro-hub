@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAuth } from '../app/providers/AuthProvider';
 import { useHistory } from '../app/providers/HistoryProvider';
-import { Button } from "@felipemalli-libs/microhub-ui";
+import { CoreButton } from "@felipemalli-libs/microhub-ui/react";
 
 const ProfilePage: React.FC = () => {
   const { user, logout } = useAuth();
@@ -66,14 +66,13 @@ const ProfilePage: React.FC = () => {
       </div>
 
       <div className="space-y-3">
-        {/* outline */}
-        <Button
+        <CoreButton
           onClick={handleLogout}
           variant="secondary"
           className="w-full py-3 border-red-300 text-red-600 hover:bg-red-50 hover:border-red-400"
         >
           Sair da conta
-        </Button>
+        </CoreButton>
       </div>
     </div>
   );

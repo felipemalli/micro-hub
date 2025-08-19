@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../app/providers/AuthProvider';
 import { FormData, FormErrors } from '../types/auth';
-import { Button } from "@felipemalli-libs/microhub-ui";
+import { CoreButton } from "@felipemalli-libs/microhub-ui/react";
 
 interface RegisterFormData extends FormData {
   name: string;
@@ -182,13 +182,13 @@ const RegisterPage: React.FC = () => {
           )}
         </div>
 
-        <Button
+        <CoreButton
           type="submit"
           disabled={isLoading}
           className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? 'Criando conta...' : 'Criar conta'}
-        </Button>
+        </CoreButton>
 
         <div className="text-center">
           <p className="text-gray-600">
