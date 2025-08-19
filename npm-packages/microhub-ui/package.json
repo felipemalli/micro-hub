@@ -17,7 +17,9 @@
     "build": "stencil build",
     "start": "stencil build --dev --watch --serve",
     "test": "stencil test --spec",
-    "test:watch": "stencil test --spec --watchAll"
+    "test:watch": "stencil test --spec --watchAll",
+    "prepublishOnly": "pnpm run build",
+    "deploy": "pnpm publish --access public"
   },
   "devDependencies": {
     "@stencil/core": "^4.36.2",
@@ -26,9 +28,15 @@
     "jest-cli": "^29.5.0",
     "typescript": "^5.0.0"
   },
+  "keywords": [
+    "microfrontends",
+    "typescript",
+    "web-components"
+  ],
+  "author": "Felipe Vahia Malliagros",
+  "license": "MIT",
   "packageManager": "pnpm@10.14.0",
   "engines": {
     "pnpm": ">=10.14.0"
-  },
-  "license": "MIT"
+  }
 }
