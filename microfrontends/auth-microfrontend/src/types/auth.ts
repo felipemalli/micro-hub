@@ -1,28 +1,12 @@
 export interface User {
-  id: number;
+  id: string;
   email: string;
   name: string;
-}
-
-export interface MockUser extends User {
-  password: string;
+  role?: 'admin' | 'user';
 }
 
 export interface AuthAppProps {
   onAuthChange?: (isAuthenticated: boolean) => void;
-}
-
-export interface LoginProps {
-  onLogin: (email: string, password: string) => Promise<User>;
-}
-
-export interface RegisterProps {
-  onRegister: (name: string, email: string, password: string) => Promise<User>;
-}
-
-export interface ProfileProps {
-  user: User;
-  onLogout: () => void;
 }
 
 export interface FormData {
@@ -31,4 +15,9 @@ export interface FormData {
 
 export interface FormErrors {
   [key: string]: string;
+}
+
+export interface ApiError {
+  message: string;
+  statusCode?: number;
 }

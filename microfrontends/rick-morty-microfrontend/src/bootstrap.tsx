@@ -12,7 +12,6 @@ const mount = (el: HTMLElement, options: any = {}) => {
   const root = createRoot(el);
   root.render(<RickMortyApp history={history} />);
 
-  // No need to return anything - shared history handles everything automatically
   return {};
 };
 
