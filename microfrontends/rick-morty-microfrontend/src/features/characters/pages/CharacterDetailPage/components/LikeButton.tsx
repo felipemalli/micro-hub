@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button } from '../../../../shared/components/ui/Button/Button';
-import { useCharacterLikes } from '../../hooks/useCharacterLikes';
+import { Button } from '../../../../../shared/components/Button/Button';
+import { useCharacterLikes } from '../../../hooks/useCharacterLikes';
 
 interface LikeButtonProps {
   characterId: number;

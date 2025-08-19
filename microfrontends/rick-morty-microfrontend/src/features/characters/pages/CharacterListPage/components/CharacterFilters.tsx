@@ -1,6 +1,6 @@
 import React from 'react';
-import { CharacterFilters as FiltersType } from '../../types/character.types';
-import { useDebounce } from '../../../../shared/hooks/useDebounce';
+import { CharacterFilters as FiltersType } from '../../../types/character.types';
+import { useDebounce } from '../../../../../shared/hooks/useDebounce';
 
 interface CharacterFiltersProps {
   filters: FiltersType;
@@ -20,8 +20,7 @@ export const CharacterFilters: React.FC<CharacterFiltersProps> = ({
   }, [debouncedName]);
 
   return (
-    <div className="bg-gray-50 p-4 rounded-lg mb-6">
-      <h3 className="text-lg font-semibold mb-4 text-gray-800">Filtros</h3>
+    <div className="mb-6 bg-gray-50 rounded-xl p-4">
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Nome */}

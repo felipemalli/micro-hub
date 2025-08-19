@@ -113,7 +113,6 @@ const AuthApp: React.FC<AuthAppProps & { history?: History }> = ({ onAuthChange,
         <div className="max-w-md mx-auto">
           <div className="auth-card">
             <div className="auth-header">
-              <h2 className="text-2xl font-bold">🔐 Sistema de Autenticação</h2>
               {user && (
                 <div className="mt-2 flex items-center justify-between">
                   <span className="text-sm opacity-90">Olá, {user.name}!</span>

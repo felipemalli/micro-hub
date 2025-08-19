@@ -2,13 +2,13 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCharacters } from '../../hooks/useCharacters';
 import { useFavorites } from '../../hooks/useFavorites';
-import { CharacterCard } from '../CharacterCard/CharacterCard';
-import { CharacterFilters } from '../CharacterFilters/CharacterFilters';
-import { Loading } from '../../../../shared/components/ui/Loading/Loading';
-import { Button } from '../../../../shared/components/ui/Button/Button';
+import { CharacterCard } from './components/CharacterCard';
+import { CharacterFilters } from './components/CharacterFilters';
+import { Loading } from '../../../../shared/components/Loading/Loading';
+import { Button } from '../../../../shared/components/Button/Button';
 import { Character } from '../../types/character.types';
 
-export const CharacterList: React.FC = () => {
+export const CharacterListPage: React.FC = () => {
   const navigate = useNavigate();
   const { characters, loading, pagination, filters, updateFilters, changePage } = useCharacters();
   const { favoritesCount } = useFavorites();

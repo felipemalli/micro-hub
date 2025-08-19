@@ -1,9 +1,9 @@
 import React from 'react';
-import { Card } from '../../../../shared/components/ui/Card/Card';
-import { Badge } from '../../../../shared/components/ui/Badge/Badge';
-import { Character } from '../../types/character.types';
-import { FavoriteButton } from '../FavoriteButton/FavoriteButton';
-import { LikeButton } from '../LikeButton/LikeButton';
+import { Card } from '../../../../../shared/components/Card/Card';
+import { Badge } from '../../../../../shared/components/Badge/Badge';
+import { Character } from '../../../types/character.types';
+import { FavoriteButton } from '../../CharacterDetailPage/components/FavoriteButton';
+import { LikeButton } from '../../CharacterDetailPage/components/LikeButton';
 
 interface CharacterCardProps {
   character: Character;

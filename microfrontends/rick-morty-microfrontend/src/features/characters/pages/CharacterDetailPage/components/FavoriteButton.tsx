@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button } from '../../../../shared/components/ui/Button/Button';
-import { useFavorites } from '../../hooks/useFavorites';
+import { Button } from '../../../../../shared/components/Button/Button';
+import { useFavorites } from '../../../hooks/useFavorites';
 
 interface FavoriteButtonProps {
   characterId: number;

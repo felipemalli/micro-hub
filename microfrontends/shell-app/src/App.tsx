@@ -1,8 +1,9 @@
 import React, { Suspense, useState, useEffect, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { Navbar } from './components/Navbar';
 
-const AuthApp = lazy(() => import('./components/AuthApp'));
-const RickMortyApp = lazy(() => import('./components/RickMortyApp'));
+const AuthApp = lazy(() => import('./microfrontends/AuthApp'));
+const RickMortyApp = lazy(() => import('./microfrontends/RickMortyApp'));
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
@@ -66,39 +67,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-        <nav className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
-              <div className="flex items-center space-x-8">
-                <Link to="/" className="text-2xl font-bold text-gray-800">
-                  🚀 Micro Hub
-                </Link>
-                <div className="flex space-x-4">
-                  <Link 
-                    to="/auth" 
-                    className="nav-link"
-                  >
-                    🔐 Autenticação
-                  </Link>
-                  <Link 
-                    to="/rickmorty" 
-                    className="nav-link"
-                  >
-                    👽 Rick & Morty
-                  </Link>
-                </div>
-              </div>
-              <div className="flex items-center space-x-4">
-                {isAuthenticated && (
-                  <span className="text-sm text-green-600 font-medium">
-                    ✅ Autenticado
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-        </nav>
-
+        <Navbar isAuthenticated={isAuthenticated} />
         <main>
           <Routes>
             <Route 
@@ -113,12 +82,12 @@ const App: React.FC = () => {
                       Uma demonstração de arquitetura de microfrontends usando Module Federation
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <Link to="/auth" className="card hover:shadow-lg transition-shadow p-6">
+                      <Link to="/auth" className="bg-white rounded-lg hover:shadow-lg transition-shadow p-6">
                         <div className="text-3xl mb-2">🔐</div>
                         <h3 className="font-semibold text-gray-800">Autenticação</h3>
                         <p className="text-sm text-gray-600">Sistema de login e registro</p>
                       </Link>
-                      <Link to="/rickmorty" className="card hover:shadow-lg transition-shadow p-6">
+                      <Link to="/rickmorty" className="bg-white rounded-lg hover:shadow-lg transition-shadow p-6">
                         <div className="text-3xl mb-2">👽</div>
                         <h3 className="font-semibold text-gray-800">Rick & Morty</h3>
                         <p className="text-sm text-gray-600">Explore o universo da série</p>

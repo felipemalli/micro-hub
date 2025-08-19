@@ -15,10 +15,6 @@
 		@apply bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden max-w-md mx-auto;
 	}
 
-	.auth-header {
-		@apply bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6 text-center;
-	}
-
 	.auth-form {
 		@apply p-6 space-y-4;
 	}

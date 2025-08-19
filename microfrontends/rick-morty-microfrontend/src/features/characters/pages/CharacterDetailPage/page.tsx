@@ -1,14 +1,14 @@
 import React from 'react';
 import { useCharacterDetail } from '../../hooks/useCharacterDetail';
-import { FavoriteButton } from '../FavoriteButton/FavoriteButton';
-import { LikeButton } from '../LikeButton/LikeButton';
-import { Badge } from '../../../../shared/components/ui/Badge/Badge';
-import { Button } from '../../../../shared/components/ui/Button/Button';
-import { Loading } from '../../../../shared/components/ui/Loading/Loading';
+import { FavoriteButton } from './components/FavoriteButton';
+import { LikeButton } from './components/LikeButton';
+import { Badge } from '../../../../shared/components/Badge/Badge';
+import { Button } from '../../../../shared/components/Button/Button';
+import { Loading } from '../../../../shared/components/Loading/Loading';
 import { CharacterDetailProps } from '../../types/character.types';
 import { useHistory } from '../../../../app/providers/HistoryProvider';
 
-export const CharacterDetail: React.FC<CharacterDetailProps> = ({ 
+export const CharacterDetailPage: React.FC<CharacterDetailProps> = ({ 
   characterId, 
   onBack 
 }) => {

@@ -1,8 +1,8 @@
-export { CharacterList } from './components/CharacterList/CharacterList';
-export { CharacterDetail } from './components/CharacterDetail/CharacterDetail';
-export { CharacterCard } from './components/CharacterCard/CharacterCard';
-export { FavoriteButton } from './components/FavoriteButton/FavoriteButton';
-export { LikeButton } from './components/LikeButton/LikeButton';
+export { CharacterListPage } from './pages/CharacterListPage/page';
+export { CharacterDetailPage } from './pages/CharacterDetailPage/page';
+export { CharacterCard } from './pages/CharacterListPage/components/CharacterCard';
+export { FavoriteButton } from './pages/CharacterDetailPage/components/FavoriteButton';
+export { LikeButton } from './pages/CharacterDetailPage/components/LikeButton';
 
 export { useCharacters } from './hooks/useCharacters';
 export { useFavorites } from './hooks/useFavorites';

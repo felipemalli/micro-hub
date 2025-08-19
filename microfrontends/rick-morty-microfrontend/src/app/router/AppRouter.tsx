@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { CharacterList, CharacterDetail } from '../../features/characters';
+import { CharacterListPage, CharacterDetailPage } from '../../features/characters';
 
 export const AppRouter: React.FC = () => {
   return (
@@ -18,9 +18,9 @@ export const AppRouter: React.FC = () => {
       {/* Content */}
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden min-h-[600px]">
         <Routes>
-          <Route path="/rickmorty" element={<CharacterList />} />
-          <Route path="/rickmorty/characters" element={<CharacterList />} />
-          <Route path="/rickmorty/characters/:id" element={<CharacterDetail />} />
+          <Route path="/rickmorty" element={<CharacterListPage />} />
+          <Route path="/rickmorty/characters" element={<CharacterListPage />} />
+          <Route path="/rickmorty/characters/:id" element={<CharacterDetailPage />} />
         </Routes>
       </div>
 

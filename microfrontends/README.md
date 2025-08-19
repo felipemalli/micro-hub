@@ -25,15 +25,15 @@ front_micro/
 ```bash
 # No shell-app
 cd shell-app
-npm install
+pnpm install
 
 # No auth-microfrontend
 cd ../auth-microfrontend
-npm install
+pnpm install
 
 # No rick-morty-microfrontend
 cd ../rick-morty-microfrontend
-npm install
+pnpm install
 ```
 
 ### 2. Executar os microfrontends
@@ -44,31 +44,6 @@ npm install
 npm start
 # ou
 npm run dev
-```
-
-**Opção 2 - Modo simples com background:**
-
-```bash
-npm run start-simple
-```
-
-**Opção 3 - Manual (3 terminais separados):**
-
-```bash
-# Terminal 1 - Rick and Morty Microfrontend:
-cd rick-morty-microfrontend && npm start
-
-# Terminal 2 - Auth Microfrontend:
-cd auth-microfrontend && npm start
-
-# Terminal 3 - Shell App:
-cd shell-app && npm start
-```
-
-**Para parar todos os serviços:**
-
-```bash
-npm run stop
 ```
 
 ### 3. Acessar a aplicação
@@ -126,23 +101,6 @@ Configuração de exposição de módulos:
 - Estados de loading e erro
 - Animações sutis com CSS
 - Tema consistente entre microfrontends
-
-## 🔧 Scripts Disponíveis
-
-**Scripts principais:**
-
-- `npm start` - Inicia todos os microfrontends automaticamente
-- `npm run dev` - Alias para desenvolvimento
-- `npm run start-simple` - Modo simples com opção de background
-- `npm run stop` - Para todos os serviços
-- `npm run install-all` - Instala dependências de todos os projetos
-- `npm run build-all` - Builda todos para produção
-- `npm run clean` - Remove node_modules
-
-**Scripts individuais (em cada pasta):**
-
-- `npm start` - Executa microfrontend individual
-- `npm run build` - Cria build de produção
 
 ## 🚨 Ordem de Execução Importante
 
