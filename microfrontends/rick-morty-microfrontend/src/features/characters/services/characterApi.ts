@@ -14,16 +14,10 @@ export const characterApi = {
 		if (filters.species) params.species = filters.species;
 		if (filters.gender) params.gender = filters.gender;
 
-		return rickMortyApi.get<ApiResponse<Character>>("/character", params, {
-			cache: true,
-			ttlMs: 2 * 60 * 1000, // 2 minutes
-		});
+		return rickMortyApi.get<ApiResponse<Character>>("/character", params);
 	},
 
 	getCharacter: async (id: number): Promise<Character> => {
-		return rickMortyApi.get<Character>(`/character/${id}`, undefined, {
-			cache: true,
-			ttlMs: 10 * 60 * 1000, // 10 minutes
-		});
+		return rickMortyApi.get<Character>(`/character/${id}`);
 	},
 };

@@ -13,7 +13,9 @@ export const CharacterDetailPage: React.FC<CharacterDetailProps> = ({
 	characterId,
 	onBack,
 }) => {
-	const { character, loading } = useCharacterDetail(characterId);
+	const { character, isLoading, error, mutate } = useCharacterDetail({
+		characterId,
+	});
 
 	const history = useHistory();
 
@@ -23,16 +25,19 @@ export const CharacterDetailPage: React.FC<CharacterDetailProps> = ({
 		} else if (history) {
 			history.push("/rickmorty/characters");
 		} else {
-			// Fallback se não tiver history
 			window.history.back();
 		}
 	};
 
-	if (loading.isLoading) {
+	const handleRetry = () => {
+		mutate();
+	};
+
+	if (isLoading) {
 		return <Loading message="Carregando detalhes do personagem..." />;
 	}
 
-	if (loading.error || !character) {
+	if (error || !character) {
 		return (
 			<div className="text-center p-8">
 				<div className="text-red-600 mb-4">
@@ -42,9 +47,14 @@ export const CharacterDetailPage: React.FC<CharacterDetailProps> = ({
 					Erro ao carregar
 				</h3>
 				<p className="text-gray-600 mb-4">
-					{loading.error || "Personagem não encontrado"}
+					{error || "Personagem não encontrado"}
 				</p>
-				<CoreButton onCoreClick={handleBack}>Voltar para lista</CoreButton>
+				<div className="space-x-2">
+					<CoreButton onCoreClick={handleRetry}>Tentar novamente</CoreButton>
+					<CoreButton variant="outline" onCoreClick={handleBack}>
+						Voltar para lista
+					</CoreButton>
+				</div>
 			</div>
 		);
 	}
