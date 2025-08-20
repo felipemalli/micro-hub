@@ -34,6 +34,8 @@
   "files": ["dist/", "loader/", "react/", "react-dist/"],
   "scripts": {
     "build": "stencil build",
+    "build:react": "tsc -p tsconfig.react.json",
+    "postbuild": "pnpm run build:react",
     "start": "stencil build --dev --watch --serve",
     "test": "stencil test --spec",
     "test:watch": "stencil test --spec --watchAll",

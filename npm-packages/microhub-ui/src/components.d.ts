@@ -38,7 +38,7 @@ export namespace Components {
         /**
           * @default ''
          */
-        "id": string;
+        "inputId": string;
         /**
           * @default ''
          */
@@ -148,7 +148,7 @@ declare namespace LocalJSX {
         /**
           * @default ''
          */
-        "id"?: string;
+        "inputId"?: string;
         /**
           * @default ''
          */

@@ -50,7 +50,7 @@ describe('core-input', () => {
   it('sets input attributes correctly', async () => {
     const page = await newSpecPage({
       components: [CoreInput],
-      html: `<core-input type="email" placeholder="Digite seu email" value="test@example.com" name="email" id="email-input" required></core-input>`,
+      html: `<core-input type="email" placeholder="Digite seu email" value="test@example.com" name="email" input-id="email-input" required></core-input>`,
     });
 
     const input = page.root?.shadowRoot?.querySelector('input');

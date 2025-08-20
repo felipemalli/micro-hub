@@ -13,7 +13,7 @@ export class CoreInput {
   @Prop() required: boolean = false;
   @Prop() size: 'small' | 'large' = 'large';
   @Prop() name: string = '';
-  @Prop() id: string = '';
+  @Prop() inputId: string = '';
   @Prop() error: boolean = false;
 
   @Event() coreInput: EventEmitter<Event>;
@@ -47,7 +47,7 @@ export class CoreInput {
         disabled={this.disabled}
         required={this.required}
         name={this.name}
-        id={this.id}
+        id={this.inputId}
         onInput={this.handleInput}
         onChange={this.handleChange}
         onFocus={this.handleFocus}
