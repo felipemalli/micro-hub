@@ -1,5 +1,5 @@
-import "@felipemalli-libs/microhub-ui/styles.css";
 import './index.css';
+import "@felipemalli-libs/microhub-ui/styles.css";
 import React, { useEffect, useState } from 'react';
 import { Router } from 'react-router-dom';
 import { AppRouter } from './app/router/AppRouter';
