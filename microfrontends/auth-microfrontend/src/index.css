@@ -2,14 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
-
-@layer base {
-	body {
-		font-family: "Inter", system-ui, sans-serif;
-	}
-}
-
 @layer components {
 	.auth-card {
 		@apply bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden max-w-md mx-auto;

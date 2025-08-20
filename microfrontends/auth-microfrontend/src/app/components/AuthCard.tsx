@@ -10,7 +10,7 @@ export const AuthCard = ({ onSubmit, title, description, children }: AuthCardPro
     <div className="bg-white rounded-lg shadow-md p-8 mx-auto flex flex-col max-w-md">
       <div className="mb-8">
         <h3>{title}</h3>
-        <p className="text-gray-600">{description}</p>
+        <p>{description}</p>
       </div>
       <form onSubmit={onSubmit} className="space-y-6">
         {children}

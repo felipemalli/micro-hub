@@ -182,6 +182,7 @@ const RegisterPage: React.FC = () => {
           variant="primary"
           disabled={isLoading}
           className="w-full"
+          onClick={handleSubmit}
         >
           {isLoading ? 'Criando conta...' : 'Criar conta'}
         </CoreButton>
@@ -190,8 +191,7 @@ const RegisterPage: React.FC = () => {
           <p className="text-gray-600">
             Já tem uma conta?{' '}
             <CoreButton
-              type="button"
-              variant="secondary"
+              variant="underline"
               onCoreClick={() => navigate('/auth/login')}
             >
               Entrar

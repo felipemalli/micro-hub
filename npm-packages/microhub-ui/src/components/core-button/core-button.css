@@ -74,7 +74,7 @@
 .btn--underline {
 	background-color: transparent;
 	color: var(--color-primary);
-	text-decoration: underline;
+	text-decoration: none;
 	padding: 0;
 }
 
@@ -82,6 +82,7 @@
 	background-color: transparent;
 	opacity: 0.9;
 	transform: none;
+	text-decoration: underline;
 }
 
 .btn:disabled {

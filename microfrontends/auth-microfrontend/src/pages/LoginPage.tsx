@@ -119,6 +119,7 @@ const LoginPage: React.FC = () => {
         type="submit"
         variant="primary"
         disabled={isLoading}
+        onClick={handleSubmit}
       >
         {isLoading ? 'Entrando...' : 'Entrar'}
       </CoreButton>
@@ -128,7 +129,7 @@ const LoginPage: React.FC = () => {
           Não tem uma conta?{' '}
           <CoreButton
             type="button"
-            variant="secondary"
+            variant="underline"
             onCoreClick={() => navigate('/auth/register')}
           >
             Criar conta
