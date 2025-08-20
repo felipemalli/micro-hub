@@ -71,6 +71,19 @@
 	transform: none;
 }
 
+.btn--underline {
+	background-color: transparent;
+	color: var(--color-primary);
+	text-decoration: underline;
+	padding: 0;
+}
+
+.btn--underline:hover:not(:disabled) {
+	background-color: transparent;
+	opacity: 0.9;
+	transform: none;
+}
+
 .btn:disabled {
 	opacity: 0.5;
 	cursor: not-allowed;
