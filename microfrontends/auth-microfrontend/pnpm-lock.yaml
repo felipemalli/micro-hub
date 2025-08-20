@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@felipemalli-libs/microhub-ui':
-        specifier: ^2.1.0
-        version: 2.1.1
+        specifier: ^2.1.3
+        version: 2.1.3
       '@stencil/react-output-target':
         specifier: ^1.2.0
         version: 1.2.0(@stencil/core@4.36.2)(@types/react@19.1.10)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -271,8 +271,8 @@ packages:
   '@emotion/unitless@0.10.0':
     resolution: {integrity: sha512-dFoMUuQA20zvtVTuxZww6OHoJYgrzfKM1t52mVySDJnMSEa08ruEvdYQbhvyu6soU+NeLVd3yKfTfT0NeV6qGg==}
 
-  '@felipemalli-libs/microhub-ui@2.1.1':
-    resolution: {integrity: sha512-8E/CtZOOI+SNINo0kJk8krYjMV+n52Z/Ya5PgLelQAe7MgN/LOTFkmnhr7+Dr90G8arqWp5WiWs1HJ0qse9Mcw==}
+  '@felipemalli-libs/microhub-ui@2.1.3':
+    resolution: {integrity: sha512-S8AlSx060RzsmE2UTukWAxuqSSxEalqH9heLzSDR0no3qQOZnYbRh8H61S0h7ko8A9LRqMavlgj2PgrFOrNBpg==}
     engines: {pnpm: '>=10.14.0'}
 
   '@isaacs/cliui@8.0.2':
@@ -2490,7 +2490,7 @@ snapshots:
 
   '@emotion/unitless@0.10.0': {}
 
-  '@felipemalli-libs/microhub-ui@2.1.1': {}
+  '@felipemalli-libs/microhub-ui@2.1.3': {}
 
   '@isaacs/cliui@8.0.2':
     dependencies:

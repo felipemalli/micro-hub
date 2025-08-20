@@ -1,0 +1,19 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+      "rootDir": "react",
+      "outDir": "react-dist",
+      "target": "ES2019",
+      "module": "ES2020",
+      "moduleResolution": "Node",
+      "jsx": "react",
+      "jsxFactory": "React.createElement",
+      "jsxFragmentFactory": "React.Fragment",
+      "declaration": true,
+      "emitDeclarationOnly": false,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "strict": false
+    },
+    "include": ["react/**/*"]
+  }
