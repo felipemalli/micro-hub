@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../app/providers/AuthProvider';
 import { FormData, FormErrors } from '../types/auth';
-import { CoreButton } from "@felipemalli-libs/microhub-ui/react";
+import { CoreButton, CoreInput } from "@felipemalli-libs/microhub-ui/react";
 
 interface RegisterFormData extends FormData {
   name: string;
@@ -21,14 +21,17 @@ const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
   const { register } = useAuth();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+
+  const handleCoreInput = (e: CustomEvent) => {
+    const target = (e as any).detail?.target as HTMLInputElement | undefined;
+    if (!target) return;
+    const { name, value } = target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
-    
-    if (errors[name]) {
+
+    if ((errors as any)[name]) {
       setErrors(prev => ({
         ...prev,
         [name]: ''
@@ -106,16 +109,14 @@ const RegisterPage: React.FC = () => {
           <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
             Nome completo
           </label>
-          <input
+          <CoreInput
             type="text"
-            id="name"
+            inputId="name"
             name="name"
             value={formData.name}
-            onChange={handleChange}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-              errors.name ? 'border-red-300 bg-red-50' : 'border-gray-300'
-            }`}
             placeholder="Seu nome completo"
+            error={!!errors.name}
+            onCoreInput={handleCoreInput}
           />
           {errors.name && (
             <p className="text-red-600 text-sm mt-1">{errors.name}</p>
@@ -126,16 +127,14 @@ const RegisterPage: React.FC = () => {
           <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
             Email
           </label>
-          <input
+          <CoreInput
             type="email"
-            id="email"
+            inputId="email"
             name="email"
             value={formData.email}
-            onChange={handleChange}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-              errors.email ? 'border-red-300 bg-red-50' : 'border-gray-300'
-            }`}
             placeholder="seu@email.com"
+            error={!!errors.email}
+            onCoreInput={handleCoreInput}
           />
           {errors.email && (
             <p className="text-red-600 text-sm mt-1">{errors.email}</p>
@@ -146,16 +145,14 @@ const RegisterPage: React.FC = () => {
           <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
             Senha
           </label>
-          <input
+          <CoreInput
             type="password"
-            id="password"
+            inputId="password"
             name="password"
             value={formData.password}
-            onChange={handleChange}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-              errors.password ? 'border-red-300 bg-red-50' : 'border-gray-300'
-            }`}
             placeholder="Mínimo 6 caracteres"
+            error={!!errors.password}
+            onCoreInput={handleCoreInput}
           />
           {errors.password && (
             <p className="text-red-600 text-sm mt-1">{errors.password}</p>
@@ -166,16 +163,14 @@ const RegisterPage: React.FC = () => {
           <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
             Confirmar senha
           </label>
-          <input
+          <CoreInput
             type="password"
-            id="confirmPassword"
+            inputId="confirmPassword"
             name="confirmPassword"
             value={formData.confirmPassword}
-            onChange={handleChange}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-              errors.confirmPassword ? 'border-red-300 bg-red-50' : 'border-gray-300'
-            }`}
             placeholder="Repita sua senha"
+            error={!!errors.confirmPassword}
+            onCoreInput={handleCoreInput}
           />
           {errors.confirmPassword && (
             <p className="text-red-600 text-sm mt-1">{errors.confirmPassword}</p>

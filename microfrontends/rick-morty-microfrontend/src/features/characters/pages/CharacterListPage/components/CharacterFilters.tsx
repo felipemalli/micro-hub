@@ -1,4 +1,5 @@
 import React from 'react';
+import { CoreInput } from "@felipemalli-libs/microhub-ui/react";
 import { CharacterFilters as FiltersType } from '../../../types/character.types';
 import { useDebounce } from '../../../../../shared/hooks/useDebounce';
 
@@ -28,12 +29,12 @@ export const CharacterFilters: React.FC<CharacterFiltersProps> = ({
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Nome
           </label>
-          <input
+          <CoreInput
             type="text"
             value={filters.name || ''}
-            onChange={(e) => onFiltersChange({ name: e.target.value })}
             placeholder="Digite o nome..."
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            size="small"
+            onCoreInput={(e: any) => onFiltersChange({ name: e.detail?.target?.value || '' })}
           />
         </div>
 
@@ -59,12 +60,12 @@ export const CharacterFilters: React.FC<CharacterFiltersProps> = ({
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Espécie
           </label>
-          <input
+          <CoreInput
             type="text"
             value={filters.species || ''}
-            onChange={(e) => onFiltersChange({ species: e.target.value })}
             placeholder="Ex: Human, Alien..."
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            size="small"
+            onCoreInput={(e: any) => onFiltersChange({ species: e.detail?.target?.value || '' })}
           />
         </div>
 

@@ -1,9 +1,10 @@
+import './styles/globals.css';
+import "@felipemalli-libs/microhub-ui/styles.css";
 import React, { useEffect, useState } from 'react';
 import { Router } from 'react-router-dom';
 import { AppRouter } from './app/router/AppRouter';
 import { ErrorBoundary } from './app/providers/ErrorBoundary';
 import { HistoryProvider } from './app/providers/HistoryProvider';
-import './styles/globals.css';
 import { History } from 'history';
 
 const App: React.FC<{ history?: History }> = ({ history }) => {

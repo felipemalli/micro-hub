@@ -15,14 +15,17 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+
+  const handleInput = (e: CustomEvent) => {
+    const target = e.detail?.target as HTMLInputElement;
+    if (!target) return;
+    const { name, value } = target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
-    
-    if (errors[name]) {
+
+    if ((errors as any)[name]) {
       setErrors(prev => ({
         ...prev,
         [name]: ''
@@ -80,16 +83,14 @@ const LoginPage: React.FC = () => {
         <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
           Email
         </label>
-        <input
+        <CoreInput
           type="email"
-          id="email"
+          inputId="email"
           name="email"
           value={formData.email}
-          onChange={handleChange}
-          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-            errors.email ? 'border-red-300 bg-red-50' : 'border-gray-300'
-          }`}
           placeholder="seu@email.com"
+          error={!!errors.email}
+          onCoreInput={handleInput}
         />
         {errors.email && (
           <p className="text-red-600 text-sm mt-1">{errors.email}</p>
@@ -100,23 +101,19 @@ const LoginPage: React.FC = () => {
         <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
           Senha
         </label>
-        <input
+        <CoreInput
           type="password"
-          id="password"
+          inputId="password"
           name="password"
           value={formData.password}
-          onChange={handleChange}
-          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-            errors.password ? 'border-red-300 bg-red-50' : 'border-gray-300'
-          }`}
           placeholder="Sua senha"
+          error={!!errors.password}
+          onCoreInput={handleInput}
         />
         {errors.password && (
           <p className="text-red-600 text-sm mt-1">{errors.password}</p>
         )}
       </div>
-
-      <CoreInput type="email" placeholder="seu@email.com" />
 
       <CoreButton
         type="submit"
