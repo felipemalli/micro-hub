@@ -1,3 +1,4 @@
+import "@felipemalli-libs/microhub-ui/dist/microhub-ui/microhub-ui.css";
 import React, { useEffect, useState } from 'react';
 import { Router } from 'react-router-dom';
 import { AppRouter } from './app/router/AppRouter';
