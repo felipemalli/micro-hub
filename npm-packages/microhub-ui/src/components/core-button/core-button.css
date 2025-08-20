@@ -43,9 +43,21 @@
 	color: white;
 }
 
+.btn--outline {
+	background-color: transparent;
+	border: 2px solid var(--color-primary);
+	color: var(--color-primary);
+}
+
 .btn:hover:not(:disabled) {
 	opacity: 0.9;
 	transform: translateY(-1px);
+}
+
+.btn--outline:hover:not(:disabled) {
+	background-color: var(--color-primary);
+	color: white;
+	opacity: 1;
 }
 
 .btn:disabled {
