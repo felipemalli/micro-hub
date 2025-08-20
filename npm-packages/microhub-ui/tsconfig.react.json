@@ -13,7 +13,15 @@
       "emitDeclarationOnly": false,
       "esModuleInterop": true,
       "skipLibCheck": true,
-      "strict": false
+      "strict": false,
+      "baseUrl": ".",
+      "types": ["react"],
+      "typeRoots": ["./node_modules/@types"],
+      "paths": {
+        "@felipemalli-libs/microhub-ui": ["./dist"],
+        "@felipemalli-libs/microhub-ui/dist/*": ["./dist/*"],
+        "react": ["./node_modules/@types/react/index.d.ts"]
+      }
     },
     "include": ["react/**/*"]
   }

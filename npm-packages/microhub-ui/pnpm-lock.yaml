@@ -18,12 +18,18 @@ importers:
       '@types/jest':
         specifier: ^29.5.5
         version: 29.5.14
+      '@types/react':
+        specifier: ^19.1.10
+        version: 19.1.10
       jest:
         specifier: ^29.5.0
         version: 29.7.0(@types/node@24.3.0)
       jest-cli:
         specifier: ^29.5.0
         version: 29.7.0(@types/node@24.3.0)
+      react:
+        specifier: ^19.1.1
+        version: 19.1.1
       typescript:
         specifier: ^5.0.0
         version: 5.9.2
