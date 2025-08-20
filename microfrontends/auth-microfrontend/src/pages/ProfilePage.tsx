@@ -31,7 +31,6 @@ const ProfilePage: React.FC = () => {
         <h1 className="text-3xl font-bold text-gray-800 mb-2">Perfil</h1>
         <p className="text-gray-600">Suas informações pessoais</p>
       </div>
-
       <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
         <div className="space-y-4">
           <div>
@@ -47,7 +46,6 @@ const ProfilePage: React.FC = () => {
             </label>
             <p className="text-lg font-medium text-gray-800">{user.email}</p>
           </div>
-
           {user.role && (
             <div>
               <label className="block text-sm font-medium text-gray-500 mb-1">
@@ -64,7 +62,6 @@ const ProfilePage: React.FC = () => {
           )}
         </div>
       </div>
-
       <div className="space-y-3">
         <CoreButton
           onClick={handleLogout}

@@ -34,7 +34,7 @@ export class ErrorBoundary extends Component<Props, State> {
             <h1 className="text-2xl font-bold text-gray-800 mb-2">
               Ops! Algo deu errado
             </h1>
-            <p className="text-gray-600 mb-4">
+            <p className="mb-4">
               Ocorreu um erro inesperado no sistema de autenticação. Tente recarregar a página.
             </p>
             <CoreButton

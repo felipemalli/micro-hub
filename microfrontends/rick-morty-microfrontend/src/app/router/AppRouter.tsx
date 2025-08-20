@@ -5,17 +5,15 @@ import { CharacterListPage, CharacterDetailPage } from '../../features/character
 export const AppRouter: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      {/* Header */}
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent mb-2">
+        <h1 className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent mb-2">
           🛸 Rick & Morty Characters
         </h1>
-        <p className="text-gray-600 text-lg">
+        <p className="text-lg">
           Explore, curta e favorite os personagens do multiverso de Rick e Morty
         </p>
       </div>
 
-      {/* Content */}
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden min-h-[600px]">
         <Routes>
           <Route path="/rickmorty" element={<CharacterListPage />} />
@@ -24,7 +22,6 @@ export const AppRouter: React.FC = () => {
         </Routes>
       </div>
 
-      {/* Footer */}
       <div className="text-center mt-8 text-gray-500 text-sm">
         <p>
           Dados fornecidos pela{' '}

@@ -24,7 +24,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({ character, onClick
       <div className="absolute top-2 right-2 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity z-10">
         <FavoriteButton characterId={character.id} />
       </div>
-      
       <div className="aspect-square">
         <img
           src={character.image}
@@ -33,29 +32,26 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({ character, onClick
           loading="lazy"
         />
       </div>
-      
       <div className="p-4">
         <h3 className="font-bold text-lg mb-2 text-gray-800 truncate">
           {character.name}
         </h3>
-        
         <div className="flex items-center justify-between mb-3">
           <Badge variant={getStatusVariant(character.status)}>
             {character.status}
           </Badge>
           <LikeButton characterId={character.id} />
         </div>
-        
         <div className="text-sm text-gray-600 space-y-1">
-          <p>
-            <span className="font-medium">Espécie:</span> {character.species}
+          <p className='truncate text-ellipsis overflow-hidden'>
+            <span>Espécie:</span> {character.species}
           </p>
-          <p>
-            <span className="font-medium">Gênero:</span> {character.gender}
+          <p className='truncate text-ellipsis overflow-hidden'>
+            <span>Gênero:</span> {character.gender}
           </p>
-          <p>
-            <span className="font-medium">Origem:</span> 
-            <span className="truncate block">{character.origin.name}</span>
+          <p className='truncate text-ellipsis overflow-hidden'>
+            <span>Origem:</span> 
+            <span>{character.origin.name}</span>
           </p>
         </div>
       </div>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../app/providers/AuthProvider';
 import { FormData, FormErrors } from '../types/auth';
 import { CoreButton, CoreInput } from "@felipemalli-libs/microhub-ui/react";
+import { AuthCard } from '../app/components/AuthCard';
 
 interface RegisterFormData extends FormData {
   name: string;
@@ -77,6 +78,8 @@ const RegisterPage: React.FC = () => {
       return;
     }
 
+    console.log(e)
+
     setIsLoading(true);
     
     try {
@@ -92,21 +95,14 @@ const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">Criar Conta</h1>
-        <p className="text-gray-600">Crie sua conta para começar</p>
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-6">
+    <AuthCard onSubmit={handleSubmit} title='Criar Conta' description='Crie sua conta para começar'>
         {errors.general && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+      <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
             {errors.general}
           </div>
         )}
-
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="name" className="block text-sm mb-2">
             Nome completo
           </label>
           <CoreInput
@@ -122,9 +118,8 @@ const RegisterPage: React.FC = () => {
             <p className="text-red-600 text-sm mt-1">{errors.name}</p>
           )}
         </div>
-
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="email" className="block text-sm mb-2">
             Email
           </label>
           <CoreInput
@@ -140,9 +135,8 @@ const RegisterPage: React.FC = () => {
             <p className="text-red-600 text-sm mt-1">{errors.email}</p>
           )}
         </div>
-
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="password" className="block text-sm mb-2">
             Senha
           </label>
           <CoreInput
@@ -158,9 +152,8 @@ const RegisterPage: React.FC = () => {
             <p className="text-red-600 text-sm mt-1">{errors.password}</p>
           )}
         </div>
-
         <div>
-          <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="confirmPassword" className="block text-sm mb-2">
             Confirmar senha
           </label>
           <CoreInput
@@ -176,7 +169,6 @@ const RegisterPage: React.FC = () => {
             <p className="text-red-600 text-sm mt-1">{errors.confirmPassword}</p>
           )}
         </div>
-
         <CoreButton
           type="submit"
           variant="primary"
@@ -186,9 +178,8 @@ const RegisterPage: React.FC = () => {
         >
           {isLoading ? 'Criando conta...' : 'Criar conta'}
         </CoreButton>
-
         <div className="text-center">
-          <p className="text-gray-600">
+          <p>
             Já tem uma conta?{' '}
             <CoreButton
               variant="underline"
@@ -198,8 +189,7 @@ const RegisterPage: React.FC = () => {
             </CoreButton>
           </p>
         </div>
-      </form>
-    </div>
+    </AuthCard>
   );
 };
 

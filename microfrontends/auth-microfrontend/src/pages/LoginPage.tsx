@@ -15,7 +15,6 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-
   const handleInput = (e: CustomEvent) => {
     const target = e.detail?.target as HTMLInputElement;
     if (!target) return;
@@ -78,9 +77,8 @@ const LoginPage: React.FC = () => {
           {errors.general}
         </div>
       )}
-
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="email" className="block text-sm mb-2">
           Email
         </label>
         <CoreInput
@@ -96,9 +94,8 @@ const LoginPage: React.FC = () => {
           <p className="text-red-600 text-sm mt-1">{errors.email}</p>
         )}
       </div>
-
       <div>
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="password" className="block text-sm mb-2">
           Senha
         </label>
         <CoreInput
@@ -114,18 +111,17 @@ const LoginPage: React.FC = () => {
           <p className="text-red-600 text-sm mt-1">{errors.password}</p>
         )}
       </div>
-
-      <CoreButton
+        <CoreButton
         type="submit"
         variant="primary"
         disabled={isLoading}
         onClick={handleSubmit}
-      >
+        className="w-full"
+        >
         {isLoading ? 'Entrando...' : 'Entrar'}
-      </CoreButton>
-
+        </CoreButton>
       <div className="text-center">
-        <p className="text-gray-600">
+        <p>
           Não tem uma conta?{' '}
           <CoreButton
             type="button"

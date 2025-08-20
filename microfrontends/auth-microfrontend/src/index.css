@@ -59,6 +59,6 @@
 .h-screen-minus-header {
 	height: calc(100vh - 3rem);
 	@media (min-width: 768px) {
-		height: calc(100vh - 4rem);
+		height: calc(100vh - 20rem);
 	}
 }

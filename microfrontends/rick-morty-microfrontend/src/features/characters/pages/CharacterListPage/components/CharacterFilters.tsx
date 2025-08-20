@@ -22,9 +22,7 @@ export const CharacterFilters: React.FC<CharacterFiltersProps> = ({
 
   return (
     <div className="mb-6 bg-gray-50 rounded-xl p-4">
-      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Nome */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Nome
@@ -37,8 +35,6 @@ export const CharacterFilters: React.FC<CharacterFiltersProps> = ({
             onCoreInput={(e: any) => onFiltersChange({ name: e.detail?.target?.value || '' })}
           />
         </div>
-
-        {/* Status */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Status
@@ -54,8 +50,6 @@ export const CharacterFilters: React.FC<CharacterFiltersProps> = ({
             <option value="unknown">Desconhecido</option>
           </select>
         </div>
-
-        {/* Espécie */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Espécie
@@ -68,8 +62,6 @@ export const CharacterFilters: React.FC<CharacterFiltersProps> = ({
             onCoreInput={(e: any) => onFiltersChange({ species: e.detail?.target?.value || '' })}
           />
         </div>
-
-        {/* Gênero */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Gênero
