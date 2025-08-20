@@ -20,9 +20,6 @@ module.exports = {
           700: '#334155',
         }
       },
-      fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-      },
     },
   },
   plugins: [],

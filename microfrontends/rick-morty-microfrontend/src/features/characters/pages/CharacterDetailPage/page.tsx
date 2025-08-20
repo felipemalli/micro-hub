@@ -1,17 +1,17 @@
-import React from 'react';
-import { useCharacterDetail } from '../../hooks/useCharacterDetail';
-import { FavoriteButton } from './components/FavoriteButton';
-import { LikeButton } from './components/LikeButton';
-import { Badge } from '../../../../shared/components/Badge/Badge';
-import { CoreButton } from '@felipemalli-libs/microhub-ui/react';
-import { Loading } from '../../../../shared/components/Loading/Loading';
-import { CharacterDetailProps } from '../../types/character.types';
-import { useHistory } from '../../../../app/providers/HistoryProvider';
-import { InfoCard } from '../../../../shared/components';
+import React from "react";
+import { useCharacterDetail } from "../../hooks/useCharacterDetail";
+import { FavoriteButton } from "./components/FavoriteButton";
+import { LikeButton } from "./components/LikeButton";
+import { Badge } from "../../../../shared/components/Badge/Badge";
+import { CoreButton } from "@felipemalli-libs/microhub-ui/react";
+import { Loading } from "../../../../shared/components/Loading/Loading";
+import { CharacterDetailProps } from "../../types/character.types";
+import { useHistory } from "../../../../app/providers/HistoryProvider";
+import { InfoCard } from "../../../../shared/components";
 
 export const CharacterDetailPage: React.FC<CharacterDetailProps> = ({
 	characterId,
-	onBack
+	onBack,
 }) => {
 	const { character, loading } = useCharacterDetail(characterId);
 
@@ -21,7 +21,7 @@ export const CharacterDetailPage: React.FC<CharacterDetailProps> = ({
 		if (onBack) {
 			onBack();
 		} else if (history) {
-			history.push('/rickmorty/characters');
+			history.push("/rickmorty/characters");
 		} else {
 			// Fallback se não tiver history
 			window.history.back();
@@ -38,22 +38,25 @@ export const CharacterDetailPage: React.FC<CharacterDetailProps> = ({
 				<div className="text-red-600 mb-4">
 					<span className="text-4xl">⚠️</span>
 				</div>
-				<h3 className="text-lg font-semibold text-gray-800 mb-2">Erro ao carregar</h3>
+				<h3 className="text-lg font-semibold text-gray-800 mb-2">
+					Erro ao carregar
+				</h3>
 				<p className="text-gray-600 mb-4">
-					{loading.error || 'Personagem não encontrado'}
+					{loading.error || "Personagem não encontrado"}
 				</p>
-				<CoreButton onCoreClick={handleBack}>
-					Voltar para lista
-				</CoreButton>
+				<CoreButton onCoreClick={handleBack}>Voltar para lista</CoreButton>
 			</div>
 		);
 	}
 
 	const getStatusVariant = (status: string) => {
 		switch (status) {
-			case 'Alive': return 'success';
-			case 'Dead': return 'danger';
-			default: return 'warning';
+			case "Alive":
+				return "success";
+			case "Dead":
+				return "danger";
+			default:
+				return "warning";
 		}
 	};
 
@@ -64,7 +67,7 @@ export const CharacterDetailPage: React.FC<CharacterDetailProps> = ({
 					← Voltar
 				</CoreButton>
 				<div className="flex items-center gap-2">
-					<FavoriteButton characterId={character.id} variant="text"/>
+					<FavoriteButton characterId={character.id} variant="text" />
 					<LikeButton characterId={character.id} />
 				</div>
 			</div>
@@ -87,9 +90,27 @@ export const CharacterDetailPage: React.FC<CharacterDetailProps> = ({
 						</Badge>
 					</div>
 					<div className="flex flex-col gap-4">
-						<InfoCard title="Informações Básicas" content={[{name: 'Espécie:', value: character.species}, {name: 'Gênero:', value: character.gender}, character.type && {name: 'Tipo:', value: character.type}]}/>
-						<InfoCard title="Localização" content={[{name: 'Origem:', value: character.origin.name}, {name: 'Última localização:', value: character.location.name}]}/>
-						<InfoCard title="Episódios" content={[{name: 'Aparece em:', value: character.episode.length}]}/>
+						<InfoCard
+							title="Informações Básicas"
+							content={[
+								{ name: "Espécie:", value: character.species },
+								{ name: "Gênero:", value: character.gender },
+								character.type && { name: "Tipo:", value: character.type },
+							]}
+						/>
+						<InfoCard
+							title="Localização"
+							content={[
+								{ name: "Origem:", value: character.origin.name },
+								{ name: "Última localização:", value: character.location.name },
+							]}
+						/>
+						<InfoCard
+							title="Episódios"
+							content={[
+								{ name: "Aparece em:", value: character.episode.length },
+							]}
+						/>
 					</div>
 				</div>
 			</div>

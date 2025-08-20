@@ -1,6 +1,6 @@
-import React from 'react';
-import { CoreButton } from '@felipemalli-libs/microhub-ui/react';
-import { useCharacterLikes } from '../../../hooks/useCharacterLikes';
+import React from "react";
+import { CoreButton } from "@felipemalli-libs/microhub-ui/react";
+import { useCharacterLikes } from "../../../hooks/useCharacterLikes";
 
 interface LikeButtonProps {
 	characterId: number;
@@ -24,10 +24,12 @@ export const LikeButton: React.FC<LikeButtonProps> = ({
 				toggleLike(characterId);
 			}}
 			className="flex items-center justify-center space-x-1 border-none"
-			title={liked ? 'Remover curtida' : 'Curtir personagem'}
+			title={liked ? "Remover curtida" : "Curtir personagem"}
 		>
-			<span className={`${liked ? 'text-blue-500' : 'text-gray-500'} transition-colors text-sm`}>
-				{liked ? '👍' : '👍🏻'}
+			<span
+				className={`${liked ? "text-blue-500" : "text-gray-500"} transition-colors text-sm`}
+			>
+				{liked ? "👍" : "👍🏻"}
 			</span>
 			{showCount && <span className="text-base font-medium">{likesCount}</span>}
 		</CoreButton>

@@ -1,0 +1,32 @@
+{
+	"folders": [
+		{
+			"name": "Auth Microfrontend",
+			"path": "./microfrontends/auth-microfrontend"
+		},
+		{
+			"name": "Rick & Morty Microfrontend",
+			"path": "./microfrontends/rick-morty-microfrontend"
+		},
+		{
+			"name": "Shell App",
+			"path": "./microfrontends/shell-app"
+		},
+		{
+			"name": "Backend",
+			"path": "./backend"
+		}
+	],
+	"settings": {
+		"editor.formatOnSave": true,
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.codeActionsOnSave": {
+			"source.fixAll.eslint": "explicit"
+		},
+		"eslint.workingDirectories": [
+			"./microfrontends/auth-microfrontend",
+			"./microfrontends/rick-morty-microfrontend",
+			"./microfrontends/shell-app"
+		]
+	}
+} 

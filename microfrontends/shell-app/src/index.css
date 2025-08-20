@@ -2,17 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Estilos específicos do Shell App apenas */
-@layer components {
-	.shell-container {
-		@apply min-h-screen bg-gradient-to-br from-blue-50 to-purple-50;
-	}
-
-	.shell-header {
-		@apply text-center py-12;
-	}
-
-	.shell-title {
-		@apply text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4;
+.h-screen-minus-header {
+	height: calc(100vh - 3rem);
+	@media (min-width: 768px) {
+		height: calc(100vh - 14rem);
 	}
 }
