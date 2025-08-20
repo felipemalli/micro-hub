@@ -1,4 +1,5 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, ErrorInfo, ReactNode } from 'react';
+import { CoreButton } from "@felipemalli-libs/microhub-ui/react";
 
 interface Props {
   children: ReactNode;
@@ -36,12 +37,13 @@ export class ErrorBoundary extends Component<Props, State> {
             <p className="text-gray-600 mb-4">
               Ocorreu um erro inesperado. Tente recarregar a página.
             </p>
-            <button
-              onClick={() => window.location.reload()}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors"
+            <CoreButton
+              variant="outline"
+              type="button"
+              onCoreClick={() => window.location.reload()}
             >
               Recarregar página
-            </button>
+            </CoreButton>
           </div>
         </div>
       );

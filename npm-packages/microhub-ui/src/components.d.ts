@@ -24,7 +24,7 @@ export namespace Components {
         /**
           * @default 'primary'
          */
-        "variant": 'primary' | 'secondary' | 'danger' | 'outline';
+        "variant": 'primary' | 'secondary' | 'danger' | 'outline' | 'ghost';
     }
     interface CoreInput {
         /**
@@ -134,7 +134,7 @@ declare namespace LocalJSX {
         /**
           * @default 'primary'
          */
-        "variant"?: 'primary' | 'secondary' | 'danger' | 'outline';
+        "variant"?: 'primary' | 'secondary' | 'danger' | 'outline' | 'ghost';
     }
     interface CoreInput {
         /**

@@ -6,7 +6,7 @@ import { Component, Prop, Event, EventEmitter, h } from '@stencil/core';
   shadow: true,
 })
 export class CoreButton {
-  @Prop() variant: 'primary' | 'secondary' | 'danger' | 'outline' = 'primary';
+  @Prop() variant: 'primary' | 'secondary' | 'danger' | 'outline' | 'ghost' = 'primary';
   @Prop() disabled: boolean = false;
   @Prop() type: 'button' | 'submit' | 'reset' = 'button';
   @Prop() size: 'small' | 'medium' | 'large' = 'medium';

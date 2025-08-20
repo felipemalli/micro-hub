@@ -19,7 +19,7 @@ export const LikeButton: React.FC<LikeButtonProps> = ({
 
   return (
     <Button
-      variant="ghost"
+      variant="outline"
       size={size}
       onClick={(e) => {
         e.stopPropagation();

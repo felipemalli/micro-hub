@@ -117,6 +117,7 @@ const LoginPage: React.FC = () => {
 
       <CoreButton
         type="submit"
+        variant="primary"
         disabled={isLoading}
       >
         {isLoading ? 'Entrando...' : 'Entrar'}
@@ -125,13 +126,13 @@ const LoginPage: React.FC = () => {
       <div className="text-center">
         <p className="text-gray-600">
           Não tem uma conta?{' '}
-          <button
+          <CoreButton
             type="button"
-            onClick={() => navigate('/auth/register')}
-            className="text-blue-600 hover:text-blue-700 font-medium"
+            variant="secondary"
+            onCoreClick={() => navigate('/auth/register')}
           >
             Criar conta
-          </button>
+          </CoreButton>
         </p>
       </div>
     </AuthCard>

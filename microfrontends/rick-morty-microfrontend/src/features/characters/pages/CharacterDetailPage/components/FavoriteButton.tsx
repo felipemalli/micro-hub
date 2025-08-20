@@ -18,7 +18,7 @@ export const FavoriteButton: React.FC<FavoriteButtonProps> = ({
 
   return (
     <Button
-      variant={favorited ? 'primary' : 'ghost'}
+      variant={favorited ? 'primary' : 'outline'}
       size={size}
       onClick={(e) => {
         e.stopPropagation();

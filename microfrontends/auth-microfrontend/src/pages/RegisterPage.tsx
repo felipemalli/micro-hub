@@ -179,8 +179,9 @@ const RegisterPage: React.FC = () => {
 
         <CoreButton
           type="submit"
+          variant="primary"
           disabled={isLoading}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full"
         >
           {isLoading ? 'Criando conta...' : 'Criar conta'}
         </CoreButton>
@@ -188,13 +189,13 @@ const RegisterPage: React.FC = () => {
         <div className="text-center">
           <p className="text-gray-600">
             Já tem uma conta?{' '}
-            <button
+            <CoreButton
               type="button"
-              onClick={() => navigate('/auth/login')}
-              className="text-blue-600 hover:text-blue-700 font-medium"
+              variant="secondary"
+              onCoreClick={() => navigate('/auth/login')}
             >
               Entrar
-            </button>
+            </CoreButton>
           </p>
         </div>
       </form>
