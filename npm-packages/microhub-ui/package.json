@@ -1,6 +1,6 @@
 {
   "name": "@felipemalli-libs/microhub-ui",
-  "version": "2.1.13",
+  "version": "2.1.14",
   "description": "Web Components design system with Stencil",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
@@ -41,13 +41,13 @@
     "react-dist/"
   ],
   "scripts": {
-    "build": "stencil build",
+    "build": "pnpm run build:web-components && pnpm run build:react",
+    "build:web-components": "stencil build",
     "build:react": "tsc -p tsconfig.react.json",
     "postbuild": "pnpm run build:react",
     "start": "stencil build --dev --watch --serve",
     "test": "stencil test --spec",
     "test:watch": "stencil test --spec --watchAll",
-    "prepublishOnly": "pnpm run build && pnpm run build:react",
     "deploy": "pnpm publish --access public"
   },
   "dependencies": {
