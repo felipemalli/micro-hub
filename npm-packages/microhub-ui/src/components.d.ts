@@ -5,6 +5,8 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { Event } from "@stencil/core";
+export { Event } from "@stencil/core";
 export namespace Components {
     interface CoreButton {
         /**
@@ -24,10 +26,52 @@ export namespace Components {
          */
         "variant": 'primary' | 'secondary' | 'danger';
     }
+    interface CoreInput {
+        /**
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * @default false
+         */
+        "error": boolean;
+        /**
+          * @default ''
+         */
+        "id": string;
+        /**
+          * @default ''
+         */
+        "name": string;
+        /**
+          * @default ''
+         */
+        "placeholder": string;
+        /**
+          * @default false
+         */
+        "required": boolean;
+        /**
+          * @default 'large'
+         */
+        "size": 'small' | 'large';
+        /**
+          * @default 'text'
+         */
+        "type": 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
+        /**
+          * @default ''
+         */
+        "value": string;
+    }
 }
 export interface CoreButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCoreButtonElement;
+}
+export interface CoreInputCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCoreInputElement;
 }
 declare global {
     interface HTMLCoreButtonElementEventMap {
@@ -47,8 +91,29 @@ declare global {
         prototype: HTMLCoreButtonElement;
         new (): HTMLCoreButtonElement;
     };
+    interface HTMLCoreInputElementEventMap {
+        "coreInput": Event;
+        "coreChange": Event;
+        "coreFocus": FocusEvent;
+        "coreBlur": FocusEvent;
+    }
+    interface HTMLCoreInputElement extends Components.CoreInput, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCoreInputElementEventMap>(type: K, listener: (this: HTMLCoreInputElement, ev: CoreInputCustomEvent<HTMLCoreInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCoreInputElementEventMap>(type: K, listener: (this: HTMLCoreInputElement, ev: CoreInputCustomEvent<HTMLCoreInputElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCoreInputElement: {
+        prototype: HTMLCoreInputElement;
+        new (): HTMLCoreInputElement;
+    };
     interface HTMLElementTagNameMap {
         "core-button": HTMLCoreButtonElement;
+        "core-input": HTMLCoreInputElement;
     }
 }
 declare namespace LocalJSX {
@@ -71,8 +136,51 @@ declare namespace LocalJSX {
          */
         "variant"?: 'primary' | 'secondary' | 'danger';
     }
+    interface CoreInput {
+        /**
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * @default false
+         */
+        "error"?: boolean;
+        /**
+          * @default ''
+         */
+        "id"?: string;
+        /**
+          * @default ''
+         */
+        "name"?: string;
+        "onCoreBlur"?: (event: CoreInputCustomEvent<FocusEvent>) => void;
+        "onCoreChange"?: (event: CoreInputCustomEvent<Event>) => void;
+        "onCoreFocus"?: (event: CoreInputCustomEvent<FocusEvent>) => void;
+        "onCoreInput"?: (event: CoreInputCustomEvent<Event>) => void;
+        /**
+          * @default ''
+         */
+        "placeholder"?: string;
+        /**
+          * @default false
+         */
+        "required"?: boolean;
+        /**
+          * @default 'large'
+         */
+        "size"?: 'small' | 'large';
+        /**
+          * @default 'text'
+         */
+        "type"?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
+        /**
+          * @default ''
+         */
+        "value"?: string;
+    }
     interface IntrinsicElements {
         "core-button": CoreButton;
+        "core-input": CoreInput;
     }
 }
 export { LocalJSX as JSX };
@@ -80,6 +188,7 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "core-button": LocalJSX.CoreButton & JSXBase.HTMLAttributes<HTMLCoreButtonElement>;
+            "core-input": LocalJSX.CoreInput & JSXBase.HTMLAttributes<HTMLCoreInputElement>;
         }
     }
 }

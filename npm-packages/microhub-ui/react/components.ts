@@ -7,8 +7,9 @@
 
 /* eslint-disable */
 
-import { type CoreButtonCustomEvent } from "@felipemalli-libs/microhub-ui";
+import { type CoreButtonCustomEvent, type CoreInputCustomEvent, type Event } from "@felipemalli-libs/microhub-ui";
 import { CoreButton as CoreButtonElement, defineCustomElement as defineCoreButton } from "@felipemalli-libs/microhub-ui/dist/components/core-button.js";
+import { CoreInput as CoreInputElement, defineCustomElement as defineCoreInput } from "@felipemalli-libs/microhub-ui/dist/components/core-input.js";
 import type { EventName, StencilReactComponent } from '@stencil/react-output-target/runtime';
 import { createComponent } from '@stencil/react-output-target/runtime';
 import React from 'react';
@@ -22,4 +23,25 @@ export const CoreButton: StencilReactComponent<CoreButtonElement, CoreButtonEven
     react: React,
     events: { onCoreClick: 'coreClick' } as CoreButtonEvents,
     defineCustomElement: defineCoreButton
+});
+
+export type CoreInputEvents = {
+    onCoreInput: EventName<CoreInputCustomEvent<Event>>,
+    onCoreChange: EventName<CoreInputCustomEvent<Event>>,
+    onCoreFocus: EventName<CoreInputCustomEvent<FocusEvent>>,
+    onCoreBlur: EventName<CoreInputCustomEvent<FocusEvent>>
+};
+
+export const CoreInput: StencilReactComponent<CoreInputElement, CoreInputEvents> = /*@__PURE__*/ createComponent<CoreInputElement, CoreInputEvents>({
+    tagName: 'core-input',
+    elementClass: CoreInputElement,
+    // @ts-ignore - ignore potential React type mismatches between the Stencil Output Target and your project.
+    react: React,
+    events: {
+        onCoreInput: 'coreInput',
+        onCoreChange: 'coreChange',
+        onCoreFocus: 'coreFocus',
+        onCoreBlur: 'coreBlur'
+    } as CoreInputEvents,
+    defineCustomElement: defineCoreInput
 });

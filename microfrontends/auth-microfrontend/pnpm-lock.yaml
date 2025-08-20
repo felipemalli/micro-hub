@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@felipemalli-libs/microhub-ui':
-        specifier: ^2.1.6
-        version: 2.1.6(@stencil/core@4.36.2)(@types/react@19.1.10)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+        specifier: ^2.1.8
+        version: 2.1.8(@stencil/core@4.36.2)(@types/react@19.1.10)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       history:
         specifier: ^5.3.0
         version: 5.3.0
@@ -268,8 +268,8 @@ packages:
   '@emotion/unitless@0.10.0':
     resolution: {integrity: sha512-dFoMUuQA20zvtVTuxZww6OHoJYgrzfKM1t52mVySDJnMSEa08ruEvdYQbhvyu6soU+NeLVd3yKfTfT0NeV6qGg==}
 
-  '@felipemalli-libs/microhub-ui@2.1.6':
-    resolution: {integrity: sha512-Ae/g/oHueyqOSfbKipG9OpTgTbUwp1VtOvtTxynp+5Hou7r8w5tw0bYMe9jT5aTBf66m2sSFvG2FZjFNK6JZtA==}
+  '@felipemalli-libs/microhub-ui@2.1.8':
+    resolution: {integrity: sha512-3g7peREFcAthFqXl71IKZz5OSKHinN8MtRIZh/ouoq29jpKXcg418LDA5ELOAiZ1lIuKktE9k5fzdApwozLT/Q==}
     engines: {pnpm: '>=10.14.0'}
 
   '@isaacs/cliui@8.0.2':
@@ -2487,7 +2487,7 @@ snapshots:
 
   '@emotion/unitless@0.10.0': {}
 
-  '@felipemalli-libs/microhub-ui@2.1.6(@stencil/core@4.36.2)(@types/react@19.1.10)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
+  '@felipemalli-libs/microhub-ui@2.1.8(@stencil/core@4.36.2)(@types/react@19.1.10)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
     dependencies:
       '@stencil/react-output-target': 1.2.0(@stencil/core@4.36.2)(@types/react@19.1.10)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
     transitivePeerDependencies:

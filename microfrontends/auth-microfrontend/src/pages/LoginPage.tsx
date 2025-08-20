@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../app/providers/AuthProvider';
 import { FormData, FormErrors } from '../types/auth';
-import { CoreButton } from "@felipemalli-libs/microhub-ui/react";
+import { CoreButton, CoreInput } from "@felipemalli-libs/microhub-ui/react";
 import { AuthCard } from '../app/components/AuthCard';
 
 const LoginPage: React.FC = () => {
@@ -115,6 +115,8 @@ const LoginPage: React.FC = () => {
           <p className="text-red-600 text-sm mt-1">{errors.password}</p>
         )}
       </div>
+
+      <CoreInput type="email" placeholder="seu@email.com" />
 
       <CoreButton
         type="submit"
