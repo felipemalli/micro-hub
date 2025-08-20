@@ -63,3 +63,10 @@
 		@apply bg-yellow-50 border border-yellow-200 rounded-xl p-4;
 	}
 }
+
+.h-screen-minus-header {
+	height: calc(100vh - 3rem);
+	@media (min-width: 768px) {
+		height: calc(100vh - 4rem);
+	}
+}

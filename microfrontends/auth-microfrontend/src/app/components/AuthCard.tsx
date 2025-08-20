@@ -6,7 +6,9 @@ interface AuthCardProps {
 }
 
 export const AuthCard = ({ onSubmit, title, description, children }: AuthCardProps) => { return (
-    <div className="bg-white rounded-lg shadow-md p-8">
+  <div className="h-screen-minus-header flex items-center justify-center">
+
+    <div className="bg-white rounded-lg shadow-md p-8 mx-auto flex flex-col max-w-md">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-800 mb-2">{title}</h1>
         <p className="text-gray-600">{description}</p>
@@ -15,5 +17,6 @@ export const AuthCard = ({ onSubmit, title, description, children }: AuthCardPro
         {children}
       </form>
     </div>
+  </div>
   );
 };

@@ -3,9 +3,16 @@
 	--color-secondary: #6b7280;
 	--color-danger: #ef4444;
 
-	--font-family: system-ui, -apple-system, sans-serif;
+	--font-family: "Inter", system-ui, -apple-system, sans-serif;
 }
 
 * {
 	box-sizing: border-box;
+}
+
+h1 {
+	font-size: 1.875rem; /* 30px */
+	line-height: 2.25rem; /* 36px */
+	font-weight: 700;
+	color: rgb(31 41 55);
 }

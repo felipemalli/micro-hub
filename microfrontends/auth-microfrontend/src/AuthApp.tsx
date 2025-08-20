@@ -1,4 +1,5 @@
-import "@felipemalli-libs/microhub-ui/dist/microhub-ui/microhub-ui.css";
+import "@felipemalli-libs/microhub-ui/styles.css";
+import './index.css';
 import React, { useEffect, useState } from 'react';
 import { Router } from 'react-router-dom';
 import { AppRouter } from './app/router/AppRouter';
@@ -7,7 +8,6 @@ import { HistoryProvider } from './app/providers/HistoryProvider';
 import { AuthProvider } from './app/providers/AuthProvider';
 import { AuthAppProps } from './types/auth';
 import { History } from 'history';
-import './index.css';
 
 const AuthApp: React.FC<AuthAppProps & { history?: History }> = ({ onAuthChange, history }) => {
   const [location, setLocation] = useState(history?.location || { pathname: '/auth' });
