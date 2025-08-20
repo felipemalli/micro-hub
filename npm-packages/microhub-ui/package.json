@@ -47,7 +47,7 @@
     "start": "stencil build --dev --watch --serve",
     "test": "stencil test --spec",
     "test:watch": "stencil test --spec --watchAll",
-    "prepublishOnly": "pnpm run build",
+    "prepublishOnly": "pnpm run build && pnpm run build:react",
     "deploy": "pnpm publish --access public"
   },
   "dependencies": {
