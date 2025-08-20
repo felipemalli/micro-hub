@@ -1,12 +1,16 @@
-import { EmailValidation, NameValidation, PasswordValidation } from '@/common/decorators/validation.decorators';
+import {
+	EmailValidation,
+	NameValidation,
+	PasswordValidation,
+} from "@/common/decorators/validation.decorators";
 
 export class RegisterDto {
-  @EmailValidation()
-  email: string;
+	@EmailValidation()
+	email: string;
 
-  @PasswordValidation()
-  password: string;
+	@PasswordValidation()
+	password: string;
 
-  @NameValidation()
-  name: string;
+	@NameValidation()
+	name: string;
 }

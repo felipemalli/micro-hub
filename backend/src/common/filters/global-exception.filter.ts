@@ -1,99 +1,99 @@
 import {
-  ExceptionFilter,
-  Catch,
-  ArgumentsHost,
-  HttpException,
-  HttpStatus,
-  Logger,
-} from '@nestjs/common';
-import { Request, Response } from 'express';
-import { MESSAGES } from '@/common/constants/error-messages';
+	ExceptionFilter,
+	Catch,
+	ArgumentsHost,
+	HttpException,
+	HttpStatus,
+	Logger,
+} from "@nestjs/common";
+import { Request, Response } from "express";
+import { MESSAGES } from "@/common/constants/error-messages";
 
 interface ErrorResponse {
-  statusCode: number;
-  timestamp: string;
-  path: string;
-  method: string;
-  error: string;
-  message: string | string[];
+	statusCode: number;
+	timestamp: string;
+	path: string;
+	method: string;
+	error: string;
+	message: string | string[];
 }
 
 interface HttpExceptionResponse {
-  error?: string;
-  message?: string | string[];
-  statusCode?: number;
+	error?: string;
+	message?: string | string[];
+	statusCode?: number;
 }
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
-  private readonly logger = new Logger(GlobalExceptionFilter.name);
+	private readonly logger = new Logger(GlobalExceptionFilter.name);
 
-  catch(exception: unknown, host: ArgumentsHost): void {
-    const ctx = host.switchToHttp();
-    const response = ctx.getResponse<Response>();
-    const request = ctx.getRequest<Request>();
+	catch(exception: unknown, host: ArgumentsHost): void {
+		const ctx = host.switchToHttp();
+		const response = ctx.getResponse<Response>();
+		const request = ctx.getRequest<Request>();
 
-    const errorResponse = this.buildErrorResponse(exception, request);
-    
-    if (errorResponse.statusCode >= 500) {
-      this.logInternalError(exception);
-    }
+		const errorResponse = this.buildErrorResponse(exception, request);
 
-    response.status(errorResponse.statusCode).json(errorResponse);
-  }
+		if (errorResponse.statusCode >= 500) {
+			this.logInternalError(exception);
+		}
 
-  private buildErrorResponse(exception: unknown, request: Request): ErrorResponse {
-    const baseResponse = {
-      timestamp: new Date().toISOString(),
-      path: request.url,
-      method: request.method,
-    };
+		response.status(errorResponse.statusCode).json(errorResponse);
+	}
 
-    if (exception instanceof HttpException) {
-      return {
-        ...baseResponse,
-        ...this.handleHttpException(exception),
-      };
-    }
+	private buildErrorResponse(
+		exception: unknown,
+		request: Request
+	): ErrorResponse {
+		const baseResponse = {
+			timestamp: new Date().toISOString(),
+			path: request.url,
+			method: request.method,
+		};
 
-    return {
-      ...baseResponse,
-      ...this.handleUnknownException(),
-    };
-  }
+		if (exception instanceof HttpException) {
+			return {
+				...baseResponse,
+				...this.handleHttpException(exception),
+			};
+		}
 
-  private handleHttpException(exception: HttpException) {
-    const status = exception.getStatus();
-    const response = exception.getResponse() as HttpExceptionResponse;
-    
-    if (typeof response === 'string') {
-      return {
-        statusCode: status,
-        error: exception.constructor.name,
-        message: response,
-      };
-    }
+		return {
+			...baseResponse,
+			...this.handleUnknownException(),
+		};
+	}
 
-    return {
-      statusCode: status,
-      error: response.error || exception.constructor.name,
-      message: response.message || exception.message,
-    };
-  }
+	private handleHttpException(exception: HttpException) {
+		const status = exception.getStatus();
+		const response = exception.getResponse() as HttpExceptionResponse;
 
-  private handleUnknownException() {
-    return {
-      statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-      error: 'InternalServerError',
-      message: MESSAGES.ERROR.INTERNAL_SERVER_ERROR,
-    };
-  }
+		if (typeof response === "string") {
+			return {
+				statusCode: status,
+				error: exception.constructor.name,
+				message: response,
+			};
+		}
 
-  private logInternalError(exception: unknown): void {
-    const error = exception as Error;
-    this.logger.error(
-      `Unexpected error: ${error.message}`,
-      error.stack,
-    );
-  }
+		return {
+			statusCode: status,
+			error: response.error || exception.constructor.name,
+			message: response.message || exception.message,
+		};
+	}
+
+	private handleUnknownException() {
+		return {
+			statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+			error: "InternalServerError",
+			message: MESSAGES.ERROR.INTERNAL_SERVER_ERROR,
+		};
+	}
+
+	private logInternalError(exception: unknown): void {
+		const error = exception as Error;
+		this.logger.error(`Unexpected error: ${error.message}`, error.stack);
+	}
 }

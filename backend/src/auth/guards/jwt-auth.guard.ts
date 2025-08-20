@@ -1,32 +1,36 @@
-import { Injectable, ExecutionContext, UnauthorizedException } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { Reflector } from '@nestjs/core';
-import { IS_PUBLIC_KEY } from '@/auth/decorators/public.decorator';
-import { MESSAGES } from '@/common/constants/error-messages';
+import {
+	Injectable,
+	ExecutionContext,
+	UnauthorizedException,
+} from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport";
+import { Reflector } from "@nestjs/core";
+import { IS_PUBLIC_KEY } from "@/auth/decorators/public.decorator";
+import { MESSAGES } from "@/common/constants/error-messages";
 
 @Injectable()
-export class JwtAuthGuard extends AuthGuard('jwt') {
-  constructor(private reflector: Reflector) {
-    super();
-  }
+export class JwtAuthGuard extends AuthGuard("jwt") {
+	constructor(private reflector: Reflector) {
+		super();
+	}
 
-  canActivate(context: ExecutionContext) {
-    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
+	canActivate(context: ExecutionContext) {
+		const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+			context.getHandler(),
+			context.getClass(),
+		]);
 
-    if (isPublic) {
-      return true;
-    }
+		if (isPublic) {
+			return true;
+		}
 
-    return super.canActivate(context);
-  }
+		return super.canActivate(context);
+	}
 
-  handleRequest(err: any, user: any, info: any) {
-    if (err || !user) {
-      throw err || new UnauthorizedException(MESSAGES.ERROR.INVALID_TOKEN);
-    }
-    return user;
-  }
+	handleRequest(err: any, user: any, info: any) {
+		if (err || !user) {
+			throw err || new UnauthorizedException(MESSAGES.ERROR.INVALID_TOKEN);
+		}
+		return user;
+	}
 }

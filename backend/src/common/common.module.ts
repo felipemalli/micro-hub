@@ -1,9 +1,9 @@
-import { Module, Global } from '@nestjs/common';
-import { PasswordService } from '@/common/services/password.service';
+import { Module, Global } from "@nestjs/common";
+import { PasswordService } from "@/common/services/password.service";
 
 @Global()
 @Module({
-  providers: [PasswordService],
-  exports: [PasswordService],
+	providers: [PasswordService],
+	exports: [PasswordService],
 })
 export class CommonModule {}
