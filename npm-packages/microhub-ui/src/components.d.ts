@@ -14,17 +14,22 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * @default 'medium'
+          * @default "medium"
          */
-        "size": 'small' | 'medium' | 'large';
+        "size": "small" | "medium" | "large";
         /**
-          * @default 'button'
+          * @default "button"
          */
-        "type": 'button' | 'submit' | 'reset';
+        "type": "button" | "submit" | "reset";
         /**
-          * @default 'primary'
+          * @default "primary"
          */
-        "variant": 'primary' | 'secondary' | 'danger' | 'outline' | 'ghost' | 'underline';
+        "variant": | "primary"
+		| "secondary"
+		| "danger"
+		| "outline"
+		| "ghost"
+		| "underline";
     }
     interface CoreInput {
         /**
@@ -36,15 +41,15 @@ export namespace Components {
          */
         "error": boolean;
         /**
-          * @default ''
+          * @default ""
          */
         "inputId": string;
         /**
-          * @default ''
+          * @default ""
          */
         "name": string;
         /**
-          * @default ''
+          * @default ""
          */
         "placeholder": string;
         /**
@@ -52,15 +57,15 @@ export namespace Components {
          */
         "required": boolean;
         /**
-          * @default 'large'
+          * @default "large"
          */
-        "size": 'small' | 'large';
+        "size": "small" | "large";
         /**
-          * @default 'text'
+          * @default "text"
          */
-        "type": 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
+        "type": "text" | "email" | "password" | "number" | "tel" | "url";
         /**
-          * @default ''
+          * @default ""
          */
         "value": string;
     }
@@ -124,17 +129,22 @@ declare namespace LocalJSX {
         "disabled"?: boolean;
         "onCoreClick"?: (event: CoreButtonCustomEvent<MouseEvent>) => void;
         /**
-          * @default 'medium'
+          * @default "medium"
          */
-        "size"?: 'small' | 'medium' | 'large';
+        "size"?: "small" | "medium" | "large";
         /**
-          * @default 'button'
+          * @default "button"
          */
-        "type"?: 'button' | 'submit' | 'reset';
+        "type"?: "button" | "submit" | "reset";
         /**
-          * @default 'primary'
+          * @default "primary"
          */
-        "variant"?: 'primary' | 'secondary' | 'danger' | 'outline' | 'ghost' | 'underline';
+        "variant"?: | "primary"
+		| "secondary"
+		| "danger"
+		| "outline"
+		| "ghost"
+		| "underline";
     }
     interface CoreInput {
         /**
@@ -146,11 +156,11 @@ declare namespace LocalJSX {
          */
         "error"?: boolean;
         /**
-          * @default ''
+          * @default ""
          */
         "inputId"?: string;
         /**
-          * @default ''
+          * @default ""
          */
         "name"?: string;
         "onCoreBlur"?: (event: CoreInputCustomEvent<FocusEvent>) => void;
@@ -158,7 +168,7 @@ declare namespace LocalJSX {
         "onCoreFocus"?: (event: CoreInputCustomEvent<FocusEvent>) => void;
         "onCoreInput"?: (event: CoreInputCustomEvent<Event>) => void;
         /**
-          * @default ''
+          * @default ""
          */
         "placeholder"?: string;
         /**
@@ -166,15 +176,15 @@ declare namespace LocalJSX {
          */
         "required"?: boolean;
         /**
-          * @default 'large'
+          * @default "large"
          */
-        "size"?: 'small' | 'large';
+        "size"?: "small" | "large";
         /**
-          * @default 'text'
+          * @default "text"
          */
-        "type"?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
+        "type"?: "text" | "email" | "password" | "number" | "tel" | "url";
         /**
-          * @default ''
+          * @default ""
          */
         "value"?: string;
     }
