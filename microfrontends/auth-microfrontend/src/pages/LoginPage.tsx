@@ -4,6 +4,7 @@ import { useAuth } from "../app/providers/AuthProvider";
 import { FormData, FormErrors } from "../types/auth";
 import { CoreButton, CoreInput } from "@felipemalli-libs/microhub-ui/react";
 import { AuthCard } from "../app/components/AuthCard";
+import { ErrorTestComponent } from "../components/ErrorTestComponent";
 
 const LoginPage: React.FC = () => {
 	const [formData, setFormData] = useState<FormData>({
@@ -85,79 +86,84 @@ const LoginPage: React.FC = () => {
 	};
 
 	return (
-		<AuthCard
-			onSubmit={handleSubmit}
-			title="Entrar"
-			description="Entre com sua conta"
-		>
-			{error && (
-				<div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-					{error}
-				</div>
-			)}
+		<div className="space-y-6">
+			{/* Componente de teste - REMOVER após testar */}
+			<ErrorTestComponent />
 
-			<div>
-				<label htmlFor="email" className="block text-sm mb-2">
-					Email
-				</label>
-				<CoreInput
-					type="email"
-					inputId="email"
-					name="email"
-					value={formData.email}
-					placeholder="seu@email.com"
-					error={!!errors.email}
-					onCoreInput={handleInput}
-					disabled={loading}
-				/>
-				{errors.email && (
-					<p className="text-red-600 text-sm mt-1">{errors.email}</p>
-				)}
-			</div>
-
-			<div>
-				<label htmlFor="password" className="block text-sm mb-2">
-					Senha
-				</label>
-				<CoreInput
-					type="password"
-					inputId="password"
-					name="password"
-					value={formData.password}
-					placeholder="Sua senha"
-					error={!!errors.password}
-					onCoreInput={handleInput}
-					disabled={loading}
-				/>
-				{errors.password && (
-					<p className="text-red-600 text-sm mt-1">{errors.password}</p>
-				)}
-			</div>
-
-			<CoreButton
-				type="submit"
-				variant="primary"
-				disabled={loading}
-				onClick={handleSubmit}
-				className="w-full"
+			<AuthCard
+				onSubmit={handleSubmit}
+				title="Entrar"
+				description="Entre com sua conta"
 			>
-				{loading ? "Entrando..." : "Entrar"}
-			</CoreButton>
+				{error && (
+					<div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+						{error}
+					</div>
+				)}
 
-			<div className="text-center">
-				<p>
-					Não tem uma conta?{" "}
-					<CoreButton
-						type="button"
-						variant="underline"
-						onCoreClick={() => navigate("/auth/register")}
+				<div>
+					<label htmlFor="email" className="block text-sm mb-2">
+						Email
+					</label>
+					<CoreInput
+						type="email"
+						inputId="email"
+						name="email"
+						value={formData.email}
+						placeholder="seu@email.com"
+						error={!!errors.email}
+						onCoreInput={handleInput}
 						disabled={loading}
-					>
-						Criar conta
-					</CoreButton>
-				</p>
-			</div>
-		</AuthCard>
+					/>
+					{errors.email && (
+						<p className="text-red-600 text-sm mt-1">{errors.email}</p>
+					)}
+				</div>
+
+				<div>
+					<label htmlFor="password" className="block text-sm mb-2">
+						Senha
+					</label>
+					<CoreInput
+						type="password"
+						inputId="password"
+						name="password"
+						value={formData.password}
+						placeholder="Sua senha"
+						error={!!errors.password}
+						onCoreInput={handleInput}
+						disabled={loading}
+					/>
+					{errors.password && (
+						<p className="text-red-600 text-sm mt-1">{errors.password}</p>
+					)}
+				</div>
+
+				<CoreButton
+					type="submit"
+					variant="primary"
+					disabled={loading}
+					onClick={handleSubmit}
+					className="w-full"
+				>
+					{loading ? "Entrando..." : "Entrar"}
+				</CoreButton>
+
+				<div className="text-center">
+					<p>
+						Não tem uma conta?{" "}
+						<CoreButton
+							type="button"
+							variant="underline"
+							onCoreClick={() => navigate("/auth/register")}
+							disabled={loading}
+						>
+							Criar conta
+						</CoreButton>
+					</p>
+				</div>
+			</AuthCard>
+		</div>
 	);
 };
 

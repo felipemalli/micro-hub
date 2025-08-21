@@ -3,7 +3,7 @@ import "@felipemalli-libs/microhub-ui/styles.css";
 import React, { useEffect, useState } from "react";
 import { Router } from "react-router-dom";
 import { AppRouter } from "./app/router/AppRouter";
-import { ErrorBoundary } from "./app/providers/ErrorBoundary";
+import { ErrorBoundary } from "./shared/components/ErrorBoundary/ErrorBoundary";
 import { AuthProvider } from "./app/providers/AuthProvider";
 import { AuthAppProps } from "./types/auth";
 import { History } from "history";
@@ -19,7 +19,7 @@ const AuthApp: React.FC<
 		if (history) {
 			setLocation(history.location);
 
-			const unlisten = history.listen((update: any) => {
+			const unlisten = history.listen((update) => {
 				setLocation(update.location || history.location);
 			});
 			return unlisten;
@@ -27,7 +27,7 @@ const AuthApp: React.FC<
 	}, [history]);
 
 	return (
-		<ErrorBoundary>
+		<ErrorBoundary context="AuthApp">
 			<AuthProvider onAuthChange={onAuthChange}>
 				<Router location={location} navigator={history}>
 					<AppRouter />

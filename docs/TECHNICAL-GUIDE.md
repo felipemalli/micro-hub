@@ -23,6 +23,26 @@ No Nest, os guards são classes que implementam a função `canActivate`. Eles s
 
 ## Microfrontends
 
+### Tratamento de erros
+
+O Error Boundary foi implementado com o uso do pacote 'react-error-boundary'.
+
+Exemplo de uso básico:
+
+![Imagem do error boundary](images/frontend-error-wrap.png)
+
+Perceba que o Context = "Auth App" foi passado.
+
+É possível customizá-lo completamente. Segue um exemplo de como isso pode ser feito:
+
+![Imagem do error boundary-2](images/frontend-error-wrap-2.png)
+
+A implementação do ErrorBoundary é bem simples e direta, segue o código real algumas explicações:
+
+![Imagem do error fallback](images/frontend-error-boundary.png)
+
+Perceba que se o fallbackComponent não for passado, o ErrorBoundary usa o ErrorFallback padrão. Ele é implementado da seguinte forma:
+
 ### Histórico de navegação com History Proxy
 
 ### Padronização de CSS
