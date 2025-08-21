@@ -25,23 +25,47 @@ No Nest, os guards são classes que implementam a função `canActivate`. Eles s
 
 ### Tratamento de erros
 
-O Error Boundary foi implementado com o uso do pacote 'react-error-boundary'.
+O Error Boundary foi implementado com o uso do pacote 'react-error-boundary'. A ideia foi criar um componente que seja capaz de ser utilizado em qualquer contexto.
+
+Acredito que o ideal seria ele estar em uma lib própria de utilitários de frontend (NPM Package) para ser reutilizado em outros projetos junto com outros utilitários.
+No caso desse projeto, o código do Error Boundary é o mesmo no projeto `auth-microfrontend` e `rick-morty-microfrontend`.
 
 Exemplo de uso básico:
 
 ![Imagem do error boundary](images/frontend-error-wrap.png)
 
-Perceba que o Context = "Auth App" foi passado.
-
 É possível customizá-lo completamente. Segue um exemplo de como isso pode ser feito:
 
 ![Imagem do error boundary-2](images/frontend-error-wrap-2.png)
+
+O resetKeys é uma propriedade do react-error-boundary que recebe um array de valores que, quando algum deles é alterado, reseta o erro.
 
 A implementação do ErrorBoundary é bem simples e direta, segue o código real algumas explicações:
 
 ![Imagem do error fallback](images/frontend-error-boundary.png)
 
-Perceba que se o fallbackComponent não for passado, o ErrorBoundary usa o ErrorFallback padrão. Ele é implementado da seguinte forma:
+O errorLogger é um objeto que é responsável por capturar os erros e enviar para o console (em desenvolvimento) e, em produção, para algum outro serviço de monitoramento (como Sentry, LogRocket, etc). Não cheguei a implementar essa integração, mas a forma de integrar isso é bem simples:
+
+![Imagem do error Logger](images/frontend-error-logger.png)
+
+O ErrorBoundary também recebe um fallbackComponent por padrão, que é um componente que criei que segue uma estrutura parecida com o do DataErrorFallback da penúltima imagem.
+
+A visualização do ErrorFallback padrão desse projeto é a seguinte:
+
+![Imagem do error ErrorFallback](images/frontend-error-box-close.png)
+
+![Imagem do error ErrorFallback](images/frontend-error-box-open.png)
+
+Os detalhes técnicos aparecem somente para desenvolvedores e mostram o erro e o stack trace para debug.
+
+Mas, apenas envolver o componente principal com ErrorBoundary não é suficiente para capturar erros assíncronos.
+Por isso, foi necessário criar um hook para capturar os erros assíncronos. Segue o código com um exemplo de uso:
+
+![Imagem do hook useAsyncError](images/frontend-use-async-error.png)
+
+Como pode ser visto, o react-error-boundary já possui um hook para invocar o ErrorBoundary. Então a implementação é bem simples.
+
+Dessa forma, os erros são lidados de forma consistente em qualquer contexto.
 
 ### Histórico de navegação com History Proxy
 

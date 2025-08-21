@@ -4,7 +4,6 @@ import { useAuth } from "../app/providers/AuthProvider";
 import { FormData, FormErrors } from "../types/auth";
 import { CoreButton, CoreInput } from "@felipemalli-libs/microhub-ui/react";
 import { AuthCard } from "../app/components/AuthCard";
-import { ErrorTestComponent } from "../components/ErrorTestComponent";
 
 const LoginPage: React.FC = () => {
 	const [formData, setFormData] = useState<FormData>({
@@ -87,9 +86,6 @@ const LoginPage: React.FC = () => {
 
 	return (
 		<div className="space-y-6">
-			{/* Componente de teste - REMOVER após testar */}
-			<ErrorTestComponent />
-
 			<AuthCard
 				onSubmit={handleSubmit}
 				title="Entrar"

@@ -3,7 +3,7 @@ import "@felipemalli-libs/microhub-ui/styles.css";
 import React, { useEffect, useState } from "react";
 import { Router } from "react-router-dom";
 import { AppRouter } from "./app/router/AppRouter";
-import { ErrorBoundary } from "./app/providers/ErrorBoundary";
+import { ErrorBoundary } from "./app/providers/ErrorBoundary/ErrorBoundary";
 import { SWRProvider } from "./app/providers/SWRProvider";
 import { History } from "history";
 
@@ -27,7 +27,7 @@ const App: React.FC<{ history?: History; isAuthenticated?: boolean }> = ({
 	}, [history]);
 
 	return (
-		<ErrorBoundary>
+		<ErrorBoundary context="AuthApp">
 			<SWRProvider>
 				<Router location={location} navigator={history}>
 					<div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
