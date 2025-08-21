@@ -5,14 +5,15 @@ import { User } from "@/entities/user.entity";
 import { RegisterDto } from "@/auth/dto/register.dto";
 import { UpdateProfileDto } from "@/users/dto/update-profile.dto";
 import { PasswordService } from "@/common/services/password.service";
-import { MESSAGES } from "@/common/constants/error-messages";
+import { CacheService } from "@/cache/cache.service";
 
 @Injectable()
 export class UserService {
 	constructor(
 		@InjectRepository(User)
 		private userRepository: Repository<User>,
-		private passwordService: PasswordService
+		private passwordService: PasswordService,
+		private cacheService: CacheService
 	) {}
 
 	async create(createUserDto: RegisterDto): Promise<User> {
@@ -35,39 +36,61 @@ export class UserService {
 		});
 	}
 
-	async findById(id: string): Promise<User> {
+	async findById(id: string): Promise<User | null> {
+		const cacheKey = `user:${id}`;
+		const cachedUser = await this.cacheService.get<User>(cacheKey);
+
+		if (cachedUser) {
+			return cachedUser;
+		}
+
 		const user = await this.userRepository.findOne({
 			where: { id, isActive: true },
 		});
 
-		if (!user) {
-			throw new NotFoundException(MESSAGES.ERROR.USER_NOT_FOUND);
+		if (user) {
+			await this.cacheService.set(cacheKey, user);
 		}
 
 		return user;
 	}
 
 	async findByEmail(email: string): Promise<User | null> {
-		return this.userRepository.findOne({
+		const user = await this.userRepository.findOne({
 			where: { email, isActive: true },
 		});
+
+		return user;
 	}
 
 	async updateProfile(
 		id: string,
 		updateProfileDto: UpdateProfileDto
 	): Promise<User> {
+		const cacheKey = `user:${id}`;
+		const cachedUser = await this.cacheService.get<User>(cacheKey);
+
+		if (cachedUser) {
+			await this.cacheService.del(cacheKey);
+		}
+
 		const user = await this.findById(id);
 
 		Object.assign(user, updateProfileDto);
 
-		return this.userRepository.save(user);
+		const updatedUser = await this.userRepository.save(user);
+
+		await this.cacheService.set(cacheKey, updatedUser);
+
+		return updatedUser;
 	}
 
 	async deactivate(id: string): Promise<void> {
 		const user = await this.findById(id);
 		user.isActive = false;
 		await this.userRepository.save(user);
+
+		await this.cacheService.del(`user:${id}`);
 	}
 
 	async getUserStats(): Promise<{ total: number; active: number }> {

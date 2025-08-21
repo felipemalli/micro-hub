@@ -6,6 +6,7 @@ import {
 import { JwtService } from "@nestjs/jwt";
 import { UserService } from "@/users/services/user.service";
 import { PasswordService } from "@/common/services/password.service";
+import { CacheService } from "@/cache/cache.service";
 import { RegisterDto } from "@/auth/dto/register.dto";
 import { LoginDto } from "@/auth/dto/login.dto";
 import { User } from "@/entities/user.entity";
@@ -17,7 +18,8 @@ export class AuthService {
 	constructor(
 		private userService: UserService,
 		private jwtService: JwtService,
-		private passwordService: PasswordService
+		private passwordService: PasswordService,
+		private cacheService: CacheService
 	) {}
 
 	async register(
@@ -52,6 +54,9 @@ export class AuthService {
 		}
 
 		const token = this.generateToken(user);
+
+		await this.cacheService.set(`user:${user.id}`, user, 300);
+
 		return { user, token };
 	}
 

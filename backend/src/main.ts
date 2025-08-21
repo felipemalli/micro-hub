@@ -33,7 +33,7 @@ async function bootstrap() {
 
 	const config = new DocumentBuilder()
 		.setTitle("Micro-Hub Backend API")
-		.setDescription("Backend for Frontend API for micro-hub project")
+		.setDescription("Backend API for micro-hub project")
 		.setVersion("1.0")
 		.addBearerAuth()
 		.addTag("auth", "Authentication endpoints")
