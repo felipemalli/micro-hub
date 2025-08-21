@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../app/providers/AuthProvider";
 import { FormData, FormErrors } from "../types/auth";
@@ -18,25 +18,39 @@ const RegisterPage: React.FC = () => {
 		confirmPassword: "",
 	});
 	const [errors, setErrors] = useState<FormErrors>({});
-	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
-	const { register } = useAuth();
+	const { register, loading, error, clearError, isAuthenticated } = useAuth();
+
+	// Redirect if already authenticated
+	useEffect(() => {
+		if (isAuthenticated) {
+			navigate("/auth/profile");
+		}
+	}, [isAuthenticated, navigate]);
+
+	// Clear errors when component mounts
+	useEffect(() => {
+		clearError();
+	}, [clearError]);
 
 	const handleCoreInput = (e: CustomEvent) => {
-		const target = (e as any).detail?.target as HTMLInputElement | undefined;
+		const target = e.detail?.target as HTMLInputElement;
 		if (!target) return;
+
 		const { name, value } = target;
 		setFormData((prev) => ({
 			...prev,
 			[name]: value,
 		}));
 
-		if ((errors as any)[name]) {
+		// Clear field errors when user starts typing
+		if (errors[name]) {
 			setErrors((prev) => ({
 				...prev,
 				[name]: "",
 			}));
 		}
+		clearError();
 	};
 
 	const validateForm = (): boolean => {
@@ -77,19 +91,15 @@ const RegisterPage: React.FC = () => {
 			return;
 		}
 
-		console.log(e);
-
-		setIsLoading(true);
-
 		try {
-			await register(formData.name.trim(), formData.email, formData.password);
-			navigate("/auth/profile");
-		} catch (error) {
-			setErrors({
-				general: error instanceof Error ? error.message : "Erro ao criar conta",
+			await register({
+				name: formData.name.trim(),
+				email: formData.email.trim(),
+				password: formData.password,
 			});
-		} finally {
-			setIsLoading(false);
+			navigate("/auth/profile");
+		} catch {
+			// Error is handled by AuthProvider
 		}
 	};
 
@@ -99,11 +109,12 @@ const RegisterPage: React.FC = () => {
 			title="Criar Conta"
 			description="Crie sua conta para começar"
 		>
-			{errors.general && (
+			{error && (
 				<div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-					{errors.general}
+					{error}
 				</div>
 			)}
+
 			<div>
 				<label htmlFor="name" className="block text-sm mb-2">
 					Nome completo
@@ -116,11 +127,13 @@ const RegisterPage: React.FC = () => {
 					placeholder="Seu nome completo"
 					error={!!errors.name}
 					onCoreInput={handleCoreInput}
+					disabled={loading}
 				/>
 				{errors.name && (
 					<p className="text-red-600 text-sm mt-1">{errors.name}</p>
 				)}
 			</div>
+
 			<div>
 				<label htmlFor="email" className="block text-sm mb-2">
 					Email
@@ -133,11 +146,13 @@ const RegisterPage: React.FC = () => {
 					placeholder="seu@email.com"
 					error={!!errors.email}
 					onCoreInput={handleCoreInput}
+					disabled={loading}
 				/>
 				{errors.email && (
 					<p className="text-red-600 text-sm mt-1">{errors.email}</p>
 				)}
 			</div>
+
 			<div>
 				<label htmlFor="password" className="block text-sm mb-2">
 					Senha
@@ -150,11 +165,13 @@ const RegisterPage: React.FC = () => {
 					placeholder="Mínimo 6 caracteres"
 					error={!!errors.password}
 					onCoreInput={handleCoreInput}
+					disabled={loading}
 				/>
 				{errors.password && (
 					<p className="text-red-600 text-sm mt-1">{errors.password}</p>
 				)}
 			</div>
+
 			<div>
 				<label htmlFor="confirmPassword" className="block text-sm mb-2">
 					Confirmar senha
@@ -167,26 +184,30 @@ const RegisterPage: React.FC = () => {
 					placeholder="Repita sua senha"
 					error={!!errors.confirmPassword}
 					onCoreInput={handleCoreInput}
+					disabled={loading}
 				/>
 				{errors.confirmPassword && (
 					<p className="text-red-600 text-sm mt-1">{errors.confirmPassword}</p>
 				)}
 			</div>
+
 			<CoreButton
 				type="submit"
 				variant="primary"
-				disabled={isLoading}
+				disabled={loading}
 				className="w-full"
 				onClick={handleSubmit}
 			>
-				{isLoading ? "Criando conta..." : "Criar conta"}
+				{loading ? "Criando conta..." : "Criar conta"}
 			</CoreButton>
+
 			<div className="text-center">
 				<p>
 					Já tem uma conta?{" "}
 					<CoreButton
 						variant="underline"
 						onCoreClick={() => navigate("/auth/login")}
+						disabled={loading}
 					>
 						Entrar
 					</CoreButton>

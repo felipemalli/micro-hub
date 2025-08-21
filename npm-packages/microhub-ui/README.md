@@ -109,6 +109,7 @@ Then use as web components in your templates:
 **React:**
 
 ```tsx
+import "@felipemalli-libs/microhub-ui/styles.css";
 import { CoreButton } from '@felipemalli-libs/microhub-ui/react';
 
 // Basic usage
@@ -130,6 +131,12 @@ import { CoreButton } from '@felipemalli-libs/microhub-ui/react';
 ```
 
 **Web Component:**
+
+```typescript
+// In your main.ts or app initialization
+import { defineCustomElements } from "@felipemalli-libs/microhub-ui/loader";
+defineCustomElements();
+```
 
 ```html
 <!-- Basic usage -->
@@ -153,39 +160,3 @@ import { CoreButton } from '@felipemalli-libs/microhub-ui/react';
 | **Angular**    | ✅ Web Components        | `@felipemalli-libs/microhub-ui/loader` |
 | **Vanilla JS** | ✅ Web Components        | `@felipemalli-libs/microhub-ui/loader` |
 | **Next.js**    | ✅ SSR Support           | `@felipemalli-libs/microhub-ui/react`  |
-
-## Troubleshooting
-
-### TypeScript Errors in React
-
-If you see `Cannot find module '@felipemalli-libs/microhub-ui/react'`:
-
-1. Make sure you've installed the runtime dependency:
-
-   ```bash
-   pnpm install @stencil/react-output-target
-   ```
-
-2. Ensure your `tsconfig.json` has `"moduleResolution": "bundler"`
-
-3. Restart your TypeScript server in your IDE
-
-### Web Component Mode (Vue/Angular)
-
-```typescript
-// In your main.ts or app initialization
-import { defineCustomElements } from "@felipemalli-libs/microhub-ui/loader";
-defineCustomElements();
-```
-
-## Development
-
-```bash
-npm run build    # Build components (includes React wrappers)
-npm run start    # Dev server
-npm test         # Run tests
-```
-
-### Building React Wrappers
-
-The React components are automatically generated during the build process. They are located in the `react/` directory and exported via the package's `exports` field.

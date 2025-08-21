@@ -25,19 +25,3 @@ export interface CharacterFilters {
 	species?: string;
 	gender?: Character["gender"] | "";
 }
-
-export interface CharacterInteraction {
-	characterId: number;
-	isLiked: boolean;
-	isFavorited: boolean;
-	likesCount: number;
-}
-
-export interface CharacterListProps {
-	onCharacterSelect?: (character: Character) => void;
-}
-
-export interface CharacterDetailProps {
-	characterId?: number;
-	onBack?: () => void;
-}

@@ -1,32 +1,25 @@
-import React from "react";
 import { useCharacterDetail } from "../../hooks/useCharacterDetail";
 import { FavoriteButton } from "./components/FavoriteButton";
 import { LikeButton } from "./components/LikeButton";
 import { Badge } from "../../../../shared/components/Badge/Badge";
 import { CoreButton } from "@felipemalli-libs/microhub-ui/react";
 import { Loading } from "../../../../shared/components/Loading/Loading";
-import { CharacterDetailProps } from "../../types/character.types";
-import { useHistory } from "../../../../app/providers/HistoryProvider";
 import { InfoCard } from "../../../../shared/components";
+import { useNavigate } from "react-router-dom";
 
-export const CharacterDetailPage: React.FC<CharacterDetailProps> = ({
+export const CharacterDetailPage = ({
 	characterId,
-	onBack,
+}: {
+	characterId?: number;
 }) => {
 	const { character, isLoading, error, mutate } = useCharacterDetail({
 		characterId,
 	});
 
-	const history = useHistory();
+	const navigate = useNavigate();
 
 	const handleBack = () => {
-		if (onBack) {
-			onBack();
-		} else if (history) {
-			history.push("/rickmorty/characters");
-		} else {
-			window.history.back();
-		}
+		navigate("/rickmorty/characters");
 	};
 
 	const handleRetry = () => {

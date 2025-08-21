@@ -19,7 +19,8 @@
 		"react": "^19.1.1",
 		"react-dom": "^19.1.1",
 		"react-hook-form": "^7.43.0",
-		"react-router-dom": "^6.8.0"
+		"react-router-dom": "^6.8.0",
+		"axios": "^1.7.9"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.20.0",

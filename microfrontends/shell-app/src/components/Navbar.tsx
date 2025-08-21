@@ -29,18 +29,12 @@ export const Navbar = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
 						</Link>
 						<div className="flex space-x-4">
 							<NavLink to="/rickmorty" icon="👽" label="Rick & Morty" />
-							<NavLink to="/auth" icon="🔐" label="Autenticação" />
+							{isAuthenticated ? (
+								<NavLink to="/auth" icon="🔐" label="Perfil" />
+							) : (
+								<NavLink to="/auth" icon="🔐" label="Entrar" />
+							)}
 						</div>
-					</div>
-					<div className="flex items-center space-x-4">
-						{isAuthenticated && (
-							<span className="text-sm text-green-600 font-medium">
-								<span className="flex items-center space-x-1">
-									<span>✅</span>
-									<span className="hidden sm:inline">Autenticado</span>
-								</span>
-							</span>
-						)}
 					</div>
 				</div>
 			</div>

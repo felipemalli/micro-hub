@@ -1,0 +1,20 @@
+{
+	"name": "micro-hub",
+	"author": "Felipe Vahia Malliagros",
+	"version": "1.0.0",
+	"description": "Microfrontends + Backend + Design System",
+	"private": true,
+	"scripts": {
+		"preinstall": "echo '📦 Instalando dependências do workspace...'",
+		"install:all": "pnpm install && cd backend && pnpm install && cd ../microfrontends && pnpm install && cd ../npm-packages/microhub-ui && pnpm install",
+		"dev": "concurrently --kill-others-on-fail \"npm run backend:dev\" \"npm run frontend:dev\"",
+		"start": "npm run dev",
+		"backend:dev": "cd backend && pnpm run docker:dev",
+		"frontend:dev": "cd microfrontends && pnpm run start",
+		"stop": "cd backend && pnpm run docker:down",
+		"clean": "rm -rf node_modules && cd backend && rm -rf node_modules && cd ../microfrontends && rm -rf */node_modules && cd ../npm-packages/microhub-ui && rm -rf node_modules"
+	},
+	"devDependencies": {
+		"concurrently": "^8.2.2"
+	}
+}

@@ -39,9 +39,7 @@ export const CharacterListPage: React.FC = () => {
 			<div className="flex justify-between items-center mb-6">
 				<div>
 					<h2 className="text-2xl font-bold text-gray-800">Personagens</h2>
-					<p className="text-gray-600">
-						{characters.length} personagens • {favoritesCount} favoritos
-					</p>
+					<p className="text-gray-600">{favoritesCount} favoritos</p>
 				</div>
 			</div>
 

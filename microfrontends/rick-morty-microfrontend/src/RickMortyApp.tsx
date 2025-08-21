@@ -4,11 +4,13 @@ import React, { useEffect, useState } from "react";
 import { Router } from "react-router-dom";
 import { AppRouter } from "./app/router/AppRouter";
 import { ErrorBoundary } from "./app/providers/ErrorBoundary";
-import { HistoryProvider } from "./app/providers/HistoryProvider";
 import { SWRProvider } from "./app/providers/SWRProvider";
 import { History } from "history";
 
-const App: React.FC<{ history?: History }> = ({ history }) => {
+const App: React.FC<{ history?: History; isAuthenticated?: boolean }> = ({
+	history,
+	isAuthenticated,
+}) => {
 	const [location, setLocation] = useState(
 		history?.location || { pathname: "/rickmorty" }
 	);
@@ -27,13 +29,11 @@ const App: React.FC<{ history?: History }> = ({ history }) => {
 	return (
 		<ErrorBoundary>
 			<SWRProvider>
-				<HistoryProvider history={history}>
-					<Router location={location} navigator={history}>
-						<div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
-							<AppRouter />
-						</div>
-					</Router>
-				</HistoryProvider>
+				<Router location={location} navigator={history}>
+					<div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
+						<AppRouter isAuthenticated={isAuthenticated} />
+					</div>
+				</Router>
 			</SWRProvider>
 		</ErrorBoundary>
 	);

@@ -51,16 +51,6 @@ const MicrofrontendWrapper: React.FC<MicrofrontendWrapperProps> = ({
 		return history;
 	}, [navigate, location]);
 
-	// Notify all listeners when location changes
-	useEffect(() => {
-		listenersRef.current.forEach((callback) => {
-			callback({
-				location: sharedHistory.location,
-				action: "POP", // or 'PUSH'/'REPLACE' based on how we got here
-			});
-		});
-	}, [location, sharedHistory]);
-
 	// Mount only once
 	useEffect(() => {
 		const mountMicrofrontend = async () => {
@@ -68,7 +58,7 @@ const MicrofrontendWrapper: React.FC<MicrofrontendWrapperProps> = ({
 				try {
 					const mountOptions = {
 						initialPath: location.pathname,
-						sharedHistory, // Pass the shared history instead of callbacks
+						sharedHistory, // Pass the shared history
 						...additionalProps,
 					};
 
@@ -81,6 +71,15 @@ const MicrofrontendWrapper: React.FC<MicrofrontendWrapperProps> = ({
 
 		mountMicrofrontend();
 	}, []);
+
+	// Notify all listeners when location changes
+	useEffect(() => {
+		listenersRef.current.forEach((callback) => {
+			callback({
+				location: sharedHistory.location,
+			});
+		});
+	}, [location, sharedHistory]);
 
 	return <div ref={ref} />;
 };

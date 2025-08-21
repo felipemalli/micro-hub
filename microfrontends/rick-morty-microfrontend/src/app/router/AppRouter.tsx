@@ -5,7 +5,9 @@ import {
 	CharacterDetailPage,
 } from "../../features/characters";
 
-export const AppRouter: React.FC = () => {
+export const AppRouter: React.FC<{ isAuthenticated?: boolean }> = ({
+	isAuthenticated,
+}) => {
 	return (
 		<div className="max-w-7xl mx-auto px-4 py-8">
 			<div className="text-center mt-4 mb-10">
@@ -16,8 +18,8 @@ export const AppRouter: React.FC = () => {
 				<p className="text-lg">
 					Explore, curta e favorite os personagens do multiverso de Rick e Morty
 				</p>
+				{isAuthenticated && <p className="mt-8">Você está autenticado</p>}
 			</div>
-
 			<div className="bg-white rounded-2xl shadow-xl overflow-hidden min-h-[600px]">
 				<Routes>
 					<Route path="/rickmorty" element={<CharacterListPage />} />

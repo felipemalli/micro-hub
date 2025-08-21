@@ -8,8 +8,4 @@ export { useCharacters } from "./hooks/useCharacters";
 export { useFavorites } from "./hooks/useFavorites";
 export { useCharacterLikes } from "./hooks/useCharacterLikes";
 
-export type {
-	Character,
-	CharacterFilters,
-	CharacterDetailProps,
-} from "./types/character.types";
+export type { CharacterFilters } from "./types/character.types";

@@ -3,7 +3,8 @@ import { createMemoryHistory, createBrowserHistory } from "history";
 import RickMortyApp from "./RickMortyApp";
 
 const mount = (el: HTMLElement, options: any = {}) => {
-	const { sharedHistory, initialPath, defaultHistory } = options;
+	const { sharedHistory, initialPath, defaultHistory, isAuthenticated } =
+		options;
 
 	const history =
 		sharedHistory ||
@@ -13,7 +14,9 @@ const mount = (el: HTMLElement, options: any = {}) => {
 		});
 
 	const root = createRoot(el);
-	root.render(<RickMortyApp history={history} />);
+	root.render(
+		<RickMortyApp history={history} isAuthenticated={isAuthenticated} />
+	);
 
 	return {};
 };

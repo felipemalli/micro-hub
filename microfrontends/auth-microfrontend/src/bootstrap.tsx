@@ -3,7 +3,7 @@ import { createMemoryHistory, createBrowserHistory } from "history";
 import AuthApp from "./AuthApp";
 
 const mount = (el: HTMLElement, options: any = {}) => {
-	const { sharedHistory, initialPath, defaultHistory } = options;
+	const { sharedHistory, initialPath, defaultHistory, onAuthChange } = options;
 
 	const history =
 		sharedHistory ||
@@ -13,7 +13,7 @@ const mount = (el: HTMLElement, options: any = {}) => {
 		});
 
 	const root = createRoot(el);
-	root.render(<AuthApp history={history} />);
+	root.render(<AuthApp history={history} onAuthChange={onAuthChange} />);
 
 	return {};
 };

@@ -4,15 +4,13 @@ import React, { useEffect, useState } from "react";
 import { Router } from "react-router-dom";
 import { AppRouter } from "./app/router/AppRouter";
 import { ErrorBoundary } from "./app/providers/ErrorBoundary";
-import { HistoryProvider } from "./app/providers/HistoryProvider";
 import { AuthProvider } from "./app/providers/AuthProvider";
 import { AuthAppProps } from "./types/auth";
 import { History } from "history";
 
-const AuthApp: React.FC<AuthAppProps & { history?: History }> = ({
-	onAuthChange,
-	history,
-}) => {
+const AuthApp: React.FC<
+	AuthAppProps & { history?: History; isAuthenticated?: boolean }
+> = ({ onAuthChange, history }) => {
 	const [location, setLocation] = useState(
 		history?.location || { pathname: "/auth" }
 	);
@@ -31,11 +29,9 @@ const AuthApp: React.FC<AuthAppProps & { history?: History }> = ({
 	return (
 		<ErrorBoundary>
 			<AuthProvider onAuthChange={onAuthChange}>
-				<HistoryProvider history={history}>
-					<Router location={location} navigator={history}>
-						<AppRouter />
-					</Router>
-				</HistoryProvider>
+				<Router location={location} navigator={history}>
+					<AppRouter />
+				</Router>
 			</AuthProvider>
 		</ErrorBoundary>
 	);

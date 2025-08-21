@@ -58,11 +58,53 @@ const App: React.FC = () => {
 
 	useEffect(() => {
 		// Verificar se há sessão salva
-		const savedUser = localStorage.getItem("currentUser");
-		setIsAuthenticated(!!savedUser);
+		const checkAuthState = () => {
+			const savedUser = localStorage.getItem("currentUser");
+			const token = localStorage.getItem("accessToken");
+			const isAuth = !!(savedUser && token);
+			console.log("Shell-app: Checking auth state", {
+				savedUser: !!savedUser,
+				token: !!token,
+				isAuth,
+			});
+			setIsAuthenticated(isAuth);
+		};
+
+		// Verificar estado inicial
+		checkAuthState();
+
+		// Escutar eventos de login/logout do auth-microfrontend
+		const handleLogin = () => {
+			console.log("Shell-app: Received login event");
+			setIsAuthenticated(true);
+		};
+
+		const handleLogout = () => {
+			console.log("Shell-app: Received logout event");
+			setIsAuthenticated(false);
+		};
+
+		// Escutar mudanças no localStorage (quando outra aba faz login/logout)
+		const handleStorageChange = (e: StorageEvent) => {
+			if (e.key === "currentUser" || e.key === "accessToken") {
+				console.log("Shell-app: Storage changed", e.key, e.newValue);
+				checkAuthState();
+			}
+		};
+
+		window.addEventListener("auth:login", handleLogin);
+		window.addEventListener("auth:logout", handleLogout);
+		window.addEventListener("storage", handleStorageChange);
+
+		return () => {
+			window.removeEventListener("auth:login", handleLogin);
+			window.removeEventListener("auth:logout", handleLogout);
+			window.removeEventListener("storage", handleStorageChange);
+		};
 	}, []);
 
 	const handleAuthChange = (authenticated: boolean) => {
+		console.log("Shell-app: Auth change from microfrontend", authenticated);
 		setIsAuthenticated(authenticated);
 	};
 
