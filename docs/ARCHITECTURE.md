@@ -67,4 +67,44 @@ backend/src/
 └── entities/               # Modelos de dados (TypeORM)
 ```
 
-## Melhorias possíveis
+![Imagem da estrutura do backend](images/backend-folder-structure.png)
+
+Ou seja, é separado por módulos. E em cada módulo, é aplicado o padrão Model-Service-Controller.
+
+Cogitei utilizar Clean Architecture, mas o projeto é muito pequeno para isso.
+
+Além disso, outros diretórios utilitários foram adicionados para manter o código limpo, organizado e escalável.
+
+#### Resumo
+
+##### Documentação API
+
+- Swagger Integration;
+- Endpoint: /docs;
+- Tags: Organização por módulos;
+- Auth: Bearer token support;
+- Schemas: Auto-geração a partir de DTOs.
+
+##### Containerização
+
+- Docker Support.
+
+##### Design Patterns Implementados
+
+- Dependency Injection: Injeção de dependências nativa do NestJS;
+- Repository Pattern: TypeORM repositories;
+- Strategy Pattern: Passport strategies (JWT);
+- Decorator Pattern: Guards, interceptors, pipes;
+- Factory Pattern: Configurações assíncronas;
+- Observer Pattern: RxJS para interceptors.
+
+##### Características Principais
+
+- Modularidade: Cada funcionalidade em módulo separado
+- Escalabilidade: Estrutura preparada para crescimento
+- Testabilidade: Injeção de dependências facilita testes
+- Type Safety: TypeScript em toda a aplicação
+- Performance: Cache Redis integrado
+- Segurança: JWT + Guards + Validation
+- Observabilidade: Logging estruturado + Health checks
+  Esta estrutura segue as melhores práticas do NestJS e permite fácil manutenção, teste e escalabilidade da aplicação.

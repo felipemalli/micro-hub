@@ -4,8 +4,6 @@ Projeto demonstrativo de microfrontends, estruturado em múltiplos repositórios
 
 📖 **Documentação Detalhada:**
 
-A ordem recomendada de leitura é:
-
 - [🏗️ Decisões Arquiteturais](./docs/ARCHITECTURE.md)
 - [🔍 Resolução de Problemas](./docs/TROUBLESHOOTING.md)
 - [⚙️ Guia Técnico](./docs/TECHNICAL-GUIDE.md)
@@ -17,7 +15,7 @@ A ordem recomendada de leitura é:
 - [Microfrontends (Module Federation)](./microfrontends/README.md)
 - [Design System (Web Components)](./npm-packages/README.md)
 
-## Quick Start
+## Inicialização
 
 ```bash
 git clone https://github.com/microhub-project/microhub.git
@@ -27,11 +25,11 @@ cd microhub
 **Instalar dependências:**
 
 ```bash
-pnpm install:all  # ou npm install / yarn install / bun install
+pnpm install:all
 ```
 
 **Executar o projeto:**
 
 ```bash
-pnpm run start  # ou npm run start / yarn run start / bun run start
+pnpm run start
 ```

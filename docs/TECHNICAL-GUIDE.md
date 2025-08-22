@@ -1,27 +1,234 @@
 # Guia Técnico
 
-Nessa seção, vou explicar como funciona o projeto.
+Nessa seção, vou explicar em detalhe as partes técnicas do projeto.
+
+### Linter
+
+Todos os projetos possuem ESLint + Prettier para padronização de código.
 
 ## Backend
 
-Como o Backend foi realizado com NestJS, a documentação técnica ficará muito voltada ao funcionamento do mesmo, visto que é um framework que abstrai muito a complexidade de se trabalhar com APIs.
+Como o Backend foi realizado com NestJS, a documentação técnica será um pouco voltada ao funcionamento do mesmo, visto que é um framework que abstrai muitas coisas.
+
+Mais sobre a arquitetura do backend no [README de Arquitetura](./ARCHITECTURE.md).
+
+### Main
+
+No arquivo `main.ts`, é definido:
+
+- Prefixo da aplicação (que será a partir de `/api`).
+- Inicialização do Swagger;
+- Portas permitidas;
+- Execução do app.
+
+Além disso, antes disso são definidos os seguintes middlewares:
+
+#### 1. GlobalExceptionFilter
+
+Responsável por capturar e tratar os erros globais.
+
+#### 2. `ResponseInterceptor`
+
+Responsável por interceptar as respostas e adicionar o timestamp e o status code.
+
+![Imagem do ResponseInterceptor](images/backend-response-interceptor.png)
+
+#### 3. CORS
+
+Para definir quais origens podem acessar a API.
+
+![Imagem do CORS](images/backend-cors.png)
+
+#### GlobalExceptionFilter
+
+Ver o arquivo completo a princípio parece complicado, mas é simples. Vou explicá-lo e por partes.
+
+O `@Catch()` é um decorator que permite capturar exceções em um determinado escopo.
+
+Se for um erro maior que 500, imprime no console. Em um projeto real, Winston, Pino, etc, poderiam ser utilizados para logar o erro e também utilizar algum serviço de monitoramento. E um sistema de agregação de logs, pensando em escalabilidade.
+
+Se for outro tipo de erro, ele chama o método `buildErrorResponse`.
+
+Para contruir a resposta, se for um erro HTTP, chama o método `handleHttpException`. Se não, se for um erro desconhecido, chama o método `handleUnknownException`.
+
+Observe o `handleHttpException`:
+
+![Imagem do GlobalExceptionFilterHttp](images/backend-global-exceptions-http.png)
+
+Essa verificação se é string no `buildErrorResponse` é uma medida defensiva, pois existe a chance do NestJS retornar uma exception como string ou objeto:
+
+![Imagem do GlobalExceptionFilterThrows](images/backend-global-exception-throws.png)
+
+Agora, observe o `handleUnknownException`:
+
+![Imagem do GlobalExceptionFilterHandlers](images/backend-global-exceptions-unknown.png)
+
+Observe que nesse caso as respostas são pré-definidas, que é uma medida de segurança para evitar vazamento de informações sensíveis do sistema.
+
+### Sistema de módulos
+
+O sistema de módulos do NestJS é baseado no conceito de Injeção de Dependência e Inversão de Controle.
+
+![Imagem do sistema de módulos](images/backend-auth-module.png)
+
+Ao definir os imports, eles são possíveis de serem injetados em outros módulos que estão definidos nesse arquivo.
+Além disso, os providers podem ser injetados nos controllers e assim por diante.
+
+### Autenticação
+
+A autenticação foi feita com JWT.
+
+No Nest, os guards são classes responsáveis por verificar se o usuário tem permissão para acessar uma rota. Eles utilizam os strategies para verificar se o usuário tem permissão para acessar uma rota. E se conectam através do 'jwt' definido no extend do JwtAuthGuard, o AuthGuard('jwt'). Com isso, o Nest busca uma classe strategy que começa com 'Jwt'.
+
+E no Nest, é uma boa prática utilizar a biblioteca nativa `Passport` para autenticação, que utilizei.
+
+![Imagem do pacote NPM](images/backend-jwt-auth-guard.png)
+
+![Imagem do pacote NPM](images/backend-jwt-strategy.png)
+
+Como o Nest abstrai bastante nessa parte, vou detalhar a ordem da execução do Guard com o Strategy.
+
+Quando uma request chega:
+
+1. Inicializa o `JwtAuthGuard` (ativa o constructor).<br> Disponibiliza o Reflector para a classe, que habilita verificar decorators.
+2. `JwtAuthGuard`.canActivate(): <br>
+   Verifica se é um request público (decorator @Public() nos controllers).<br>
+   => Público: retorna true, pula autenticação.<br>
+   => Não Público: chama super.canActivate() (que é a classe extendida, AuthGuard, do Passport).<br>
+3. Inicializa `JwtStrategy` (ativa o constructor). <br> De acordo com os parâmetros do super, Passport verifica se o token é válido. Internamente extrai e valida o JWT.<br>
+4. Se for válido: chama o `JwtStrategy`.validate(payload).<br>
+   Busca o usuário com findById e verifica se ele já existe e não está inativo.<br>
+5. Se existir, Passport manda para o user `JwtAuthGuard`.handleRequest() (e algum erro possível).<br>
+   Lança um erro se vier um erro ou não tiver usuário.<br>
+   Se vier um user, `JwtAuthGuard` injeta user no request. `request.user = user`<br>
+
+O Controller consegue saber que o usuário está autenticado através do decorator @CurrentUser(), que retorna true se o `request.user` existir.
+
+![Imagem do decorator @CurrentUser](images/backend-current-user-decorator.png)
+
+Além disso, todas as rotas são protegidas por padrão graças à configuração no `app.module.ts` com a seguinte configuração no providers:
+
+![Imagem do global guard](images/backend-global-guard.png)
+
+Isso funciona porque:
+
+- O `APP_GUARD` é um token especial do NestJS que faz com que o guard em que ele está seja aplicada a todas as rotas.
+- O `JwtAuthGuard` é o guard que verifica se o usuário está autenticado.
+
+E isso foi feito como medida de segurança. Caso um desenvolvedor queira desabilitar a proteção de alguma rota, ele terá que manualmente definir @Public() na rota.
+
+### Entities
+
+O TypeORM é um ORM que facilita a interação com o banco de dados.
+Para integrá-lo ao projeto, preciso definir minhas entidades com seu auxilio.
+
+![Imagem do User Entity](images/backend-user-entity.png)
+
+O `@Exclude()` que é a abordagem padrão para esconder campos sensíveis. Remove automaticamente o campo da resposta JSON quando a entidade é retornada pelas APIs.
+
+O atributo `isActive` é um booleano que serve para a implementação do padrão de soft delete, que implementei. Nele, os usuários são apenas marcados como inativos ao invés de serem deletados do banco de dados.
+
+Assim, o histórico de dados críticos são preservados. Isso permite a reativação simples de usuários, oferece melhor performance (mais rapido UPDATE que DELETE) e permite rastros para investigações de segurança. Além de análises históricas sobre padrões de usuários, muito importante para a área de Análise de Dados.
+
+A aplicação exige um CRUD básico. Mas, resolvi adicionar o atributo `role` e uma rota protegida para ficar um pouco mais próxima de uma aplicação real, embora eu não esteja utilizando-a no frontend. É uma rota de estatística simples, que conta a quantidade de usuários ativos.
 
 ### Cache com Redis
 
 Implementei um sistema de cache bem simples com Redis para a busca de usuário
 
+![Imagem do Redis](images/backend-cache-service.png)
+
 ![Imagem do Redis](images/backend-cache.png)
+
 Exemplo com findById.
 
 Verifica o cache primeiro. Se não está no cache, busca no banco. Se achou, adiciona no cache.
 
 As outras requisições são tratadas de forma parecida. O prazo de cache é de 5 minutos.
 
-### Autenticação com JWT
+### DTOs
 
-No Nest, os guards são classes que implementam a função `canActivate`. Eles são responsáveis por verificar se o usuário tem permissão para acessar uma rota.
+DTOs são classes que representam e validam os dados que a API envia ou recebe.
+Neste projeto, são utilizados para os dados recebidos nas requisições.
 
-![Imagem do pacote NPM](images/backend-jwt-guard.png)
+![Imagem do DTO](images/backend-dtos.png)
+
+A validação dos dados é feita com Decorators. Isso foi feito porque diferentes rotas exigiam validações muito parecidas ou até iguais. Então, foi criado um decorator para cada tipo de validação.
+
+![Imagem dos decorators](images/backend-decorators-email.png)
+
+Alguns até um pouco mais complexos, mas seguindo a mesma lógica:
+
+![Imagem do decorator de senha](images/backend-password-decorator.png)
+
+Esse decorator de senha em específico deveria ser bem mais completo (validando presença de letras maiúsculas, números... etc), mas como o projeto é pequeno, decidi fazer apenas com o mínimo necessário.
+
+Esse decorator eventualmente poderia precisar de algum parâmetro que definiria a força da senha. E, com base nele, a validação seria mais ou menos rigorosa em vários aspectos. Mas, como isso aumentaria a complexidade desnecessariamente (YAGNI), só valeria a pena quando realmente demandasse.
+
+### Controllers
+
+Os controllers são responsáveis por receber as requisições e retornar as respostas.
+
+Exemplo da rota `PUT /users/:id`:
+
+![Imagem do Controller PUT /users/:id](images/backend-users-controller-put.png)
+
+Como pode perceber, são muitos decorators. Mas vários deles são de documentação do Swagger (os que iniciam com `@Api`). É importante manter o Swagger próximo do código para lembrar o desenvolvedor de atualizá-lo quando hover alguma alteração.
+
+Perceba que o userService é injetado no controller (pelo `users.module.ts`).
+
+E essa rota não é pública, pois não possui o decorator `@Public()`.
+
+### Services
+
+Os services são responsáveis por executar a lógica do negócio, são chamados pelos controllers.
+
+![Imagem do Service delete](images/backend-users-service-create.png)
+
+Observe que o userRepository é injetado pelo TypeORM, abstraindo a necessidade de criar manualmente a camada Model ou Repository para o acesso ao banco de dados.
+
+### Health Check
+
+Os arquivos `app.controller.ts` e `app.service.ts` implementam um health check para verificar se a aplicação está funcionando.
+
+### Swagger
+
+O projeto foi documentado com o Swagger (`@nestjs/swagger`). Difersos decorators foram utilizados para informar as propriedades das requisições (nos controllers) e validações (nos decorators de validação dos DTOs).
+
+![Imagem do Swagger](images/backend-swagger.png)
+
+### Uso de constants
+
+Foi criado um arquivo `error-messages.ts` por diversas razões:
+
+- Facilitar na manutenção, tradução para outros idiomas, testes e debugging;
+- Evitar duplicação de código, padronizar as mensagens.
+
+![Imagem dos constants](images/backend-constants.png)
+
+Segue como foi utilizado:
+
+![Imagem do uso das constants](images/backend-constants-usage.png)
+
+### Docker
+
+Para facilitar a execução do projeto e escalabilidade, foi criado um Dockerfile para o backend.
+
+Segue o Dockerfile com explicações de cada linha:
+
+Dockerfile de produção:
+
+![Imagem do Dockerfile de produção](images/backend-dockerfile-prod.png)
+
+Dockerfile de desenvolvimento, mais simples:
+
+![Imagem do Dockerfile de desenvolvimento](images/backend-dockerfile-dev.png)
+
+Para facilitar a execução do projeto, foi criado um ambiente de desenvolvimento com Docker Compose. Ele sobe containers para o banco de dados, o Redis e o backend, conectando-os automaticamente. Assim, basta um único comando para iniciar todo o projeto, sem precisar instalar nada além do Docker.
+
+![Imagem do Dockerfile de desenvolvimento](images/backend-docker-compose-dev.png)
+
+Em produção, especialmente em projetos de grande escala, o foco principal está nos Dockerfiles. Isso porque cada serviço (backend, banco de dados e Redis) normalmente é executado em ambientes separados, sendo orquestrados por ferramentas como Kubernetes ou serviços de nuvem, em vez de um único Docker Compose.
 
 ## Microfrontends
 
@@ -89,9 +296,9 @@ As funções de validação são simples e estão armazenadas no arquivo `valida
 
 Para armazenar o token e o usuário, foi utilizado o localstorage.
 
-O motivo do uso de localstorage foi explicado [aqui](./TROUBLESHOOTING.md#11---compartilhamento-de-estadosautenticação-entre-microfrontends).
+Sobre o uso de localstorage está no [README de Resolução de Problemas](./TROUBLESHOOTING.md#11---compartilhamento-de-estadosautenticação-entre-microfrontends).
 
-Como não é a solução ideal e deve ser substituída, não irei elaborar sobre ela neste documento.
+Como não é a solução ideal e deve ser substituída, não irei me estender sobre ela neste documento.
 
 No `AuthApp`, a conexão com o backend é feita diretamente via Axios. Para aprimorar essa comunicação, poderia ser implementado um sistema de retry com exponential backoff (estratégia em que o tempo de espera entre cada tentativa aumenta de forma exponencial) e jitter (variação aleatória nesse tempo de espera para evitar sobrecarga simultânea).
 Outra alternativa seria utilizar o `SWR`, que já oferece essas soluções nativamente e ainda possibilita adicionar cache no client side, o que não foi implementado neste App pois não faria tanto sentido por ser um microfrontend de autenticação.
@@ -145,7 +352,7 @@ Exemplo de uso dos ícones:
 
 ### Criação do env.d.ts
 
-Criei arquivo env.d.ts em todos os microfrontends para evitar baixar o @types/node apenas para o process.env (que foi necessário para o arquivo `bootstrap.ts`).
+Foi criado um arquivo env.d.ts em todos os microfrontends para evitar baixar o @types/node apenas para o process.env (que foi necessário para o arquivo `bootstrap.ts`).
 O @types/node é um pacote relativamente pesado que aumentaria o bundle. E também traria tipagens inconsistentes com o que de fato funciona no browser.
 
 ![Imagem do env.d.ts](images/frontend-env-d-ts.png)

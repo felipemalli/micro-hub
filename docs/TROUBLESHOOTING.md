@@ -2,9 +2,9 @@
 
 ## 1 - Problema de roteamento e histórico entre Microfrontends
 
-Esse foi um dos principais desafios no início do projeto. Acredito _(espero)_ até que, em algum momento, o próprio Module Federation deverá oferecer uma solução nativa para esse problema.
+Esse foi um dos principais desafios do projeto. Acredito _(espero)_ até que, em algum momento, o próprio Module Federation deverá oferecer uma solução nativa para esse problema.
 
-No começo, segui a abordagem de um curso de microfrontends que havia comprado para estudar. Essa solução utilizava callbacks para sincronizar a navegação. Mas, na prática, percebi que ela não funcionava tão bem: às vezes o botão de voltar/avançar do navegador não respondia corretamente, e em outras a URL não era atualizada como deveria.
+No começo, segui a abordagem de um curso de microfrontends que havia comprado para estudar. Essa solução utilizava callbacks para sincronizar a navegação. Mas, na prática, percebi que ela não funcionava tão bem: às vezes o botão de voltar/avançar do navegador não respondia corretamente, e em outras a URL não era atualizada como deveria. Criava ciclos de navegação e entradas duplicadas no histórico.
 
 Mas, o curso me fez entender que utilizar uma função de mount seria uma excelente ideia.
 
