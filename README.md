@@ -9,6 +9,12 @@ Projeto de microfrontends, estruturado em múltiplos repositórios independentes
 - [🔍 Resolução de Problemas](./docs/TROUBLESHOOTING.md)
 - [⚙️ Guia Técnico](./docs/TECHNICAL-GUIDE.md)
 
+## Pré-requisitos
+
+- Node.js 18+
+- Docker
+- pnpm 10+
+
 ## Inicialização
 
 ```bash

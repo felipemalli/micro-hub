@@ -50,8 +50,8 @@
 		"webpack-dev-server": "^4.11.1",
 		"webpack-merge": "^5.8.0"
 	},
-	"packageManager": "pnpm@10.14.0",
+	"packageManager": "pnpm@10.0.0",
 	"engines": {
-		"pnpm": ">=10.14.0"
+		"pnpm": ">=10.0.0"
 	}
 }
