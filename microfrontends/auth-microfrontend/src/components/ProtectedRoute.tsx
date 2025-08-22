@@ -16,9 +16,9 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
 	if (loading) {
 		return (
-			<div className="min-h-screen flex items-center justify-center">
+			<div className="flex min-h-screen items-center justify-center">
 				<div className="text-center">
-					<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+					<div className="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-blue-600"></div>
 					<p className="mt-4 text-gray-600">Carregando...</p>
 				</div>
 			</div>
@@ -31,9 +31,9 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
 	if (requiredRole && user?.role !== requiredRole) {
 		return (
-			<div className="min-h-screen flex items-center justify-center">
+			<div className="flex min-h-screen items-center justify-center">
 				<div className="text-center">
-					<h1 className="text-2xl font-bold text-gray-800 mb-4">
+					<h1 className="mb-4 text-2xl font-bold text-gray-800">
 						Acesso Negado
 					</h1>
 					<p className="text-gray-600">

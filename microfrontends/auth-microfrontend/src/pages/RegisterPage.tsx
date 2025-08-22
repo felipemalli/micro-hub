@@ -61,7 +61,7 @@ export const RegisterPage: React.FC = () => {
 			description="Crie sua conta para começar"
 		>
 			<div>
-				<label htmlFor="name" className="block text-sm mb-2">
+				<label htmlFor="name" className="mb-2 block text-sm">
 					Nome completo
 				</label>
 				<CoreInput
@@ -75,11 +75,11 @@ export const RegisterPage: React.FC = () => {
 					disabled={loading || isSubmitting}
 				/>
 				{errors.name && (
-					<p className="text-red-600 text-sm mt-1">{errors.name}</p>
+					<p className="mt-1 text-sm text-red-600">{errors.name}</p>
 				)}
 			</div>
 			<div>
-				<label htmlFor="email" className="block text-sm mb-2">
+				<label htmlFor="email" className="mb-2 block text-sm">
 					Email
 				</label>
 				<CoreInput
@@ -93,11 +93,11 @@ export const RegisterPage: React.FC = () => {
 					disabled={loading || isSubmitting}
 				/>
 				{errors.email && (
-					<p className="text-red-600 text-sm mt-1">{errors.email}</p>
+					<p className="mt-1 text-sm text-red-600">{errors.email}</p>
 				)}
 			</div>
 			<div>
-				<label htmlFor="password" className="block text-sm mb-2">
+				<label htmlFor="password" className="mb-2 block text-sm">
 					Senha
 				</label>
 				<CoreInput
@@ -111,11 +111,11 @@ export const RegisterPage: React.FC = () => {
 					disabled={loading || isSubmitting}
 				/>
 				{errors.password && (
-					<p className="text-red-600 text-sm mt-1">{errors.password}</p>
+					<p className="mt-1 text-sm text-red-600">{errors.password}</p>
 				)}
 			</div>
 			<div>
-				<label htmlFor="confirmPassword" className="block text-sm mb-2">
+				<label htmlFor="confirmPassword" className="mb-2 block text-sm">
 					Confirmar senha
 				</label>
 				<CoreInput
@@ -129,7 +129,7 @@ export const RegisterPage: React.FC = () => {
 					disabled={loading || isSubmitting}
 				/>
 				{errors.confirmPassword && (
-					<p className="text-red-600 text-sm mt-1">{errors.confirmPassword}</p>
+					<p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
 				)}
 			</div>
 			<CoreButton

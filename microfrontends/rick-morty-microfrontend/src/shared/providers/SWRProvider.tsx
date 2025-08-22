@@ -1,7 +1,7 @@
 import React from "react";
 import { SWRConfig } from "swr";
-import { rickMortyApi } from "../../shared/services/api";
-import { swrConfig } from "../../shared/config/swr.config";
+import { rickMortyApi } from "../services/api";
+import { swrConfig } from "../config/swr.config";
 
 interface SWRProviderProps {
 	children: React.ReactNode;

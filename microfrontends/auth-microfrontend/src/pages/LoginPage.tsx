@@ -45,7 +45,7 @@ export const LoginPage: React.FC = () => {
 				description="Entre com sua conta"
 			>
 				<div>
-					<label htmlFor="email" className="block text-sm mb-2">
+					<label htmlFor="email" className="mb-2 block text-sm">
 						Email
 					</label>
 					<CoreInput
@@ -59,11 +59,11 @@ export const LoginPage: React.FC = () => {
 						disabled={loading || isSubmitting}
 					/>
 					{errors.email && (
-						<p className="text-red-600 text-sm mt-1">{errors.email}</p>
+						<p className="mt-1 text-sm text-red-600">{errors.email}</p>
 					)}
 				</div>
 				<div>
-					<label htmlFor="password" className="block text-sm mb-2">
+					<label htmlFor="password" className="mb-2 block text-sm">
 						Senha
 					</label>
 					<CoreInput
@@ -77,7 +77,7 @@ export const LoginPage: React.FC = () => {
 						disabled={loading || isSubmitting}
 					/>
 					{errors.password && (
-						<p className="text-red-600 text-sm mt-1">{errors.password}</p>
+						<p className="mt-1 text-sm text-red-600">{errors.password}</p>
 					)}
 				</div>
 				<CoreButton

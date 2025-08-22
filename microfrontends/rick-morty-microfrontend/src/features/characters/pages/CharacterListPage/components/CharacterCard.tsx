@@ -26,36 +26,36 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 	};
 
 	return (
-		<Card hover onClick={() => onClick(character)} className="relative group">
-			<div className="absolute top-2 right-2 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+		<Card hover onClick={() => onClick(character)} className="group relative">
+			<div className="absolute right-2 top-2 z-10 flex space-x-1 opacity-0 transition-opacity group-hover:opacity-100">
 				<FavoriteButton characterId={character.id} />
 			</div>
 			<div className="aspect-square">
 				<img
 					src={character.image}
 					alt={character.name}
-					className="w-full h-full object-cover"
+					className="h-full w-full object-cover"
 					loading="lazy"
 				/>
 			</div>
 			<div className="p-4">
-				<h3 className="font-bold text-lg mb-2 text-gray-800 truncate">
+				<h3 className="mb-2 truncate text-lg font-bold text-gray-800">
 					{character.name}
 				</h3>
-				<div className="flex items-center justify-between mb-3">
+				<div className="mb-3 flex items-center justify-between">
 					<Badge variant={getStatusVariant(character.status)}>
 						{character.status}
 					</Badge>
 					<LikeButton characterId={character.id} />
 				</div>
-				<div className="text-sm text-gray-600 space-y-1">
-					<p className="truncate text-ellipsis overflow-hidden">
+				<div className="space-y-1 text-sm text-gray-600">
+					<p className="overflow-hidden truncate text-ellipsis">
 						<span>Espécie:</span> {character.species}
 					</p>
-					<p className="truncate text-ellipsis overflow-hidden">
+					<p className="overflow-hidden truncate text-ellipsis">
 						<span>Gênero:</span> {character.gender}
 					</p>
-					<p className="truncate text-ellipsis overflow-hidden">
+					<p className="overflow-hidden truncate text-ellipsis">
 						<span>Origem:</span>
 						<span>{character.origin.name}</span>
 					</p>

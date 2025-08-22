@@ -12,7 +12,7 @@ interface InfoCardProps {
 
 export const InfoCard: React.FC<InfoCardProps> = ({ title, content }) => {
 	return (
-		<div className={`bg-gray-50 rounded-lg p-5 flex flex-col gap-2`}>
+		<div className={`flex flex-col gap-2 rounded-lg bg-gray-50 p-5`}>
 			<h6 className="text-gray-500">{title}</h6>
 			<div className="flex flex-col gap-2">
 				{content.map((item, idx) => (

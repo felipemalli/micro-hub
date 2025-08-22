@@ -6,8 +6,8 @@ export function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
 	const isDevelopment = process.env.NODE_ENV === "development";
 
 	return (
-		<div className="h-screen-minus-header my-4 sm:my-16 flex items-center justify-center bg-gradient-to-br from-red-50 to-orange-50">
-			<div className="max-w-md w-full flex flex-col items-center grow gap-6 text-center p-8 bg-white rounded-lg shadow-xl">
+		<div className="h-screen-minus-header my-4 flex items-center justify-center bg-gradient-to-br from-red-50 to-orange-50 sm:my-16">
+			<div className="flex w-full max-w-md grow flex-col items-center gap-6 rounded-lg bg-white p-8 text-center shadow-xl">
 				<AlertIcon className="size-16" />
 				<h2>Oops! Algo deu errado</h2>
 				<p>
@@ -24,11 +24,11 @@ export function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
 					Tentar Novamente
 				</CoreButton>
 				{isDevelopment && error && (
-					<details className="w-full text-left flex-shrink">
-						<summary className="cursor-pointer text-sm text-gray-500 mb-2 hover:text-gray-700">
+					<details className="w-full flex-shrink text-left">
+						<summary className="mb-2 cursor-pointer text-sm text-gray-500 hover:text-gray-700">
 							Detalhes Técnicos (Dev)
 						</summary>
-						<div className="p-3 bg-gray-100 rounded text-xs text-red-600 max-h-48 overflow-auto space-y-2">
+						<div className="max-h-48 space-y-2 overflow-auto rounded bg-gray-100 p-3 text-xs text-red-600">
 							<div>
 								<strong>Error:</strong> {error.message}
 							</div>

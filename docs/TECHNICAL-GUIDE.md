@@ -137,6 +137,12 @@ O @types/node é um pacote relativamente pesado que aumentaria o bundle. E tamb�
 
 ![Imagem do env.d.ts](images/frontend-env-d-ts.png)
 
+### Prettier
+
+Nos microfrontends foi configurado o plugin `prettier-plugin-tailwindcss`, que reorganiza automaticamente as classes do Tailwind CSS dentro dos arquivos.
+
+Isso traz consistência visual, facilitando a leitura e manutenção do código.
+
 ## 2. NPM Package
 
 Para facilitar a visualização dos componentes, descobri algo chamado [Storybook](https://storybook.js.org/). Mas achei que precisaria de mais tempo para estudar pois nunca utilizei, então resolvi não utilizar e fiz uma documentação mais básica.

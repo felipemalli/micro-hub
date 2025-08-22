@@ -27,7 +27,7 @@ export const LikeButton: React.FC<LikeButtonProps> = ({
 			title={liked ? "Remover curtida" : "Curtir personagem"}
 		>
 			<span
-				className={`${liked ? "text-blue-500" : "text-gray-500"} transition-colors text-sm`}
+				className={`${liked ? "text-blue-500" : "text-gray-500"} text-sm transition-colors`}
 			>
 				{liked ? "👍" : "👍🏻"}
 			</span>

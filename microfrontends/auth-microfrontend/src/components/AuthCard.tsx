@@ -14,8 +14,8 @@ export const AuthCard = ({
 	children,
 }: AuthCardProps) => {
 	return (
-		<div className="h-screen-minus-header flex items-center justify-center py-4 sm:my-16 px-4">
-			<div className="bg-white rounded-lg sm:shadow-md px-6 py-8 sm:px-8 sm:py-8 flex flex-col sm:max-w-md w-full gap-8">
+		<div className="h-screen-minus-header flex items-center justify-center px-4 py-4 sm:my-16">
+			<div className="flex w-full flex-col gap-8 rounded-lg bg-white px-6 py-8 sm:max-w-md sm:px-8 sm:py-8 sm:shadow-md">
 				<div className="flex flex-col gap-2 sm:items-center">
 					<h3>{title}</h3>
 					<p>{description}</p>

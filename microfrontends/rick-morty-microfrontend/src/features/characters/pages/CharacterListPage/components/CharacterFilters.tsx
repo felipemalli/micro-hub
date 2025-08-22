@@ -21,10 +21,10 @@ export const CharacterFilters: React.FC<CharacterFiltersProps> = ({
 	}, [debouncedName]);
 
 	return (
-		<div className="mb-6 bg-gray-50 rounded-xl p-4">
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+		<div className="mb-6 rounded-xl bg-gray-50 p-4">
+			<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
 				<div>
-					<label className="block text-sm font-medium text-gray-700 mb-1">
+					<label className="mb-1 block text-sm font-medium text-gray-700">
 						Nome
 					</label>
 					<CoreInput
@@ -38,13 +38,13 @@ export const CharacterFilters: React.FC<CharacterFiltersProps> = ({
 					/>
 				</div>
 				<div>
-					<label className="block text-sm font-medium text-gray-700 mb-1">
+					<label className="mb-1 block text-sm font-medium text-gray-700">
 						Status
 					</label>
 					<select
 						value={filters.status || ""}
 						onChange={(e) => onFiltersChange({ status: e.target.value as any })}
-						className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+						className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
 					>
 						<option value="">Todos</option>
 						<option value="Alive">Vivo</option>
@@ -53,7 +53,7 @@ export const CharacterFilters: React.FC<CharacterFiltersProps> = ({
 					</select>
 				</div>
 				<div>
-					<label className="block text-sm font-medium text-gray-700 mb-1">
+					<label className="mb-1 block text-sm font-medium text-gray-700">
 						Espécie
 					</label>
 					<CoreInput
@@ -67,13 +67,13 @@ export const CharacterFilters: React.FC<CharacterFiltersProps> = ({
 					/>
 				</div>
 				<div>
-					<label className="block text-sm font-medium text-gray-700 mb-1">
+					<label className="mb-1 block text-sm font-medium text-gray-700">
 						Gênero
 					</label>
 					<select
 						value={filters.gender || ""}
 						onChange={(e) => onFiltersChange({ gender: e.target.value as any })}
-						className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+						className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
 					>
 						<option value="">Todos</option>
 						<option value="Male">Masculino</option>

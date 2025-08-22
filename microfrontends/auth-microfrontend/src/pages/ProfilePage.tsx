@@ -44,7 +44,7 @@ export const ProfilePage: React.FC = () => {
 
 	if (!user) {
 		return (
-			<div className="w-full max-w-md mx-auto text-center">
+			<div className="mx-auto w-full max-w-md text-center">
 				<p className="text-gray-600">Usuário não encontrado</p>
 				<CoreButton
 					onClick={() => navigate("/auth/login")}
@@ -58,37 +58,37 @@ export const ProfilePage: React.FC = () => {
 	}
 
 	return (
-		<div className="w-full max-w-md mx-auto">
-			<div className="text-center my-8">
-				<div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-					<span className="text-white text-2xl font-bold">
+		<div className="mx-auto w-full max-w-md">
+			<div className="my-8 text-center">
+				<div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-600">
+					<span className="text-2xl font-bold text-white">
 						{user.name.charAt(0).toUpperCase()}
 					</span>
 				</div>
 				<h1>Perfil</h1>
 				<p>Suas informações pessoais</p>
 			</div>
-			<div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+			<div className="mb-6 rounded-xl bg-white p-6 shadow-lg">
 				{!isEditing ? (
 					<div className="space-y-4">
 						<div>
-							<label className="block text-sm mb-1">Nome</label>
+							<label className="mb-1 block text-sm">Nome</label>
 							<p className="text-lg text-gray-800">{user.name}</p>
 						</div>
 
 						<div>
-							<label className="block text-sm font-medium text-gray-500 mb-1">
+							<label className="mb-1 block text-sm font-medium text-gray-500">
 								Email
 							</label>
 							<p className="text-lg font-medium text-gray-800">{user.email}</p>
 						</div>
 
 						<div>
-							<label className="block text-sm font-medium text-gray-500 mb-1">
+							<label className="mb-1 block text-sm font-medium text-gray-500">
 								Tipo de conta
 							</label>
 							<span
-								className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${
+								className={`inline-flex rounded-full px-3 py-1 text-sm font-medium ${
 									user.role === "admin"
 										? "bg-purple-100 text-purple-800"
 										: "bg-blue-100 text-blue-800"
@@ -99,7 +99,7 @@ export const ProfilePage: React.FC = () => {
 						</div>
 						{user.createdAt && (
 							<div>
-								<label className="block text-sm font-medium text-gray-500 mb-1">
+								<label className="mb-1 block text-sm font-medium text-gray-500">
 									Membro desde
 								</label>
 								<p className="text-lg font-medium text-gray-800">
@@ -113,7 +113,7 @@ export const ProfilePage: React.FC = () => {
 						<div>
 							<label
 								htmlFor="name"
-								className="block text-sm font-medium text-gray-500 mb-2"
+								className="mb-2 block text-sm font-medium text-gray-500"
 							>
 								Nome
 							</label>
@@ -128,11 +128,11 @@ export const ProfilePage: React.FC = () => {
 								disabled={isSubmitting}
 							/>
 							{errors.name && (
-								<p className="text-red-600 text-sm mt-1">{errors.name}</p>
+								<p className="mt-1 text-sm text-red-600">{errors.name}</p>
 							)}
 						</div>
 						<div>
-							<label className="block text-sm font-medium text-gray-500 mb-1">
+							<label className="mb-1 block text-sm font-medium text-gray-500">
 								Email (não pode ser alterado)
 							</label>
 							<p className="text-lg font-medium text-gray-400">{user.email}</p>

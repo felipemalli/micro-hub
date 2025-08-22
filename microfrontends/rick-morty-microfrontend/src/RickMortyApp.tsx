@@ -2,9 +2,9 @@ import "./styles/globals.css";
 import "@felipemalli-libs/microhub-ui/styles.css";
 import React, { useEffect, useState } from "react";
 import { Router } from "react-router-dom";
-import { AppRouter } from "./app/router/AppRouter";
-import { ErrorBoundary } from "./app/providers/ErrorBoundary/ErrorBoundary";
-import { SWRProvider } from "./app/providers/SWRProvider";
+import { AppRouter } from "./router/AppRouter";
+import { ErrorBoundary } from "./shared/providers/ErrorBoundary/ErrorBoundary";
+import { SWRProvider } from "./shared/providers/SWRProvider";
 import { History } from "history";
 
 const App: React.FC<{ history?: History; isAuthenticated?: boolean }> = ({

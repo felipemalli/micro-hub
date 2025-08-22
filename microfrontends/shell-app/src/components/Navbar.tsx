@@ -17,10 +17,10 @@ const NavLink = ({ to, icon, label }: NavLinkProps) => (
 
 export const Navbar = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
 	return (
-		<nav className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50 h-16">
-			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				<div className="flex justify-between items-center h-16">
-					<div className="flex items-center justify-between w-full space-x-8">
+		<nav className="sticky top-0 z-50 h-16 border-b border-gray-200 bg-white/80 backdrop-blur-sm">
+			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+				<div className="flex h-16 items-center justify-between">
+					<div className="flex w-full items-center justify-between space-x-8">
 						<Link to="/" className="text-2xl font-bold text-gray-800">
 							<span className="flex items-center space-x-2">
 								<span>🚀</span>

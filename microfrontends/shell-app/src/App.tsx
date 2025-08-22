@@ -30,22 +30,22 @@ const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({
 };
 
 const LoadingSpinner: React.FC = () => (
-	<div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
+	<div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50">
 		<div className="text-center">
-			<div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500 mx-auto mb-4"></div>
-			<p className="text-gray-600 font-medium">Carregando...</p>
+			<div className="mx-auto mb-4 h-16 w-16 animate-spin rounded-full border-b-2 border-blue-500"></div>
+			<p className="font-medium text-gray-600">Carregando...</p>
 		</div>
 	</div>
 );
 
 const ErrorFallback: React.FC<{ message: string }> = ({ message }) => (
-	<div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-red-50 to-pink-50">
-		<div className="text-center p-8 card max-w-md">
-			<div className="text-red-500 text-5xl mb-4">⚠️</div>
-			<h2 className="text-xl font-bold text-gray-800 mb-2">
+	<div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-red-50 to-pink-50">
+		<div className="card max-w-md p-8 text-center">
+			<div className="mb-4 text-5xl text-red-500">⚠️</div>
+			<h2 className="mb-2 text-xl font-bold text-gray-800">
 				Ops! Algo deu errado
 			</h2>
-			<p className="text-gray-600 mb-4">{message}</p>
+			<p className="mb-4 text-gray-600">{message}</p>
 			<button onClick={() => window.location.reload()} className="btn-primary">
 				Tentar novamente
 			</button>
@@ -116,21 +116,21 @@ const App: React.FC = () => {
 						<Route
 							path="/"
 							element={
-								<div className="flex items-center justify-center h-screen-minus-header">
-									<div className="text-center p-8 card max-w-2xl">
-										<h1 className="text-4xl font-bold text-gray-800 mb-4">
+								<div className="h-screen-minus-header flex items-center justify-center">
+									<div className="card max-w-2xl p-8 text-center">
+										<h1 className="mb-4 text-4xl font-bold text-gray-800">
 											Bem-vindo ao Micro Hub
 										</h1>
-										<p className="text-gray-600 mb-8 text-lg max-w-lg">
+										<p className="mb-8 max-w-lg text-lg text-gray-600">
 											Um projeto de demostração da arquitetura de microfrontends
 											utilizando o Module Federation
 										</p>
-										<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+										<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 											<Link
 												to="/auth"
-												className="bg-white rounded-lg hover:shadow-lg transition-shadow p-6"
+												className="rounded-lg bg-white p-6 transition-shadow hover:shadow-lg"
 											>
-												<div className="text-3xl mb-2">🔐</div>
+												<div className="mb-2 text-3xl">🔐</div>
 												<h5 className="font-semibold text-gray-800">
 													Autenticação
 												</h5>
@@ -140,9 +140,9 @@ const App: React.FC = () => {
 											</Link>
 											<Link
 												to="/rickmorty"
-												className="bg-white rounded-lg hover:shadow-lg transition-shadow p-6"
+												className="rounded-lg bg-white p-6 transition-shadow hover:shadow-lg"
 											>
-												<div className="text-3xl mb-2">👽</div>
+												<div className="mb-2 text-3xl">👽</div>
 												<h5 className="font-semibold text-gray-800">
 													Rick & Morty
 												</h5>

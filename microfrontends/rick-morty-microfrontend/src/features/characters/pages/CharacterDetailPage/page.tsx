@@ -32,11 +32,11 @@ export const CharacterDetailPage = ({
 
 	if (error || !character) {
 		return (
-			<div className="text-center p-8 flex flex-col gap-4">
+			<div className="flex flex-col gap-4 p-8 text-center">
 				<div className="text-red-600">
 					<span className="text-4xl">⚠️</span>
 				</div>
-				<h3 className="text-lg font-semibold text-gray-800 mb-2">
+				<h3 className="mb-2 text-lg font-semibold text-gray-800">
 					Erro ao carregar
 				</h3>
 				<p className="text-gray-600">Personagem não encontrado</p>
@@ -63,7 +63,7 @@ export const CharacterDetailPage = ({
 
 	return (
 		<div className="p-6">
-			<div className="flex items-center justify-between mb-6">
+			<div className="mb-6 flex items-center justify-between">
 				<CoreButton variant="outline" onCoreClick={handleBack}>
 					← Voltar
 				</CoreButton>
@@ -73,7 +73,7 @@ export const CharacterDetailPage = ({
 				</div>
 			</div>
 
-			<div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+			<div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
 				<div className="flex justify-center">
 					<img
 						src={character.image}
@@ -83,7 +83,7 @@ export const CharacterDetailPage = ({
 				</div>
 				<div className="space-y-6">
 					<div>
-						<h1 className="text-3xl font-bold text-gray-800 mb-2">
+						<h1 className="mb-2 text-3xl font-bold text-gray-800">
 							{character.name}
 						</h1>
 						<Badge variant={getStatusVariant(character.status)} size="md">

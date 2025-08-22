@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo } from "react";
 import useSWR from "swr";
 import { Character, CharacterFilters } from "../types/character.types";
-import { fetcherWithParams } from "../../../app/providers/SWRProvider";
+import { fetcherWithParams } from "../../../shared/providers/SWRProvider";
 import { swrConfig } from "../../../shared/config/swr.config";
 import { useApiError } from "../../../shared/hooks/useApiError";
 

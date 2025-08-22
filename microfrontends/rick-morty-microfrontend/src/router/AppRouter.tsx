@@ -1,17 +1,14 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import {
-	CharacterListPage,
-	CharacterDetailPage,
-} from "../../features/characters";
+import { CharacterListPage, CharacterDetailPage } from "../features/characters";
 
 export const AppRouter: React.FC<{ isAuthenticated?: boolean }> = ({
 	isAuthenticated,
 }) => {
 	return (
-		<div className="max-w-7xl mx-auto px-4 py-8">
-			<div className="text-center mt-4 mb-10">
-				<h1 className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent mb-2">
+		<div className="mx-auto max-w-7xl px-4 py-8">
+			<div className="mb-10 mt-4 text-center">
+				<h1 className="mb-2 bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
 					<span>🛸 </span>
 					Rick & Morty
 				</h1>
@@ -20,7 +17,7 @@ export const AppRouter: React.FC<{ isAuthenticated?: boolean }> = ({
 				</p>
 				{isAuthenticated && <p className="mt-8">Você está autenticado</p>}
 			</div>
-			<div className="bg-white rounded-2xl shadow-xl overflow-hidden min-h-[600px]">
+			<div className="min-h-[600px] overflow-hidden rounded-2xl bg-white shadow-xl">
 				<Routes>
 					<Route path="/rickmorty" element={<CharacterListPage />} />
 					<Route path="/rickmorty/characters" element={<CharacterListPage />} />
@@ -31,14 +28,14 @@ export const AppRouter: React.FC<{ isAuthenticated?: boolean }> = ({
 				</Routes>
 			</div>
 
-			<div className="text-center mt-8 text-gray-500 text-sm">
+			<div className="mt-8 text-center text-sm">
 				<p>
 					Dados fornecidos pela{" "}
 					<a
 						href="https://rickandmortyapi.com/"
 						target="_blank"
 						rel="noopener noreferrer"
-						className="text-blue-500 hover:text-blue-600 underline"
+						className="text-blue-500 underline hover:text-blue-600"
 					>
 						Rick and Morty API
 					</a>

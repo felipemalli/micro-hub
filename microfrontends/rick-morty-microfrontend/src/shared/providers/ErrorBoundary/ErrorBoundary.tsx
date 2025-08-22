@@ -1,7 +1,7 @@
 import React from "react";
 import { ErrorBoundary as ReactErrorBoundary } from "react-error-boundary";
 import { ErrorFallback } from "./ErrorFallback";
-import { errorLogger } from "../../../shared/services/errorLogger";
+import { errorLogger } from "../../services/errorLogger";
 
 interface ErrorBoundaryProps {
 	children: React.ReactNode;
