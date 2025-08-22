@@ -1,59 +1,160 @@
-# Decisões Arquiteturais
+## Arquiteturas dos Microfrontends
 
-## 1- Microfrontend: Module Federation
+### 1 - Arquitetura do Design System `microhub-ui`
 
-A princípio fiquei receoso de escolher Module Federation porque pensando em escala, todos os microfrontends ficariam acoplados ao Webpack. Além disso, [não há — e não parece que haverá — suporte oficial às versões mais recentes do Next.js](https://module-federation.io/practice/frameworks/next/index.html). Isso significa abrir mão de SSR/ISR com o framework mais consolidado do ecossistema React. Embora existam alternativas, elas me pareceram menos confiáveis pensando a longo prazo.
+Para o design system compartilhado, escolhi o **Stencil** por permitir a criação de Web Components que funcionam nativamente em qualquer framework (React, Vue, Angular) ou vanilla JavaScript. Essa abordagem garante máxima interoperabilidade entre os microfrontends sem acoplamento tecnológico.
 
-**Longevidade** <br>
-Por outro lado, rapidamente percebi que o Module Federation é, de longe, a solução de microfrontends mais utilizada, com muito mais comunidade do que o segundo colocado (Single-SPA). Além disso, o Webpack continua sendo o bundler mais adotado no mercado, direta ou indiretamente (CRA, Next.js, Angular CLI, etc.).
+#### Padrões Arquiteturais
 
-**Benefício técnico chave** <br>
-Diferente do Single-SPA, que orquestra microapps inteiros, o Module Federation permite compartilhar módulos individuais em runtime com inclusive reaproveitamento de dependências. Isso reduz duplicação de código, evita múltiplas versões pesadas de dependências.
+##### Web Components Nativos
 
-**Curva de aprendizado** <br>
-Também é importante destacar que eu não tinha experiência prévia com microfrontends e teria pouco tempo para estudar. O fato de o Module Federation possuir muito mais conteúdo que qualquer outra tecnologia, exemplos e solução de problemas conhecidos foi essencial para viabilizar a entrega no prazo e definir minha decisão.
+Utilização do padrão Web Components para encapsulamento completo (Shadow DOM, Custom Elements) garantindo isolamento de estilos e comportamentos.
 
-## 2- Componentes UI reutilizáveis (Design System)
+##### Multi-Target Build
 
-Inicialmente fiz um modelo básico com 2 microfrontends como pedido, mas, rapidamente percebi que componentes reutilizáveis seriam um problema para padronização.
-Meu primeiro pensamento foi fazer outro microfrontend chamado `shared-components` _(e eu fiz, é meu segundo commit)_. Mas a cada componente que eu fosse utilizar, teria que ser com Lazy loading (em runtime). <br><br>Embora estivesse funcionando, não me pareceu certo pois eram componentes muito simples, então fui pesquisar à respeito.
-E descobri que de fato não era uma boa prática, que isso poderia causar inconsistências visuais em produção, piorar desempenho e outros bugs.
+Configuração para gerar múltiplos formatos de saída:
 
-### 2.1 - NPM Packages vs Monorepo Lib (sem publicar no NPM)
+- **Vanilla Web Components**: Para uso direto no DOM
+- **React Wrappers**: Bindings automáticos para React
+- **ES Modules**: Para bundlers modernos
+- **CommonJS**: Para compatibilidade legacy
 
-> O uso do Monorepo Lib me direcionaria para uma solução Monorepo no geral, deixando de utilizar Module Federation. Só percebi isso posteriormente. Mesmo que ainda pudesse ser considerado microfrontends dependendo da forma que fosse feito, isso poderia ser considerado um desvio do objetivo do projeto de trabalhar com microfrontends. Mantive essa parte da documentação pois é algo que cogitei no momento e deve ser considerado em um cenário real.
+##### Design Tokens
 
-Então após algumas pesquisas me deparei com 2 alternativas que me chamaram mais atenção:
+Sistema de tokens de design através de CSS Custom Properties para consistência visual e facilidade de tematização.
 
-- Monorepo Lib: proporciona reuso de código, mas exige um CI/CD bem estruturado (Nx, Turborepo, Bazel…) para evitar conflitos e builds demorados, visto que ficaria tudo no mesmo repositório. Considerando o tempo limitado do projeto e a complexidade adicional de aprender e configurar alguma dessas ferramentas, poderia comprometer o restante da entrega.
-- NPM Packages: o risco principal é o “Dependency Hell”, que pode ser mitigado com testes automatizados e ferramentas como Dependabot ou Renovate. Mas o benefício é que oferece maior autonomia para cada equipe lidar com seu microfrontend, uma vez que são repositórios git completamente separados (em um cenário real).
+##### Component-Driven Architecture
 
-Embora eu não fosse resolver o problema das dependências nesse projeto com soluções automatizadas, percebi que alcançaria uma configuração mais próxima da ideal dentro do prazo com o NPM Packages.
-Em um cenário real, eu estudaria mais a fundo sobre como funcionaria na prática um monorepo lib para ter certeza absoluta dessa decisão e também sobre outras estruturas, antes de dar minha opinião para a equipe.
+Cada componente como unidade independente com:
 
-## 3- Arquiteturas dos Microfrontends
+- Props tipadas para configuração
+- Eventos customizados para comunicação
+- Estilos encapsulados
+- Testes unitários isolados
 
-### Arquitetura do NPM Package
+##### Framework Agnostic
 
-### Arquitetura do Microfrontend Principal
+Arquitetura que permite uso em qualquer tecnologia frontend sem dependências específicas de framework.
 
-### Arquitetura do Microfrontend de autenticação
+#### Organização de Diretórios
 
-Como eu havia pouco tempo e esse microfrontend tinha pouco código, decidi manter a arquitetura do auth-microfrontend bem básica. É claro que será necessário refatorar esse microfrontend, pois é possível imaginar ele expandindo para a parte de “Esqueceu a senha”, “Autenticação em 2 fatores”, “Configurar PIN”, “Editar conta”... etc.
+O design system possui uma estrutura simples e focada na distribuição multi-target, com separação clara entre código fonte, builds gerados e configurações específicas de cada formato de saída.
 
-### Arquitetura do Microfrontend que consome uma API externa
+```bash
+npm-packages/microhub-ui/
+├── src/
+│   ├── components/        # Web Components (core-button, core-input)
+│   ├── global/           # Estilos globais e tokens de design
+│   └── index.ts          # Ponto de entrada principal
+├── dist/                 # Build para Web Components vanilla
+├── react-dist/           # Build para React wrappers
+├── loader/               # Lazy loading utilities
+└── www/                  # Documentação e playground
+```
+
+![Imagem da estrutura do design system](images/npm-package-structure.png)
+
+### 3.2 - Arquitetura do Microfrontend Principal `microhub-shell`
+
+...
+
+### 3.3 - Arquitetura do Microfrontend que consome uma API externa
 
 A arquitetura do microfrontend que consome uma API externa `rick-morty-microfrontend` foi pensada exclusivamente no consumo dessa API.
 
-Então, criei um diretório features que em cada pasta filha incluirá uma seção da API apresentada. No caso dessa entrega, apenas criei a parte de personagens (diretório characters), mas a estrutura foi feita pensando no potencial em que é consumida a API Externa. A API do rick and morty, especificamente, existe uma parte que expõem dados de localização e episódios, por exemplo. Poderiam ser uma outras sessões no frontend. E assim, consequentemente, outro diretório na arquitetura.
+...
 
-### Arquitetura do Backend
+#### Organização de Diretórios
 
-Para o backend, optei por utilizar o NestJS, pois é um framework muito utilizado no ambiente profissional. Ele abstrai bastante coisa, mas na parte técnica da documentação explicarei algumas delas como estão funcionando.
+Implementei um diretório `features` onde cada pasta representa uma seção específica da API consumida. Nesta versão, desenvolvi apenas a funcionalidade de personagens (diretório `characters`), mas a arquitetura foi projetada considerando o potencial completo da API do Rick and Morty, que oferece endpoints para localizações e episódios. Essas funcionalidades futuras seriam organizadas como novos diretórios dentro de `features`, mantendo a modularidade e escalabilidade da aplicação.
 
-Utilizei o TypeORM para o mapeamento de entidades e o Redis para o cache.
+![Imagem da estrutura do microfrontend que consome uma API externa](images/microfrontend-rick-morty-structure.png)
 
-A estrutura do backend é dessa forma:
+### 3.4 - Arquitetura do Microfrontend de autenticação
+
+Padrões Arquiteturais Implementados:
+
+##### Context API + Custom Hooks
+
+Gerenciamento de estado centralizado através do AuthProvider com hook useAuth para acesso simplificado ao contexto de autenticação.
+
+##### Error Boundaries
+
+Tratamento de erros com ErrorBoundary customizado que captura erros React e oferece recuperação automática.
+
+##### Service Layer
+
+Camada de abstração da API (authApi) que encapsula chamadas HTTP, implementa retry automático e gerencia persistência local.
+
+##### Hooks Especializados
+
+useApiError para tratamento de erros, useForm para formulários com validação, e useAuth para acesso ao contexto.
+
+##### Proteção de Rotas
+
+ProtectedRoute component para controle de acesso com suporte a roles.
+
+##### Persistência Local
+
+Utilitário storage que gerencia localStorage com validação de expiração de tokens JWT.
+
+#### Organização de Diretórios
+
+O auth-microfrontend possui uma estrutura básica mas bem organizada, com separação de responsabilidades entre API, estado, componentes e páginas. Embora simples no escopo atual, os padrões implementados (Context API, hooks customizados, error boundaries) permitem expansão controlada para funcionalidades futuras.
+
+```bash
+src/
+├── api/           # Camada de comunicação com backend
+├── components/    # Componentes reutilizáveis (AuthCard, ProtectedRoute)
+├── hooks/         # Hooks customizados para lógica compartilhada
+├── pages/         # Páginas da aplicação (Login, Register, Profile)
+├── providers/     # Context providers + Error boundaries
+├── router/        # Configuração de rotas
+├── types/         # Definições TypeScript
+└── utils/         # Utilitários (storage, validation)
+```
+
+![Imagem da estrutura do microfrontend de autenticação](images/microfrontend-auth-structure.png)
+
+### 3.5 - Arquitetura do Backend
+
+Para o backend, escolhi o **NestJS** por ser amplamente adotado no mercado e oferecer uma arquitetura robusta baseada em decorators e injeção de dependências. O framework abstrai complexidades de configuração enquanto mantém flexibilidade para customizações, permitindo foco na lógica de negócio.
+
+Implementei **TypeORM** como ORM para mapeamento objeto-relacional com **PostgreSQL**, proporcionando type safety e migrations automáticas. Para otimização de performance, integrei **Redis** como camada de cache para dados frequentemente acessados.
+
+#### Padrões Arquiteturais
+
+##### Modularidade
+
+Cada funcionalidade organizada em módulo separado com responsabilidades bem definidas.
+
+##### Padrão MSC (Model-Service-Controller)
+
+Separação clara de responsabilidades por camadas em cada módulo.
+
+##### Dependency Injection
+
+Facilita testes, manutenção e desacoplamento entre componentes.
+
+##### Interceptadores e Guards
+
+- **Global Guards**: Proteção automática de rotas
+- **Interceptadores**: Padronização de respostas e transformação de dados
+
+##### Segurança
+
+- Autenticação JWT stateless
+- Hashing bcrypt para senhas
+- Validação rigorosa com DTOs
+- CORS configurado para microfrontends
+
+##### Observabilidade
+
+- Error tracking global
+- Health checks
+- Documentação automática com Swagger
+
+#### Organização de Diretórios
 
 ```bash
 backend/src/
@@ -68,43 +169,3 @@ backend/src/
 ```
 
 ![Imagem da estrutura do backend](images/backend-folder-structure.png)
-
-Ou seja, é separado por módulos. E em cada módulo, é aplicado o padrão Model-Service-Controller.
-
-Cogitei utilizar Clean Architecture, mas o projeto é muito pequeno para isso.
-
-Além disso, outros diretórios utilitários foram adicionados para manter o código limpo, organizado e escalável.
-
-#### Resumo
-
-##### Documentação API
-
-- Swagger Integration;
-- Endpoint: /docs;
-- Tags: Organização por módulos;
-- Auth: Bearer token support;
-- Schemas: Auto-geração a partir de DTOs.
-
-##### Containerização
-
-- Docker Support.
-
-##### Design Patterns Implementados
-
-- Dependency Injection: Injeção de dependências nativa do NestJS;
-- Repository Pattern: TypeORM repositories;
-- Strategy Pattern: Passport strategies (JWT);
-- Decorator Pattern: Guards, interceptors, pipes;
-- Factory Pattern: Configurações assíncronas;
-- Observer Pattern: RxJS para interceptors.
-
-##### Características Principais
-
-- Modularidade: Cada funcionalidade em módulo separado
-- Escalabilidade: Estrutura preparada para crescimento
-- Testabilidade: Injeção de dependências facilita testes
-- Type Safety: TypeScript em toda a aplicação
-- Performance: Cache Redis integrado
-- Segurança: JWT + Guards + Validation
-- Observabilidade: Logging estruturado + Health checks
-  Esta estrutura segue as melhores práticas do NestJS e permite fácil manutenção, teste e escalabilidade da aplicação.

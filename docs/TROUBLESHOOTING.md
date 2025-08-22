@@ -14,7 +14,7 @@ Eu preciso que todos os microfrontends utilizem o mesmo history.
 
 > Observação sobre o Webpack: O `index.ts` da raiz chama o `boostrap.tsx`, que permite ao webpack a habilidade de carregar o `boostrap.tsx` de forma assíncrona.
 
-Vamos começar do início. O container principal é o `shell-app`. Nele, é definido que sempre que acessar o AuthApp, ele adicionará ao seu history '/auth'.
+Vamos começar do início. O container principal é o `microhub-shell`. Nele, é definido que sempre que acessar o AuthApp, ele adicionará ao seu history '/auth'.
 
 ![Imagem do history do AuthApp](images/frontend-history-shell.png)
 
@@ -65,12 +65,12 @@ Essa solução é eficiente porque não fica faz re-mount, ela reutiliza o Route
 
 Tentei abstrair ao máximo a complexidade para que seja o mais fácil de escalar possível.
 
-No container principal (`shell-app`), basta adicionar dessa forma:
+No container principal (`microhub-shell`), basta adicionar dessa forma:
 
 ![Imagem do history do AuthApp](images/frontend-history-shell-microfronts-app.png)
 
 ```bash
-shell-app/
+microhub-shell/
 ├── microfrontends/
 │   ├── MicrofrontendWrapper.tsx
 │   ├── AuthApp.tsx
@@ -99,9 +99,9 @@ A forma de compartilhar estados via aplicações que acredito ser ideal envolver
 ## 2 - Padronização do CSS entre Microfrontends
 
 Logo percebi que teria que resolver o problema de conflitos e padronização de CSS.
-De primeiro momento pensei em definir no microfrontend principal `shell-app` os arquivos .css e tailwind.config.js configurados, já que todos inciariam dele.<br><br>
+De primeiro momento pensei em definir no microfrontend principal `microhub-shell` os arquivos .css e tailwind.config.js configurados, já que todos inciariam dele.<br><br>
 Mas, quando comecei a pensar em escalabilidade, logo pensei em alguns problemas. Para começar eu obrigaria todos os microfrontends à terem como base essas configurações, o que faria com que eles fossem menos independentes. O ideal é que cada microfrontend escolhesse se quer utilizar a estilização base ou não, e qual parte dela.<br>
-Além disso, em ambiente de desenvolvimento, eu seria obrigado a executar os microfrontends a partir do `shell-app` para ter acesso aos estilos. Isso reduziria bastante a independência de cada microfrontend.
+Além disso, em ambiente de desenvolvimento, eu seria obrigado a executar os microfrontends a partir do `microhub-shell` para ter acesso aos estilos. Isso reduziria bastante a independência de cada microfrontend.
 
 A forma de resolver isso foi adicionando a estilização base no NPM Package `microhub-ui` que eu já havia criado para lidar com componentes reutilizáveis. E permitir que cada microfrontend escolhesse se quer utilizar a estilização base ou não, e qual parte dela.
 

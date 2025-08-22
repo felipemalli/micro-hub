@@ -76,7 +76,7 @@ Além disso, os providers podem ser injetados nos controllers e assim por diante
 
 ### Autenticação
 
-A autenticação foi feita com JWT.
+A autenticação foi feita com JWT stateless.
 
 No Nest, os guards são classes responsáveis por verificar se o usuário tem permissão para acessar uma rota. Eles utilizam os strategies para verificar se o usuário tem permissão para acessar uma rota. E se conectam através do 'jwt' definido no extend do JwtAuthGuard, o AuthGuard('jwt'). Com isso, o Nest busca uma classe strategy que começa com 'Jwt'.
 
