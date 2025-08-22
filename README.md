@@ -1,6 +1,6 @@
 # Microhub
 
-Projeto demonstrativo de microfrontends, estruturado em múltiplos repositórios independentes, com backend desacoplado e consumo de um NPM Package para o design system.
+Projeto de microfrontends, estruturado em múltiplos repositórios independentes, com backend desacoplado e consumo de um NPM Package para o design system.
 
 📖 **Documentação Detalhada:**
 
@@ -28,6 +28,8 @@ pnpm install:all
 pnpm run start
 ```
 
+> **Nota:** O comando `pnpm run start` automaticamente para o Docker quando você pressiona Ctrl+C.
+
 ## Execução
 
 Microfrontend Principal (`microhub-shell`):
@@ -50,21 +52,7 @@ Documentação:
 http://localhost:4000/docs#/
 ```
 
-**Executar o projeto com o Docker:**
-
-```bash
-pnpm run docker:dev
-```
-
-**Parar o projeto com o Docker:**
-
-```bash
-pnpm run docker:down
-```
-
-### Frontend
-
-#### Execução isolada dosMicrofrontends
+### Execução isolada dos Microfrontends
 
 Microfrontend de Autenticação (`auth-microfrontend`):
 
@@ -82,13 +70,7 @@ http://localhost:3002/rickmorty
 
 ### Gerenciamento de Dependências
 
-**Instalar todas as dependências:**
-
-```bash
-pnpm run install:all
-```
-
-**Limpar todos os node_modules:**
+Limpar todos os node_modules:
 
 ```bash
 pnpm run clean:node_modules
@@ -96,16 +78,14 @@ pnpm run clean:node_modules
 
 ### Gerenciamento do Backend
 
-**Parar apenas o backend (Docker):**
+Parar apenas o backend (Docker):
 
 ```bash
 pnpm run stop:backend
 ```
 
-**Resetar banco de dados:**
+Resetar banco de dados:
 
 ```bash
 pnpm run clean:backend:db
 ```
-
-> **Nota:** O comando `pnpm run start` automaticamente executa `pnpm run stop:backend` quando você pressiona Ctrl+C, garantindo que os containers Docker sejam limpos adequadamente.

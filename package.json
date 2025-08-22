@@ -7,7 +7,7 @@
 	"scripts": {
 		"preinstall": "echo '📦 Instalando dependências do workspace...'",
 		"install:all": "pnpm install && cd backend && pnpm install && cd ../microfrontends/microhub-shell && pnpm install && cd ../auth-microfrontend && pnpm install && cd ../rick-morty-microfrontend && pnpm install",
-		"start": "trap 'npm run stop' EXIT INT TERM; concurrently --kill-others-on-fail \"cd backend && pnpm run docker:dev\" \"cd microfrontends/microhub-shell && pnpm run dev\" \"cd microfrontends/auth-microfrontend && pnpm run dev\" \"cd microfrontends/rick-morty-microfrontend && pnpm run dev\"",
+		"start": "echo '⏳ Aguardando...' && trap 'npm run stop' EXIT INT TERM; concurrently --kill-others-on-fail --success first \"cd backend && pnpm run docker:dev\" \"cd microfrontends/microhub-shell && pnpm run dev\" \"cd microfrontends/auth-microfrontend && pnpm run dev\" \"cd microfrontends/rick-morty-microfrontend && pnpm run dev\" && echo '🚀 Projeto executando no localhost:3000'",
 		"stop:backend": "cd backend && pnpm run docker:down",
 		"clean:backend:db": "cd backend && pnpm run db:reset",
 		"clean:node_modules": "rm -rf node_modules && cd backend && rm -rf node_modules && cd ../microfrontends/microhub-shell && rm -rf node_modules && cd ../auth-microfrontend && rm -rf node_modules && cd ../rick-morty-microfrontend && rm -rf node_modules"
