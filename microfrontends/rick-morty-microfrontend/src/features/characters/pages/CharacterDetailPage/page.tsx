@@ -1,11 +1,9 @@
-import { useCharacterDetail } from "../../hooks/useCharacterDetail";
-import { FavoriteButton } from "./components/FavoriteButton";
-import { LikeButton } from "./components/LikeButton";
-import { Badge } from "../../../../shared/components/Badge/Badge";
-import { CoreButton } from "@felipemalli-libs/microhub-ui/react";
-import { Loading } from "../../../../shared/components/Loading/Loading";
-import { InfoCard } from "../../../../shared/components";
 import { useNavigate } from "react-router-dom";
+import { useCharacterDetail } from "@characters/hooks";
+import { Badge, InfoCard, Loading } from "@/shared";
+import { CoreButton } from "@felipemalli-libs/microhub-ui/react";
+import { FavoriteButton } from "@characters/pages/CharacterDetailPage/components/FavoriteButton";
+import { LikeButton } from "@characters/pages/CharacterDetailPage/components/LikeButton";
 
 export const CharacterDetailPage = ({
 	characterId,

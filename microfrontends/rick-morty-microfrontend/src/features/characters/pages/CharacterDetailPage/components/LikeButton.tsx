@@ -1,6 +1,6 @@
 import React from "react";
 import { CoreButton } from "@felipemalli-libs/microhub-ui/react";
-import { useCharacterLikes } from "../../../hooks/useCharacterLikes";
+import { useCharacterLikes } from "@characters/hooks";
 
 interface LikeButtonProps {
 	characterId: number;

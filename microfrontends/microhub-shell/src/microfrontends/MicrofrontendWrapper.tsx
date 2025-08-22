@@ -15,7 +15,6 @@ const MicrofrontendWrapper: React.FC<MicrofrontendWrapperProps> = ({
 	const location = useLocation();
 	const listenersRef = useRef<Set<(update: any) => void>>(new Set());
 
-	// Create a history proxy that uses the microhub-shell's navigation
 	const sharedHistory = useMemo(() => {
 		const history = {
 			location: {
@@ -51,14 +50,13 @@ const MicrofrontendWrapper: React.FC<MicrofrontendWrapperProps> = ({
 		return history;
 	}, [navigate, location]);
 
-	// Mount only once
 	useEffect(() => {
 		const mountMicrofrontend = async () => {
 			if (ref.current && mount) {
 				try {
 					const mountOptions = {
 						initialPath: location.pathname,
-						sharedHistory, // Pass the shared history
+						sharedHistory,
 						...additionalProps,
 					};
 
@@ -72,7 +70,6 @@ const MicrofrontendWrapper: React.FC<MicrofrontendWrapperProps> = ({
 		mountMicrofrontend();
 	}, []);
 
-	// Notify all listeners when location changes
 	useEffect(() => {
 		listenersRef.current.forEach((callback) => {
 			callback({

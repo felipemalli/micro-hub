@@ -1,6 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import { CharacterListPage, CharacterDetailPage } from "../features/characters";
+import { CharacterListPage } from "@characters/pages/CharacterListPage/page";
+import { CharacterDetailPage } from "@characters/pages/CharacterDetailPage/page";
 
 export const AppRouter: React.FC<{ isAuthenticated?: boolean }> = ({
 	isAuthenticated,

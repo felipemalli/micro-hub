@@ -1,4 +1,4 @@
-import { useLocalStorage } from "../../../shared/hooks/useLocalStorage";
+import { useLocalStorage } from "@/shared";
 
 interface LikesData {
 	[characterId: number]: number;

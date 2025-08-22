@@ -1,6 +1,6 @@
 import React from "react";
 import { CoreButton } from "@felipemalli-libs/microhub-ui/react";
-import { useFavorites } from "../../../hooks/useFavorites";
+import { useFavorites } from "@characters/hooks";
 
 interface FavoriteButtonProps {
 	characterId: number;

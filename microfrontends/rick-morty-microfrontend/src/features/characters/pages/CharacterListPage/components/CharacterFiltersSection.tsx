@@ -1,24 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { CoreInput } from "@felipemalli-libs/microhub-ui/react";
-import { CharacterFilters as FiltersType } from "../../../types/character.types";
-import { useDebounce } from "../../../../../shared/hooks/useDebounce";
+import { CharacterFilters } from "@characters/types/character.types";
 
-interface CharacterFiltersProps {
-	filters: FiltersType;
-	onFiltersChange: (filters: Partial<FiltersType>) => void;
+interface CharacterFiltersSectionsProps {
+	filters: CharacterFilters;
+	onFiltersChange: (filters: Partial<CharacterFilters>) => void;
 }
 
-export const CharacterFilters: React.FC<CharacterFiltersProps> = ({
-	filters,
-	onFiltersChange,
-}) => {
-	const debouncedName = useDebounce(filters.name || "", 500);
+export const CharacterFiltersSection: React.FC<
+	CharacterFiltersSectionsProps
+> = ({ filters, onFiltersChange }) => {
+	const debouncedName = filters.name || "";
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (debouncedName !== filters.name) {
 			onFiltersChange({ name: debouncedName });
 		}
-	}, [debouncedName]);
+	}, [debouncedName, filters.name, onFiltersChange]);
 
 	return (
 		<div className="mb-6 rounded-xl bg-gray-50 p-4">

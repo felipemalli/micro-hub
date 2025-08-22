@@ -1,9 +1,8 @@
 import { useParams } from "react-router-dom";
 import useSWR from "swr";
-import { Character } from "../types/character.types";
-import { swrConfig } from "../../../shared/config/swr.config";
-import { useApiError } from "../../../shared/hooks/useApiError";
 import { useMemo } from "react";
+import { Character } from "@/features/characters/types/character.types";
+import { swrConfig, useApiError } from "@/shared";
 
 interface UseCharacterDetailParams {
 	characterId?: number;

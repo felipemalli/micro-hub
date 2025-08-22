@@ -1,6 +1,5 @@
-import { rickMortyApi } from "../../../shared/services/api";
-import { Character, CharacterFilters } from "../types/character.types";
-import { ApiResponse } from "../../../shared/types/common.types";
+import { rickMortyApi, ApiResponse } from "@/shared";
+import { Character, CharacterFilters } from "@characters/types/character.types";
 
 export const characterApi = {
 	getCharacters: async (

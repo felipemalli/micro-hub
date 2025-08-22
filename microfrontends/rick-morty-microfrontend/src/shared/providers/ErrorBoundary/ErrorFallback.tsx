@@ -1,6 +1,6 @@
 import { FallbackProps } from "react-error-boundary";
 import { CoreButton } from "@felipemalli-libs/microhub-ui/react";
-import { AlertIcon, RefreshIcon } from "../../assets";
+import { AlertIcon, RefreshIcon } from "@/shared";
 
 export function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
 	const isDevelopment = process.env.NODE_ENV === "development";

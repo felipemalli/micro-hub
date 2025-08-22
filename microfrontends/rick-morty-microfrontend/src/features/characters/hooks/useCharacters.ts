@@ -1,33 +1,35 @@
 import { useState, useCallback, useMemo } from "react";
 import useSWR from "swr";
-import { Character, CharacterFilters } from "../types/character.types";
-import { fetcherWithParams } from "../../../shared/providers/SWRProvider";
-import { swrConfig } from "../../../shared/config/swr.config";
-import { useApiError } from "../../../shared/hooks/useApiError";
+import {
+	Character,
+	CharacterFilters,
+} from "@/features/characters/types/character.types";
+import {
+	fetcherWithParams,
+	swrConfig,
+	useApiError,
+	buildQueryParams,
+} from "@/shared";
 
 interface UseCharactersReturn {
 	characters: Character[];
 	isLoading: boolean;
 	error: string | null;
-
 	pagination: {
 		currentPage: number;
 		totalPages: number;
 		hasNext: boolean;
 		hasPrev: boolean;
 	};
-
 	filters: CharacterFilters;
-	searchFilters: CharacterFilters;
 	updateFilters: (newFilters: Partial<CharacterFilters>) => void;
 	executeSearch: () => void;
 	resetFilters: () => void;
-
 	changePage: (newPage: number) => void;
 	refetch: () => void;
 }
 
-const initialFilters: CharacterFilters = {
+const INITIAL_FILTERS: CharacterFilters = {
 	name: "",
 	status: "",
 	species: "",
@@ -36,22 +38,23 @@ const initialFilters: CharacterFilters = {
 
 export const useCharacters = (): UseCharactersReturn => {
 	const [page, setPage] = useState(1);
-	const [filters, setFilters] = useState<CharacterFilters>(initialFilters);
+	const [filters, setFilters] = useState<CharacterFilters>(INITIAL_FILTERS);
 	const [searchFilters, setSearchFilters] =
-		useState<CharacterFilters>(initialFilters);
+		useState<CharacterFilters>(INITIAL_FILTERS);
+
 	const handleApiError = useApiError();
 
-	const cacheKey = useMemo(() => {
-		const params: Record<string, string> = { page: page.toString() };
-
-		if (searchFilters.name?.trim()) params.name = searchFilters.name.trim();
-		if (searchFilters.status) params.status = searchFilters.status;
-		if (searchFilters.species?.trim())
-			params.species = searchFilters.species.trim();
-		if (searchFilters.gender) params.gender = searchFilters.gender;
-
-		return ["/character", params] as const;
-	}, [page, searchFilters]);
+	const cacheKey = useMemo(
+		() =>
+			[
+				"/character",
+				buildQueryParams(
+					page,
+					searchFilters as Partial<Record<string, string>>
+				),
+			] as const,
+		[page, searchFilters]
+	);
 
 	const { data, error, isLoading, mutate } = useSWR(
 		cacheKey,
@@ -69,8 +72,8 @@ export const useCharacters = (): UseCharactersReturn => {
 	}, [filters]);
 
 	const resetFilters = useCallback(() => {
-		setFilters(initialFilters);
-		setSearchFilters(initialFilters);
+		setFilters(INITIAL_FILTERS);
+		setSearchFilters(INITIAL_FILTERS);
 		setPage(1);
 	}, []);
 
@@ -78,23 +81,15 @@ export const useCharacters = (): UseCharactersReturn => {
 		setPage(newPage);
 	}, []);
 
-	const pagination = useMemo(() => {
-		if (!data) {
-			return {
-				currentPage: page,
-				totalPages: 1,
-				hasNext: false,
-				hasPrev: false,
-			};
-		}
-
-		return {
+	const pagination = useMemo(
+		() => ({
 			currentPage: page,
-			totalPages: data.info.pages,
-			hasNext: !!data.info.next,
-			hasPrev: !!data.info.prev,
-		};
-	}, [data, page]);
+			totalPages: data?.info?.pages ?? 1,
+			hasNext: !!data?.info?.next,
+			hasPrev: !!data?.info?.prev,
+		}),
+		[data, page]
+	);
 
 	const errorMessage = useMemo(() => {
 		if (!error) return null;
@@ -113,7 +108,6 @@ export const useCharacters = (): UseCharactersReturn => {
 		error: errorMessage,
 		pagination,
 		filters,
-		searchFilters,
 		updateFilters,
 		executeSearch,
 		resetFilters,

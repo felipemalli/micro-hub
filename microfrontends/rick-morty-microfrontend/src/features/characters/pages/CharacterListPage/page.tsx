@@ -1,11 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useCharacters } from "../../hooks/useCharacters";
-import { CharacterCard } from "./components/CharacterCard";
-import { CharacterFilters } from "./components/CharacterFilters";
-import { Loading } from "../../../../shared/components/Loading/Loading";
+import { useCharacters } from "@characters/hooks";
+import { CharacterCard } from "@characters/pages/CharacterListPage/components/CharacterCard";
+import { CharacterFiltersSection } from "@characters/pages/CharacterListPage/components/CharacterFiltersSection";
+import { Loading } from "@/shared";
 import { CoreButton } from "@felipemalli-libs/microhub-ui/react";
-import { Character } from "../../types/character.types";
+import { Character } from "@characters/types/character.types";
 
 export const CharacterListPage: React.FC = () => {
 	const navigate = useNavigate();
@@ -19,7 +19,6 @@ export const CharacterListPage: React.FC = () => {
 		executeSearch,
 		resetFilters,
 		changePage,
-		refetch,
 	} = useCharacters();
 
 	const handleCharacterSelect = (character: Character) => {
@@ -30,7 +29,10 @@ export const CharacterListPage: React.FC = () => {
 		<div className="p-6">
 			<h4 className="mb-4">Personagens</h4>
 			<div className="mb-6">
-				<CharacterFilters filters={filters} onFiltersChange={updateFilters} />
+				<CharacterFiltersSection
+					filters={filters}
+					onFiltersChange={updateFilters}
+				/>
 				<div className="mt-4 flex gap-2">
 					<CoreButton onCoreClick={executeSearch} disabled={isLoading}>
 						Pesquisar
@@ -44,13 +46,11 @@ export const CharacterListPage: React.FC = () => {
 					</CoreButton>
 				</div>
 			</div>
-
 			{isLoading && characters.length > 0 && (
 				<div className="py-4 text-center">
 					<span className="text-blue-600">Atualizando resultados...</span>
 				</div>
 			)}
-
 			{isLoading && characters.length === 0 ? (
 				<div className="flex items-center justify-center py-12">
 					<Loading message="Carregando personagens..." />
@@ -61,8 +61,7 @@ export const CharacterListPage: React.FC = () => {
 						<span className="text-4xl">⚠️</span>
 					</div>
 					<h3>Erro ao carregar</h3>
-					<p>{error}</p>
-					<CoreButton onCoreClick={refetch}>Tentar novamente</CoreButton>
+					<p className="text-gray-600">Personagem não encontrado</p>
 				</div>
 			) : (
 				<div className="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -75,7 +74,6 @@ export const CharacterListPage: React.FC = () => {
 					))}
 				</div>
 			)}
-
 			{pagination.totalPages > 1 && !error && (
 				<div className="flex flex-row items-center justify-center space-x-4">
 					<CoreButton

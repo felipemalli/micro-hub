@@ -1,40 +1,44 @@
+const path = require("path");
+
 module.exports = {
-  resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.tsx'],
-  },
-  module: {
-    rules: [
-      {
-        test: /\.tsx?$/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
-      },
-      {
-        test: /\.jsx?$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/,
-        options: {
-          presets: ['@babel/preset-react', '@babel/preset-typescript'],
-        },
-      },
-      {
-        test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          {
-            loader: 'postcss-loader',
-            options: {
-              postcssOptions: {
-                plugins: [
-                  require('tailwindcss'),
-                  require('autoprefixer'),
-                ],
-              },
-            },
-          },
-        ],
-      },
-    ],
-  },
+	resolve: {
+		extensions: [".js", ".jsx", ".ts", ".tsx"],
+		alias: {
+			"@": path.resolve(__dirname, "../src"),
+			"@characters": path.resolve(__dirname, "../src/features/characters"),
+			"@shared": path.resolve(__dirname, "../src/shared"),
+		},
+	},
+	module: {
+		rules: [
+			{
+				test: /\.tsx?$/,
+				use: "ts-loader",
+				exclude: /node_modules/,
+			},
+			{
+				test: /\.jsx?$/,
+				loader: "babel-loader",
+				exclude: /node_modules/,
+				options: {
+					presets: ["@babel/preset-react", "@babel/preset-typescript"],
+				},
+			},
+			{
+				test: /\.css$/,
+				use: [
+					"style-loader",
+					"css-loader",
+					{
+						loader: "postcss-loader",
+						options: {
+							postcssOptions: {
+								plugins: [require("tailwindcss"), require("autoprefixer")],
+							},
+						},
+					},
+				],
+			},
+		],
+	},
 };

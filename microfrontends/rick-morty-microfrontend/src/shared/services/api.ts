@@ -54,22 +54,3 @@ class ApiClient {
 }
 
 export const rickMortyApi = new ApiClient(API_BASE_URL);
-export const retryRequest = async <T>(
-	requestFn: () => Promise<T>,
-	maxRetries = 3,
-	baseDelay = 1000
-): Promise<T> => {
-	for (let attempt = 1; attempt <= maxRetries; attempt++) {
-		try {
-			return await requestFn();
-		} catch (error) {
-			if (attempt === maxRetries) throw error;
-
-			const baseDelayWithBackoff = baseDelay * Math.pow(2, attempt - 1);
-			const jitter = Math.random() * 0.1;
-			const delay = baseDelayWithBackoff * (1 + jitter);
-			await new Promise((resolve) => setTimeout(resolve, delay));
-		}
-	}
-	throw new Error("Max retries exceeded");
-};

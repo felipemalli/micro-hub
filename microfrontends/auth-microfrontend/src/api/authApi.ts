@@ -1,4 +1,4 @@
-import { apiClient, retryRequest } from "./apiClient";
+import { apiClient } from "./apiClient";
 import { storage } from "../utils/storage";
 import { User, LoginCredentials, RegisterCredentials } from "../types/auth";
 
@@ -21,8 +21,9 @@ export const authApi = {
 	async login(
 		credentials: LoginCredentials
 	): Promise<{ user: User; token: string }> {
-		const response = await retryRequest(() =>
-			apiClient.post<AuthResponse>("/auth/login", credentials)
+		const response = await apiClient.post<AuthResponse>(
+			"/auth/login",
+			credentials
 		);
 
 		const { user, token } = response.data.data;
@@ -36,8 +37,9 @@ export const authApi = {
 	async register(
 		credentials: RegisterCredentials
 	): Promise<{ user: User; token: string }> {
-		const response = await retryRequest(() =>
-			apiClient.post<AuthResponse>("/auth/register", credentials)
+		const response = await apiClient.post<AuthResponse>(
+			"/auth/register",
+			credentials
 		);
 
 		const { user, token } = response.data.data;
