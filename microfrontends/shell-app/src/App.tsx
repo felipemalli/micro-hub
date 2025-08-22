@@ -57,7 +57,6 @@ const App: React.FC = () => {
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
 	useEffect(() => {
-		// Verificar se há sessão salva
 		const checkAuthState = () => {
 			const savedUser = localStorage.getItem("currentUser");
 			const token = localStorage.getItem("accessToken");
@@ -70,10 +69,8 @@ const App: React.FC = () => {
 			setIsAuthenticated(isAuth);
 		};
 
-		// Verificar estado inicial
 		checkAuthState();
 
-		// Escutar eventos de login/logout do auth-microfrontend
 		const handleLogin = () => {
 			console.log("Microhub Shell: Received login event");
 			setIsAuthenticated(true);
@@ -84,7 +81,6 @@ const App: React.FC = () => {
 			setIsAuthenticated(false);
 		};
 
-		// Escutar mudanças no localStorage (quando outra aba faz login/logout)
 		const handleStorageChange = (e: StorageEvent) => {
 			if (e.key === "currentUser" || e.key === "accessToken") {
 				console.log("Microhub Shell: Storage changed", e.key, e.newValue);

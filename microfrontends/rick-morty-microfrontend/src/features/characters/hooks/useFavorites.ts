@@ -6,34 +6,21 @@ export const useFavorites = () => {
 		[]
 	);
 
-	const addToFavorites = (characterId: number) => {
-		if (!favorites.includes(characterId)) {
-			setFavorites([...favorites, characterId]);
-		}
-	};
-
-	const removeFromFavorites = (characterId: number) => {
-		setFavorites(favorites.filter((id) => id !== characterId));
-	};
-
-	const isFavorite = (characterId: number) => {
+	const isFavorite = (characterId: number): boolean => {
 		return favorites.includes(characterId);
 	};
 
 	const toggleFavorite = (characterId: number) => {
 		if (isFavorite(characterId)) {
-			removeFromFavorites(characterId);
+			setFavorites(favorites.filter((id) => id !== characterId));
 		} else {
-			addToFavorites(characterId);
+			setFavorites([...favorites, characterId]);
 		}
 	};
 
 	return {
 		favorites,
-		addToFavorites,
-		removeFromFavorites,
 		isFavorite,
 		toggleFavorite,
-		favoritesCount: favorites.length,
 	};
 };

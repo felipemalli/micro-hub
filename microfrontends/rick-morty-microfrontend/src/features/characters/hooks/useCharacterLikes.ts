@@ -24,18 +24,10 @@ export const useCharacterLikes = () => {
 		const wasLiked = isLiked(characterId);
 
 		if (wasLiked) {
-			// Remove like
-			setLikes({
-				...likes,
-				[characterId]: Math.max(0, currentLikes - 1),
-			});
+			setLikes({ ...likes, [characterId]: Math.max(0, currentLikes - 1) });
 			setUserLikes(userLikes.filter((id) => id !== characterId));
 		} else {
-			// Add like
-			setLikes({
-				...likes,
-				[characterId]: currentLikes + 1,
-			});
+			setLikes({ ...likes, [characterId]: currentLikes + 1 });
 			setUserLikes([...userLikes, characterId]);
 		}
 	};

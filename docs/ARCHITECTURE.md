@@ -54,23 +54,11 @@ npm-packages/microhub-ui/
 
 ![Imagem da estrutura do design system](images/npm-package-structure.png)
 
-### 3.2 - Arquitetura do Microfrontend Principal `microhub-shell`
+### 2 - Arquitetura do Microfrontend Principal `microhub-shell`
 
 ...
 
-### 3.3 - Arquitetura do Microfrontend que consome uma API externa
-
-A arquitetura do microfrontend que consome uma API externa `rick-morty-microfrontend` foi pensada exclusivamente no consumo dessa API.
-
-...
-
-#### Organização de Diretórios
-
-Implementei um diretório `features` onde cada pasta representa uma seção específica da API consumida. Nesta versão, desenvolvi apenas a funcionalidade de personagens (diretório `characters`), mas a arquitetura foi projetada considerando o potencial completo da API do Rick and Morty, que oferece endpoints para localizações e episódios. Essas funcionalidades futuras seriam organizadas como novos diretórios dentro de `features`, mantendo a modularidade e escalabilidade da aplicação.
-
-![Imagem da estrutura do microfrontend que consome uma API externa](images/microfrontend-rick-morty-structure.png)
-
-### 3.4 - Arquitetura do Microfrontend de autenticação
+### 3 - Arquitetura do Microfrontend de autenticação
 
 Padrões Arquiteturais Implementados:
 
@@ -116,7 +104,19 @@ src/
 
 ![Imagem da estrutura do microfrontend de autenticação](images/microfrontend-auth-structure.png)
 
-### 3.5 - Arquitetura do Backend
+### 4 - Arquitetura do Microfrontend que consome uma API externa
+
+A arquitetura do microfrontend que consome uma API externa `rick-morty-microfrontend` foi pensada exclusivamente no consumo dessa API.
+
+...
+
+#### Organização de Diretórios
+
+Implementei um diretório `features` onde cada pasta representa uma seção específica da API consumida. Nesta versão, desenvolvi apenas a funcionalidade de personagens (diretório `characters`), mas a arquitetura foi projetada considerando o potencial completo da API do Rick and Morty, que oferece endpoints para localizações e episódios. Essas funcionalidades futuras seriam organizadas como novos diretórios dentro de `features`, mantendo a modularidade e escalabilidade da aplicação.
+
+![Imagem da estrutura do microfrontend que consome uma API externa](images/microfrontend-rick-morty-structure.png)
+
+### 5 - Arquitetura do Backend
 
 Para o backend, escolhi o **NestJS** por ser amplamente adotado no mercado e oferecer uma arquitetura robusta baseada em decorators e injeção de dependências. O framework abstrai complexidades de configuração enquanto mantém flexibilidade para customizações, permitindo foco na lógica de negócio.
 

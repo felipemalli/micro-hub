@@ -1,8 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useCharacters } from "../../hooks/useCharacters";
-import { useCharacterFilters } from "../../hooks/useCharacterFilters";
-import { useFavorites } from "../../hooks/useFavorites";
 import { CharacterCard } from "./components/CharacterCard";
 import { CharacterFilters } from "./components/CharacterFilters";
 import { Loading } from "../../../../shared/components/Loading/Loading";
@@ -12,37 +10,25 @@ import { Character } from "../../types/character.types";
 export const CharacterListPage: React.FC = () => {
 	const navigate = useNavigate();
 	const {
-		page,
+		characters,
+		isLoading,
+		error,
+		pagination,
 		filters,
-		searchFilters,
 		updateFilters,
 		executeSearch,
-		changePage,
 		resetFilters,
-	} = useCharacterFilters();
-	const { characters, isLoading, error, pagination, mutate } = useCharacters({
-		page,
-		filters: searchFilters,
-	});
-	const { favoritesCount } = useFavorites();
+		changePage,
+		refetch,
+	} = useCharacters();
 
 	const handleCharacterSelect = (character: Character) => {
 		navigate(`/rickmorty/characters/${character.id}`);
 	};
 
-	const handleRetry = () => {
-		mutate();
-	};
-
 	return (
 		<div className="p-6">
-			<div className="flex justify-between items-center mb-6">
-				<div>
-					<h2 className="text-2xl font-bold text-gray-800">Personagens</h2>
-					<p className="text-gray-600">{favoritesCount} favoritos</p>
-				</div>
-			</div>
-
+			<h2 className="mb-4">Personagens</h2>
 			<div className="mb-6">
 				<CharacterFilters filters={filters} onFiltersChange={updateFilters} />
 				<div className="flex gap-2 mt-4">
@@ -74,11 +60,9 @@ export const CharacterListPage: React.FC = () => {
 					<div className="text-red-600 mb-4">
 						<span className="text-4xl">⚠️</span>
 					</div>
-					<h3 className="text-lg font-semibold text-gray-800 mb-2">
-						Erro ao carregar
-					</h3>
-					<p className="text-gray-600 mb-4">{error}</p>
-					<CoreButton onCoreClick={handleRetry}>Tentar novamente</CoreButton>
+					<h3>Erro ao carregar</h3>
+					<p>{error}</p>
+					<CoreButton onCoreClick={refetch}>Tentar novamente</CoreButton>
 				</div>
 			) : (
 				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">

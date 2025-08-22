@@ -30,7 +30,7 @@ export const useCharacterFilters = (): UseCharacterFiltersReturn => {
 
 	const executeSearch = useCallback(() => {
 		setSearchFilters(filters);
-		setPage(1); // Reset para primeira página quando executa pesquisa
+		setPage(1);
 	}, [filters]);
 
 	const changePage = useCallback((newPage: number) => {

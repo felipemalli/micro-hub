@@ -43,8 +43,6 @@ Então, desisti dessa ideia e comecei a pensar na possibilidade de ter no mesmo 
 
 Mas, percebi que isso ainda assim seria extremamente trabalhoso. E quando eu comecei a pensar no backend, ainda faltava muita coisa a ser feita nos Microfrontends e no Design System.
 
-Além disso, havia diversos problemas não resolvidos (ou resolvidos parcialmente / de forma não ideal). E não somente os que estão no [README de Resolução de PRoblemas](./TROUBLESHOOTING.md), mas pequenos probleminhas de configuração que as vezes levavam muitas horas para eu conseguir uma solução e que fosse decente.
+Além disso, havia diversos problemas não resolvidos (ou resolvidos parcialmente / de forma não ideal). E não somente os que estão no [README de Resolução de Problemas](./TROUBLESHOOTING.md). Esses foram os principais. Mas também vários pequenos probleminhas de configuração que as vezes levavam muitas horas para eu conseguir uma solução e que fosse decente.
 
 Então fiquei receoso com o tempo disponível. Achei que seria muito mais prudente e seguro finalizar bem o que já estava em desenvolvimento antes de tentar implementar o BFF. E, se desse tempo, o backend que eu tinha eu poderia renomear de backend para backend-core e criar os BFFs consumindo ele.
-
-Infelizmente não tive tempo. Essa 1 semana basicamente vivi esse projeto. Estudei exaustivamente sobre microfrontends, todas as melhores práticas possíveis sobre tudo, arquiteturas, etc. Foi um baita aprendizado em relação à todas as áreas. Utilizei até o último minuto para melhorar ao máximo o código que eu já havia feito. Acredito que se eu tivesse mais uns 2 dias, eu conseguiria implementar os BFFs simplificados.

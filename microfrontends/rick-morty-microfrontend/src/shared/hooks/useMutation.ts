@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { useApiError } from "./useApiError";
 
 interface MutationState {
 	isLoading: boolean;
@@ -19,6 +20,7 @@ export const useMutation = <TData, TVariables>(
 		isLoading: false,
 		error: null,
 	});
+	const handleApiError = useApiError();
 
 	const mutate = useCallback(
 		async (variables: TVariables) => {
@@ -28,31 +30,34 @@ export const useMutation = <TData, TVariables>(
 				const result = await mutationFn(variables);
 				setState({ isLoading: false, error: null });
 
-				// Invalida cache se especificado
 				if (options?.invalidateCache) {
 					options.invalidateCache();
 				}
 
-				// Callback de sucesso
 				if (options?.onSuccess) {
 					options.onSuccess();
 				}
 
 				return result;
 			} catch (error) {
-				const errorMessage =
-					error instanceof Error ? error.message : "Erro desconhecido";
-				setState({ isLoading: false, error: errorMessage });
+				try {
+					handleApiError(error);
+				} catch (handledError) {
+					const errorMessage =
+						handledError instanceof Error
+							? handledError.message
+							: "Erro desconhecido";
+					setState({ isLoading: false, error: errorMessage });
 
-				// Callback de erro
-				if (options?.onError) {
-					options.onError(error);
+					if (options?.onError) {
+						options.onError(handledError);
+					}
+
+					throw handledError;
 				}
-
-				throw error;
 			}
 		},
-		[mutationFn, options]
+		[mutationFn, options, handleApiError]
 	);
 
 	return {

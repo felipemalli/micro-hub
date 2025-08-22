@@ -1,53 +1,82 @@
-import { useMemo } from "react";
+import { useState, useCallback, useMemo } from "react";
 import useSWR from "swr";
 import { Character, CharacterFilters } from "../types/character.types";
 import { fetcherWithParams } from "../../../app/providers/SWRProvider";
-import { characterListConfig } from "../../../shared/config/swr.config";
-
-interface UseCharactersParams {
-	page: number;
-	filters: CharacterFilters;
-}
+import { swrConfig } from "../../../shared/config/swr.config";
+import { useApiError } from "../../../shared/hooks/useApiError";
 
 interface UseCharactersReturn {
 	characters: Character[];
 	isLoading: boolean;
 	error: string | null;
+
 	pagination: {
 		currentPage: number;
 		totalPages: number;
 		hasNext: boolean;
 		hasPrev: boolean;
 	};
-	mutate: () => void;
+
+	filters: CharacterFilters;
+	searchFilters: CharacterFilters;
+	updateFilters: (newFilters: Partial<CharacterFilters>) => void;
+	executeSearch: () => void;
+	resetFilters: () => void;
+
+	changePage: (newPage: number) => void;
+	refetch: () => void;
 }
 
-export const useCharacters = ({
-	page,
-	filters,
-}: UseCharactersParams): UseCharactersReturn => {
-	// Cria uma chave única baseada nos parâmetros
+const initialFilters: CharacterFilters = {
+	name: "",
+	status: "",
+	species: "",
+	gender: "",
+};
+
+export const useCharacters = (): UseCharactersReturn => {
+	const [page, setPage] = useState(1);
+	const [filters, setFilters] = useState<CharacterFilters>(initialFilters);
+	const [searchFilters, setSearchFilters] =
+		useState<CharacterFilters>(initialFilters);
+	const handleApiError = useApiError();
+
 	const cacheKey = useMemo(() => {
 		const params: Record<string, string> = { page: page.toString() };
 
-		// Só inclui filtros que têm valor
-		if (filters.name?.trim()) params.name = filters.name.trim();
-		if (filters.status) {
-			params.status = filters.status;
-		}
-		if (filters.species?.trim()) params.species = filters.species.trim();
-		if (filters.gender) {
-			params.gender = filters.gender;
-		}
+		if (searchFilters.name?.trim()) params.name = searchFilters.name.trim();
+		if (searchFilters.status) params.status = searchFilters.status;
+		if (searchFilters.species?.trim())
+			params.species = searchFilters.species.trim();
+		if (searchFilters.gender) params.gender = searchFilters.gender;
 
 		return ["/character", params] as const;
-	}, [page, filters]);
+	}, [page, searchFilters]);
 
 	const { data, error, isLoading, mutate } = useSWR(
 		cacheKey,
 		fetcherWithParams,
-		characterListConfig
+		swrConfig
 	);
+
+	const updateFilters = useCallback((newFilters: Partial<CharacterFilters>) => {
+		setFilters((prev) => ({ ...prev, ...newFilters }));
+	}, []);
+
+	const executeSearch = useCallback(() => {
+		setSearchFilters(filters);
+		setPage(1);
+	}, [filters]);
+
+	const resetFilters = useCallback(() => {
+		setFilters(initialFilters);
+		setSearchFilters(initialFilters);
+		setPage(1);
+	}, []);
+
+	const changePage = useCallback((newPage: number) => {
+		setPage(newPage);
+	}, []);
 
 	const pagination = useMemo(() => {
 		if (!data) {
@@ -67,11 +96,28 @@ export const useCharacters = ({
 		};
 	}, [data, page]);
 
+	const errorMessage = useMemo(() => {
+		if (!error) return null;
+
+		if (error.shouldShowInBoundary) {
+			handleApiError(error);
+			return null;
+		}
+
+		return error.message || "Erro ao carregar personagens. Tente novamente.";
+	}, [error, handleApiError]);
+
 	return {
 		characters: data?.results ?? [],
 		isLoading,
-		error: error ? "Erro ao carregar personagens. Tente novamente." : null,
+		error: errorMessage,
 		pagination,
-		mutate,
+		filters,
+		searchFilters,
+		updateFilters,
+		executeSearch,
+		resetFilters,
+		changePage,
+		refetch: mutate,
 	};
 };

@@ -7,14 +7,11 @@ interface SWRProviderProps {
 	children: React.ReactNode;
 }
 
-// Fetcher genérico para SWR que usa nossa instância do axios
 const fetcher = async (url: string) => {
-	// Remove o baseURL do início da URL se estiver presente
 	const endpoint = url.replace("https://rickandmortyapi.com/api", "");
 	return rickMortyApi.get(endpoint);
 };
 
-// Fetcher para URLs com parâmetros
 const fetcherWithParams = async ([url, params]: [
 	string,
 	Record<string, string>,
@@ -36,5 +33,4 @@ export const SWRProvider: React.FC<SWRProviderProps> = ({ children }) => {
 	);
 };
 
-// Export do fetcher com parâmetros para uso em hooks específicos
 export { fetcherWithParams };

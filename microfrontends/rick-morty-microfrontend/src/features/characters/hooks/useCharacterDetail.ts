@@ -1,7 +1,9 @@
 import { useParams } from "react-router-dom";
 import useSWR from "swr";
 import { Character } from "../types/character.types";
-import { characterDetailConfig } from "../../../shared/config/swr.config";
+import { swrConfig } from "../../../shared/config/swr.config";
+import { useApiError } from "../../../shared/hooks/useApiError";
+import { useMemo } from "react";
 
 interface UseCharacterDetailParams {
 	characterId?: number;
@@ -19,6 +21,7 @@ export const useCharacterDetail = ({
 	characterId,
 }: UseCharacterDetailParams = {}): UseCharacterDetailReturn => {
 	const { id } = useParams<{ id: string }>();
+	const handleApiError = useApiError();
 	const finalCharacterId = characterId || (id ? parseInt(id) : null);
 
 	const {
@@ -28,15 +31,32 @@ export const useCharacterDetail = ({
 		mutate,
 	} = useSWR<Character>(
 		finalCharacterId ? `/character/${finalCharacterId}` : null,
-		characterDetailConfig
+		{
+			...swrConfig,
+			onError: (error) => {
+				console.error("Error loading character detail:", error);
+			},
+		}
 	);
+
+	const errorMessage = useMemo(() => {
+		if (!error) return null;
+
+		if (error.shouldShowInBoundary) {
+			handleApiError(error);
+			return null;
+		}
+
+		return (
+			error.message ||
+			"Erro ao carregar detalhes do personagem. Tente novamente."
+		);
+	}, [error, handleApiError]);
 
 	return {
 		character: character ?? null,
 		isLoading,
-		error: error
-			? "Erro ao carregar detalhes do personagem. Tente novamente."
-			: null,
+		error: errorMessage,
 		characterId: finalCharacterId,
 		mutate,
 	};
