@@ -9,7 +9,7 @@
 		"start": "concurrently --kill-others-on-fail --success first \"cd backend && pnpm run docker:dev\" \"cd microfrontends/microhub-shell && pnpm run dev\" \"cd microfrontends/auth-microfrontend && pnpm run dev\" \"cd microfrontends/rick-morty-microfrontend && pnpm run dev\"",
 		"stop": "cd backend && pnpm run docker:down",
 		"stop:backend": "cd backend && pnpm run docker:down",
-		"clean:docker": "cd backend && docker-compose -f docker-compose.dev.yml down --volumes --remove-orphans && docker system prune -f",
+		"clean:docker": "cd backend && docker compose -f docker-compose.dev.yml down --volumes --remove-orphans && docker system prune -f",
 		"clean:backend:db": "cd backend && pnpm run db:reset",
 		"clean:node_modules": "rm -rf node_modules && cd backend && rm -rf node_modules && cd ../microfrontends/microhub-shell && rm -rf node_modules && cd ../auth-microfrontend && rm -rf node_modules && cd ../rick-morty-microfrontend && rm -rf node_modules"
 	},

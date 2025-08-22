@@ -12,14 +12,8 @@ Projeto de microfrontends, estruturado em múltiplos repositórios independentes
 ## Pré-requisitos
 
 - Node.js 18+
-- Docker
+- Docker v20.10+ (com Compose v2)
 - pnpm 10+
-
-> **⚠️ Problema conhecido no Docker:** Se estiver com problemas de compatibilidade com o Docker, instale o plugin:
->
-> ```bash
-> sudo apt install docker-compose-plugin
-> ```
 
 ## Inicialização
 
