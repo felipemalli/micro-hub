@@ -46,8 +46,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
 						onAuthChange?.(true);
 					}
 				}
-			} catch (error) {
-				console.error("Auth initialization failed:", error);
+			} catch {
 				await authApi.logout();
 				setUser(null);
 				onAuthChange?.(false);
@@ -105,8 +104,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
 			await authApi.logout();
 			setUser(null);
 			onAuthChange?.(false);
-		} catch (error) {
-			console.error("Logout error:", error);
+		} catch {
 			setUser(null);
 			onAuthChange?.(false);
 		} finally {

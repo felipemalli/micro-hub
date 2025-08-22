@@ -35,11 +35,11 @@ Em um cenário real, eu estudaria mais a fundo sobre como funcionaria na prátic
 
 Eu cheguei a pesquisar e estudar sobre o BFF pois não conhecia e fiquei extremamente interessado em aplicá-lo. Mas não tive tempo de implementá-lo.
 
-Pelo o que entendi, deveria existir um backend core, que iria prover para esses backends menores. Esses, por sua vez, deveriam ser implementados pensando em prover os dados sob medida para para cada microfrontend. Então, cada microfrontend teria seu próprio BFF.
+Pelo que entendi, deveria existir um backend core, que iria prover para esses backends menores. Esses, por sua vez, deveriam ser implementados pensando em prover os dados sob medida para cada microfrontend. Então, cada microfrontend teria seu próprio BFF.
 
 Eu inicialmente cheguei a cogitar fazer um backend só, mas arquiteturado de forma a simular o BFF. Então seria algo como: os controllers funcionariam como os BFF's e os services + restante como o core. Mas, percebi que isso acabaria prejudicando ambos, fazendo com que eu não simulasse em nada um ambiente real. Eu não teria BFF's de fato como devem ser feitos, e também não teria um backend core como deve ser feito.
 
-Então, desisti dessa ideia e comecei a pensar na possibilidade de ter no mesmo repositório um backend principal e vários BFFS menores.
+Então, desisti dessa ideia e comecei a pensar na possibilidade de ter no mesmo repositório um backend principal e vários BFFs menores.
 
 Mas, percebi que isso ainda assim seria extremamente trabalhoso. E quando eu comecei a pensar no backend, ainda faltava muita coisa a ser feita nos Microfrontends e no Design System.
 

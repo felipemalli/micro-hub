@@ -2,26 +2,26 @@
 
 ### 1 - Arquitetura do Design System `microhub-ui`
 
-Para o design system compartilhado, escolhi o **Stencil** por permitir a criação de Web Components que funcionam nativamente em qualquer framework (React, Vue, Angular) ou vanilla JavaScript. Essa abordagem garante máxima interoperabilidade entre os microfrontends sem acoplamento tecnológico.
+Para o design system compartilhado, escolhi o **Stencil** por permitir a criação de Web Components que funcionam nativamente em qualquer framework (React, Vue, Angular) ou vanilla JavaScript. Isso garante que todos os microfrontends possam usar os mesmos componentes, independente da tecnologia escolhida.
 
 #### Padrões Arquiteturais
 
 ##### Web Components Nativos
 
-Utilização do padrão Web Components para encapsulamento completo (Shadow DOM, Custom Elements) garantindo isolamento de estilos e comportamentos.
+Uso de Web Components para criar componentes isolados, onde cada um tem seus próprios estilos e comportamentos sem interferir nos outros.
 
 ##### Multi-Target Build
 
 Configuração para gerar múltiplos formatos de saída:
 
 - **Vanilla Web Components**: Para uso direto no DOM
-- **React Wrappers**: Bindings automáticos para React
+- **React Wrappers**: Adaptadores automáticos para React
 - **ES Modules**: Para bundlers modernos
 - **CommonJS**: Para compatibilidade legacy
 
 ##### Design Tokens
 
-Sistema de tokens de design através de CSS Custom Properties para consistência visual e facilidade de tematização.
+Sistema de tokens de design usando variáveis CSS para manter consistência visual e facilitar mudanças de tema.
 
 ##### Component-Driven Architecture
 
@@ -38,7 +38,7 @@ Arquitetura que permite uso em qualquer tecnologia frontend sem dependências es
 
 #### Organização de Diretórios
 
-O design system possui uma estrutura simples e focada na distribuição multi-target, com separação clara entre código fonte, builds gerados e configurações específicas de cada formato de saída.
+O design system tem uma estrutura simples focada em gerar múltiplos formatos, com separação clara entre código fonte, arquivos compilados e configurações para cada tipo de saída.
 
 ```bash
 npm-packages/microhub-ui/
@@ -56,21 +56,21 @@ npm-packages/microhub-ui/
 
 ### 2 - Arquitetura do Microfrontend Principal `microhub-shell`
 
-O `microhub-shell` atua como o **Host Application** na arquitetura de microfrontends, sendo responsável por orquestrar e integrar todos os microfrontends remotos através do **Webpack Module Federation**. Sua função principal é fornecer uma camada de abstração que permite carregamento dinâmico, roteamento unificado e comunicação entre aplicações independentes.
+O `microhub-shell` funciona como a **aplicação principal** que coordena todos os microfrontends. Ele usa o **Webpack Module Federation** para carregar e integrar as outras aplicações dinamicamente, fornecendo navegação unificada e comunicação entre elas.
 
 #### Padrões Arquiteturais
 
 ##### Module Federation Host
 
-Host que consome microfrontends remotos via ModuleFederationPlugin com carregamento dinâmico e lazy loading.
+Aplicação principal que carrega microfrontends remotos dinamicamente conforme necessário.
 
 ##### Shared Dependencies Management
 
-Dependências compartilhadas (React, React-DOM, React Router) com configuração singleton para evitar duplicação.
+Bibliotecas compartilhadas (React, React-DOM, React Router) configuradas para evitar duplicação entre microfrontends.
 
 ##### Federated Routing e Shared History API
 
-Proxy de navegação que sincroniza roteamento entre shell e microfrontends através de API unificada.
+Sistema de navegação que mantém as rotas sincronizadas entre a aplicação principal e os microfrontends.
 
 ##### Cross-Microfrontend Communication
 
@@ -89,7 +89,8 @@ microfrontends/microhub-shell/
 ├── src/
 │   ├── App.tsx                       # Aplicação principal com roteamento
 │   ├── bootstrap.tsx                 # Inicialização da aplicação
-│   ├── components/                   # Componentes do shell (Navbar)
+│   ├── components/                   # Componentes do shell
+│   ├── hooks/                        # Hooks customizados
 │   ├── microfrontends/               # Wrappers para microfrontends remotos
 │   │   ├── MicrofrontendWrapper.tsx  # Abstração de montagem
 │   │   ├── AuthApp.tsx               # Wrapper para auth microfrontend
@@ -102,13 +103,13 @@ microfrontends/microhub-shell/
 └── public/                           # Assets estáticos
 ```
 
-Esta arquitetura demonstra como um shell pode orquestrar múltiplos microfrontends mantendo baixo acoplamento e alta coesão, permitindo que cada aplicação evolua independentemente enquanto oferece uma experiência unificada ao usuário.
+Esta arquitetura mostra como uma aplicação principal pode coordenar múltiplos microfrontends mantendo-os independentes, permitindo que cada um evolua separadamente enquanto oferece uma experiência integrada ao usuário.
 
-![Imagem da estrutura do microfrontend de autenticação](images/microfrontend-microhub-shell-architecture.png)
+![Imagem da estrutura do microfrontend de shell](images/microfrontend-microhub-shell-architecture.png)
 
 ### 3 - Arquitetura do Microfrontend de autenticação
 
-Padrões Arquiteturais Implementados:
+#### Padrões Arquiteturais
 
 ##### Context API + Custom Hooks
 
@@ -120,7 +121,7 @@ Tratamento de erros com ErrorBoundary customizado que captura erros React e ofer
 
 ##### Service Layer
 
-Camada de abstração da API (authApi) que encapsula chamadas HTTP, implementa retry automático e gerencia persistência local.
+Camada de abstração da API que encapsula chamadas HTTP e gerencia persistência local com tratamento de tokens expirados.
 
 ##### Hooks Especializados
 
@@ -132,7 +133,7 @@ ProtectedRoute component para controle de acesso com suporte a roles.
 
 #### Organização de Diretórios
 
-O auth-microfrontend possui uma estrutura básica mas bem organizada, com separação de responsabilidades entre API, estado, componentes e páginas. Embora simples no escopo atual, os padrões implementados (Context API, hooks customizados, error boundaries) permitem expansão controlada para funcionalidades futuras.
+O auth-microfrontend possui uma estrutura básica mas bem organizada, com separação de responsabilidades entre API, estado, componentes e páginas. Os padrões implementados (Context API, hooks customizados, error boundaries) permitem expansão controlada para funcionalidades futuras.
 
 ```bash
 src/
@@ -154,60 +155,45 @@ O `rick-morty-microfrontend` foi arquitetado especificamente para demonstrar pad
 
 #### Padrões Arquiteturais
 
-##### SWR para Data Fetching e Cache Management
+##### SWR (Stale-While-Revalidate) Pattern
 
-Implementação do padrão **stale-while-revalidate** com cache automático, revalidação em background e invalidação inteligente baseada em ações do usuário.
+Cache inteligente que atualiza dados em segundo plano, evita requisições duplicadas e tenta novamente automaticamente em caso de falha.
 
-##### Feature-Driven Architecture
+##### Feature-Based Architecture
 
-Organização por features com estrutura completa (hooks, componentes, páginas, services e tipos) para cada funcionalidade.
+Organização por funcionalidades onde cada feature é bem estruturada e organizada, com separação clara entre regras de negócio (dentro de cada feature) e código de infraestrutura (diretório shared).
 
-##### Custom Hooks Especializados
+##### Custom Hooks Pattern
 
-Hooks customizados para encapsular lógica de data fetching, filtros, paginação e estado local.
+useCharacters para lista com filtros, useCharacterDetail para detalhes individuais, useFavorites e useCharacterLikes para estado persistente.
 
-##### API Client com Interceptors
+##### Hybrid State Management
 
-Cliente HTTP com interceptors para tratamento uniforme de erros e transformação de respostas.
+Combinação de server state (SWR), client state (React) e persistent state (localStorage) para experiência otimizada.
 
-##### Optimistic Updates
+##### API Client Architecture
 
-Mutações otimistas via hook `useMutation` para atualizações imediatas na UI.
+Cliente HTTP robusto com interceptadores, classificação de erros e tratamento estratificado para APIs externas.
 
-##### Error Boundaries
+##### Error Handling Strategy
 
-ErrorBoundary customizado para captura de erros React e recuperação automática.
+Sistema de tratamento de erros em várias camadas, classificando erros por tipo e mantendo a aplicação funcionando mesmo quando algo dá errado.
 
 #### Organização de Diretórios
 
-A arquitetura implementa um diretório `features` onde cada pasta representa uma seção específica da API consumida. Nesta versão, desenvolvi apenas a funcionalidade de personagens (diretório `characters`), mas a estrutura foi projetada considerando o potencial completo da API do Rick and Morty, que oferece endpoints para localizações e episódios.
+Arquitetura feature-based com separação clara entre funcionalidades de domínio e infraestrutura compartilhada, promovendo escalabilidade e reutilização.
 
 ```bash
-microfrontends/rick-morty-microfrontend/
-├── src/
-│   ├── RickMortyApp.tsx              # Aplicação principal com providers
-│   ├── bootstrap.tsx                 # Inicialização para Module Federation
-│   ├── features/                     # Features organizadas por domínio
-│   │   └── characters/               # Feature de personagens
-│   │       ├── components/           # Componentes específicos da feature
-│   │       ├── hooks/                # Hooks customizados (useCharacters, useFilters)
-│   │       ├── pages/                # Páginas da feature (List, Detail)
-│   │       ├── services/             # API clients específicos
-│   │       └── types/                # Tipos TypeScript da feature
-│   ├── shared/                       # Código compartilhado entre features
-│   │   ├── components/               # Componentes reutilizáveis (Card, Badge, Loading)
-│   │   ├── hooks/                    # Hooks utilitários (useMutation, useApiError)
-│   │   ├── services/                 # Serviços base (API client, error logger)
-│   │   ├── providers/                # Providers globais (SWR, ErrorBoundary)
-│   │   ├── config/                   # Configurações (SWR config)
-│   │   └── types/                    # Tipos compartilhados
-│   ├── router/                       # Configuração de rotas
-│   └── styles/                       # Estilos globais
-├── config/                           # Configurações Webpack para Module Federation
-│   ├── webpack.common.js             # Configuração base
-│   ├── webpack.dev.js                # Configuração de desenvolvimento
-│   └── webpack.prod.js               # Configuração de produção
-└── public/                           # Assets estáticos
+src/
+├── features/          # Funcionalidades de domínio por feature
+│   └── characters/    # Feature completa (hooks, pages, services, types)
+├── shared/            # Infraestrutura compartilhada
+│   ├── components/    # Componentes reutilizáveis
+│   ├── hooks/         # Hooks utilitários
+│   ├── providers/     # Context providers + Error boundaries
+│   ├── services/      # API client + Error logger
+│   └── utils/         # Utilitários de apoio
+└── router/            # Configuração de rotas
 ```
 
 ![Imagem da estrutura do microfrontend que consome uma API externa](images/microfrontend-rick-morty-structure.png)

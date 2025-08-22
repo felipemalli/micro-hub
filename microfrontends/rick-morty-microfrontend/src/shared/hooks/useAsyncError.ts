@@ -5,8 +5,7 @@ export function useAsyncError() {
 	const { showBoundary } = useErrorBoundary();
 
 	const captureAsyncError = useCallback(
-		(error: Error, context?: string) => {
-			console.error(`Async error in ${context || "unknown context"}:`, error);
+		(error: Error) => {
 			showBoundary(error);
 		},
 		[showBoundary]

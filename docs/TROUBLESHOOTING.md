@@ -20,7 +20,7 @@ Todos os microfrontends (incluindo o AuthApp) possuem uma função mount que est
 
 O MicrofrontendWrapper cria um objeto 'history' manualmente, que será exportado para os microfrontends.
 
-> Isso é necessário porque o React Router v6 removeu sua exposição. E nós precisamos adicionar uma função listener nele.
+> Isso é necessário porque o React Router v6 não expõe mais o objeto history diretamente como nas versões anteriores. Precisamos criar um history customizado com listeners para sincronização entre microfrontends.
 
 Adicionei explicações dentro da foto sobre o MicrofrontendWrapper:
 
@@ -32,16 +32,16 @@ E caso os microfrontends mudem, eles avisam o container principal com o simples 
 
 ![Imagem do history do AuthApp](images/frontend-history-webpack.png)
 
-Esse 'singleton: true' permite isso.
+Este 'singleton: true' permite isso.
 
 Como explicado, os microfrontends são renderizados com a execução de uma função mount, que contém o sharedHistory principal.<br><br>
-Logo, no arquivo inicial de cada microfrontend (`bootstrap.tsx`) é exportada essa função, que será executada pelo container principal.
+Logo, no arquivo inicial de cada microfrontend (`bootstrap.tsx`) é exportada esta função, que será executada pelo container principal.
 
 ![Imagem do history do AuthApp](images/frontend-history-auth-bootstrap.png)
 
 Perceba que sua única função é passar o histórico compartilhado e criar o root do microfrontend.
 
-Essa versão acima é a simplificada. <br> <br>Abaixo está a versão final, que inclui a opção de executar o microfrontend isoladamente (para desenvolvimento). Ou seja, o histórico compartilhado não é passado, 'sharedHistory = undefined'. Nesse caso, utiliza-se o defaultHistory, que é o próprio browser history do navegador.
+Esta versão acima é a simplificada. <br> <br>Abaixo está a versão final, que inclui a opção de executar o microfrontend isoladamente (para desenvolvimento). Ou seja, o histórico compartilhado não é passado, 'sharedHistory = undefined'. Neste caso, utiliza-se o defaultHistory, que é o próprio browser history do navegador.
 
 ![Imagem do history do AuthApp](images/frontend-history-bootstrap.png)
 
@@ -55,13 +55,13 @@ Quando executamos o microfrontend via container principal, o "update.location" �
 
 Mas se utilizarmos o history.location, causará um bug de sincronização, não atualizará a tela para o container principal. O update.location possui dados "frescos" do evento.
 
-Caso o desenvolvedor inicie o microfrontend isoladamente, o update.location virá como undefined, aí será necessário utilizar o history.location. Mas nesse caso não tem problema, pois não há nada para sincronizar.
+Caso o desenvolvedor inicie o microfrontend isoladamente, o update.location virá como undefined, aí será necessário utilizar o history.location. Mas neste caso não tem problema, pois não há nada para sincronizar.
 
-Essa solução é eficiente porque não faz re-mount, ela reutiliza o Router principal. E ainda é capaz de lidar com a execução individual dos microfrontends (para cada equipe de desenvolvimento).
+Esta solução é eficiente porque não faz re-mount, ela reutiliza o Router principal. E ainda é capaz de lidar com a execução individual dos microfrontends (para cada equipe de desenvolvimento).
 
 Tentei abstrair ao máximo a complexidade para que seja o mais fácil de escalar possível.
 
-No container principal (`microhub-shell`), basta adicionar dessa forma:
+No container principal (`microhub-shell`), basta adicionar desta forma:
 
 ![Imagem do history do AuthApp](images/frontend-history-shell-microfronts-app.png)
 
@@ -74,11 +74,11 @@ microhub-shell/
 ├── ...
 ```
 
-Com essa solução, nenhuma equipe de desenvolvimento precisa se preocupar com o history, ele é gerenciada pelo container principal. Basta copiar a função de mount do arquivo 'bootstrap.tsx' (que é padrão para todos os microfrontends) e chamar ela no seu arquivo inicial. E adicionar no container principal esse modelo da foto acima.
+Com esta solução, nenhuma equipe de desenvolvimento precisa se preocupar com o history, ele é gerenciado pelo container principal. Basta copiar a função de mount do arquivo 'bootstrap.tsx' (que é padrão para todos os microfrontends) e chamar ela no seu arquivo inicial. E adicionar no container principal este modelo da foto acima.
 
 ## 1.1 - Compartilhamento de estados/autenticação entre microfrontends
 
-Atualmente o projeto utiliza a comunicação à respeito da autenticação através das props dessa forma:
+Atualmente o projeto utiliza a comunicação a respeito da autenticação através das props desta forma:
 
 ![Imagem do history do AuthApp](images/frontend-history-authenticated.png)
 
@@ -86,24 +86,24 @@ Depois, defini no container principal um estado global para controlar a autentic
 
 Isso serviria para qualquer tipo de estado, funcionando como um Redux, por exemplo.
 
-Para um projeto real, essa solução seria ruim pois cada microfrontend deve ser independente. Com essa solução o container principal precisaria conhecer todos os microfrontends. A cada mudança de estado de um time, precisaria modificar o container principal.
+Para um projeto real, esta solução seria ruim pois cada microfrontend deve ser independente. Com esta solução o container principal precisaria conhecer todos os microfrontends. A cada mudança de estado de um time, precisaria modificar o container principal.
 
-E compartilhar estados ou autenticação via localstorage/sessionstorage (como foi feito) seria um risco grave de vulnerabilidade (em especial, XSS).
+E compartilhar estados ou autenticação via localStorage/sessionStorage (como foi feito) seria um risco grave de vulnerabilidade (em especial, XSS).
 
 A forma de compartilhar estados via aplicações que acredito ser ideal envolveria conexão com o backend e SameSite cookies HTTPOnly e com tokens CSRF. Não tive tempo de implementá-la.
 
 ## 2 - Padronização do CSS entre Microfrontends
 
 Logo percebi que teria que resolver o problema de conflitos e padronização de CSS.
-De primeiro momento pensei em definir no microfrontend principal `microhub-shell` os arquivos .css e tailwind.config.js configurados, já que todos inciariam dele.<br><br>
-Mas, quando comecei a pensar em escalabilidade, logo pensei em alguns problemas. Para começar eu obrigaria todos os microfrontends à terem como base essas configurações, o que faria com que eles fossem menos independentes. O ideal é que cada microfrontend escolhesse se quer utilizar a estilização base ou não, e qual parte dela.<br>
+De primeiro momento pensei em definir no microfrontend principal `microhub-shell` os arquivos .css e tailwind.config.js configurados, já que todos iniciariam dele.<br><br>
+Mas, quando comecei a pensar em escalabilidade, logo pensei em alguns problemas. Para começar eu obrigaria todos os microfrontends a terem como base estas configurações, o que faria com que eles fossem menos independentes. O ideal é que cada microfrontend escolhesse se quer utilizar a estilização base ou não, e qual parte dela.<br>
 Além disso, em ambiente de desenvolvimento, eu seria obrigado a executar os microfrontends a partir do `microhub-shell` para ter acesso aos estilos. Isso reduziria bastante a independência de cada microfrontend.
 
 A forma de resolver isso foi adicionando a estilização base no NPM Package `microhub-ui` que eu já havia criado para lidar com componentes reutilizáveis. E permitir que cada microfrontend escolhesse se quer utilizar a estilização base ou não, e qual parte dela.
 
 ![Imagem da importação do microhub-ui](images/frontend-import-lib.png)
 
-Nesse caso acima, o microfrontend AuthApp possui estilizações próprias no `index.css`, mas utiliza a estilização base do `microhub-ui` para os componentes.
+Neste caso acima, o microfrontend AuthApp possui estilizações próprias no `index.css`, mas utiliza a estilização base do `microhub-ui` para os componentes.
 
 Vale ressaltar que, caso o microfrontend desejasse sobrescrever alguma regra do `microhub-ui`, ele poderia fazer isso simplesmente alternando a ordem em que são chamados no arquivo inicial.
 
@@ -111,14 +111,14 @@ Além disso, classes Tailwind específicas dentro dos componentes sobrescrevem a
 
 ### 2.1 Componentes Reutilizáveis Cross-Framework? Web Components!
 
-Primeiro eu defini que gostaria de um sistema que seja capaz de lidar com qualquer framework: React, Angular, Vue… etc para ser o mais independente possível. Pois estava pensando em um App de grande escala, eu não poderia ficar preso à frameworks.
+Primeiro eu defini que gostaria de um sistema que seja capaz de lidar com qualquer framework: React, Angular, Vue… etc para ser o mais independente possível. Pois estava pensando em um App de grande escala, eu não poderia ficar preso a frameworks.
 
 Mas eu havia feito minha biblioteca com React Components, e eu só percebi que isso forçaria meus microfrontends ao React depois que já havia feito `(curiosidade: é a versão 1.x.x da microhub-ui, por isso atualmente ela é 2.x.x)`. Então, tive que refazê-la completamente.
 
 Ao pesquisar soluções possíveis, inicialmente pensei em utilizar a técnica de Tokens + CSS. Mas, eventualmente percebi que não seria uma solução boa. Primeiro porque não teria as lógicas internas dos componentes implementadas, apenas o CSS. Além disso, não teria isolamento, poderia vazar CSS.
 
 Então encontrei uma solução melhor: Web Components.
-Segue um exemplo à respeito das vantagens do Web Components em comparação com o Tokens + CSS à respeito de encapsulamento de CSS:
+Segue um exemplo a respeito das vantagens do Web Components em comparação com o Tokens + CSS a respeito de encapsulamento de CSS:
 
 ![Imagem do microhub-ui](images/npm-package-tokens-vs-web-components.png)
 

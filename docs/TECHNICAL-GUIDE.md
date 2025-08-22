@@ -1,6 +1,6 @@
 # Guia Técnico
 
-Nessa seção, vou explicar com detalhes as partes técnicas do projeto.
+Nesta seção, vou explicar com detalhes as partes técnicas do projeto.
 
 ### Linter
 
@@ -13,7 +13,7 @@ Todos os projetos possuem ESLint + Prettier para padronização de código.
 O Error Boundary foi implementado com o uso do pacote 'react-error-boundary'. A ideia foi criar um componente que seja capaz de ser utilizado em qualquer contexto.
 
 Acredito que o ideal seria ele estar em uma lib própria de utilitários de frontend (NPM Package) para ser reutilizado em outros projetos junto com outros utilitários.
-No caso desse projeto, o código do Error Boundary é o mesmo no projeto `auth-microfrontend` e `rick-morty-microfrontend`.
+No caso deste projeto, o código do Error Boundary é o mesmo no projeto `auth-microfrontend` e `rick-morty-microfrontend`.
 
 Exemplo de uso básico:
 
@@ -25,7 +25,7 @@ Exemplo de uso básico:
 
 O resetKeys é uma propriedade do react-error-boundary que recebe um array de valores que, quando algum deles é alterado, reseta o erro.
 
-A implementação do ErrorBoundary é bem simples e direta, segue o código real algumas explicações:
+A implementação do ErrorBoundary é bem simples e direta, segue o código real com algumas explicações:
 
 ![Imagem do error fallback](images/frontend-error-boundary.png)
 
@@ -35,7 +35,7 @@ O errorLogger é um objeto que é responsável por capturar os erros e enviar pa
 
 O ErrorBoundary também recebe um fallbackComponent por padrão, que é um componente que criei que segue uma estrutura parecida com o do DataErrorFallback da penúltima imagem.
 
-A visualização do ErrorFallback padrão desse projeto é a seguinte:
+A visualização do ErrorFallback padrão deste projeto é a seguinte:
 
 ![Imagem do error ErrorFallback](images/frontend-error-box-close.png)
 
@@ -48,9 +48,9 @@ Por isso, foi necessário criar um hook para capturar os erros assíncronos. Seg
 
 ![Imagem do hook useAsyncError](images/frontend-use-async-error.png)
 
-Como pode ser visto, o`react-error-boundary` já possui um hook para invocar o ErrorBoundary. Então a implementação é bem simples.
+Como pode ser visto, o `react-error-boundary` já possui um hook para invocar o ErrorBoundary. Então a implementação é bem simples.
 
-Essa propriedade `shouldShowInBoundary` é uma propriedade que é acoplada ao error (como um decorator) no interceptor do axios (que é usado para as requisições). Nele, defini que erros com status >= 500, o erro é mostrado via ErrorBoundary. Pois como são erros do servidor, o usuário não pode fazer nada para resolver. Os demais, são tratados inline.
+Essa propriedade `shouldShowInBoundary` é uma propriedade que é acoplada ao error (como um decorator) no interceptor do axios (que é usado para as requisições). Nele, defini que erros com status >= 500, o erro é mostrado via ErrorBoundary. Pois como são erros do servidor, o usuário não pode fazer nada para resolver. Os demais são tratados inline.
 
 Caso seja um formulário, o hook criado `useForm` chama o `handleApiError` internamente para capturar os erros caso passe pelas verificações de validação definidas.
 
@@ -60,7 +60,7 @@ No `rick-morty-microfrontend`, todos os hooks que consultam a API utilizam o `ha
 
 Dessa forma, os erros são lidados de forma consistente em qualquer contexto.
 
-### Formuláros
+### Formulários
 
 Para envio de formulários, eu considerei utilizar o Formik ou outro framework bem estabelecido, mas, como comentado acima, optei por implementar um hook `useForm` para evitar tantas dependências.
 
@@ -72,18 +72,53 @@ As funções de validação são simples e estão armazenadas no arquivo `valida
 
 ### AuthApp e conexão com o backend
 
-Para armazenar o token, usuário foi utilizado o localstorage.
+Para armazenar o token, o usuário foi utilizado o localStorage.
 
-Sobre o uso de localstorage está no [README de Resolução de Problemas](./TROUBLESHOOTING.md#11---compartilhamento-de-estadosautenticação-entre-microfrontends).
+Sobre o uso de localStorage está no [README de Resolução de Problemas](./TROUBLESHOOTING.md#11---compartilhamento-de-estadosautenticação-entre-microfrontends).
 
-Além disso, like e favorito estão no localstorage pois não tive tempo de integrá-los ao backend.
+Além disso, like e favorito do `RickMortyApp` possuem implementação com localStorage pois não tive tempo de integrá-los ao backend.
 
-Como nada da solução de localstorage é ideal e deve ser substituída, não irei me estender sobre ela neste documento.
+Como nada da solução de localStorage é ideal e deve ser substituída, não irei me estender sobre ela neste documento.
 
 No `AuthApp`, a conexão com o backend é feita diretamente via Axios. Para aprimorar essa comunicação, poderia ser implementado um sistema de retry com exponential backoff (estratégia em que o tempo de espera entre cada tentativa aumenta de forma exponencial) e jitter (variação aleatória nesse tempo de espera para evitar sobrecarga simultânea).
 Outra alternativa seria utilizar o `SWR`, que já oferece essas soluções nativamente e ainda possibilita adicionar cache no client side, o que não foi implementado neste App pois não faria tanto sentido por ser um microfrontend de autenticação.
 
-Já no `RickMortyApp`, a conexão com o backend é feita através do `SWR`, que já oferece essas soluções nativamente e ainda possibilita adicionar cache no client side.
+### SWR e Interceptação de requisições
+
+No `RickMortyApp`, a conexão com o backend é feita através do `SWR`, que já oferece essas soluções nativamente e ainda possibilita adicionar cache no client side.
+
+Segue o arquivo de configuração do `SWR` com explicações:
+![Imagem do SWR](images/frontend-swr-config.png)
+
+Importante ressaltar que no `SWR`, por padrão, o **cache client-side** é permanente e só atualiza quando há necessidade real (reconexão, dados obsoletos, etc).
+
+Utilizei o `useSWR` (nativo do `SWR`) dentro de hooks próprios customizados, que fazem as requisições da Rick Morty API. Atualmente existem 2 no projeto, que são eles:
+
+- 1 - `useCharacterDetail`
+
+![Imagem do SWR](images/frontend-use-character-detail.png)
+
+Como é possível ver, do `useSWR`, utilizei apenas os dados, error, loading e mutate (que revalida e atualiza o cache, então refaz a requisição).
+
+E a parte do errorMessage é a mesma já explicada acima. Se for erro >= 500, o erro é mostrado via ErrorBoundary.
+
+- 2 - `useCharacters`
+
+Esses são os filtros que podem ser aplicados na busca de personagens:
+
+![Imagem do SWR](images/frontend-character-filters.png)
+
+E essa é uma função utilitária que usaremos.
+
+![Imagem do SWR](images/frontend-use-characters-build-query-params.png)
+
+Ou seja, ela só transforma em um output com um objeto com 'page' + 'filtros não vazios'.
+
+Agora, vamos ver o hook `useCharacters`:
+
+![Imagem do SWR](images/frontend-use-characters.png)
+
+Pode parecer um arquivo complexo por ser grande. Mas a verdade é que se você analisar função por função, é bem simples. São funções separadas (modificando alguns estados) com propriedades únicas que foram requisitadas na página `CharacterListPage/page.tsx` para renderizar os personagens filtrados.
 
 ### Rota Protegida
 
@@ -91,13 +126,9 @@ Rotas que necessitam de autenticação são encapsuladas em um componente `Prote
 
 ![Imagem do protected route](images/frontend-protected-route-app-router.png)
 
-Além disso, esse ProtectedRoute é capaz também de receber um parâmetro para identficar se o usuário possui determinado cargo (no backend, existe um campo `role` com possibilidade de ser `admin`, apesar de eu não ter utilizado isso no frontend).
+Além disso, esse ProtectedRoute é capaz também de receber um parâmetro para identificar se o usuário possui determinado cargo (no backend, existe um campo `role` com possibilidade de ser `admin`, apesar de eu não ter utilizado isso no frontend).
 
 ![Imagem do protected route](images/frontend-protected-route-component.png)
-
-### Interceptação de requisições
-
-### Microfrontend de Autenticação
 
 ### Importação em lote e Aliases de Caminho (Barrel Export e Path Aliases)
 
@@ -106,6 +137,14 @@ Que é a importação dos arquivos através de `@/` em vez de `../`, `../../`.
 
 E a estratégia do Barrel Export para auxiliar nessa importação.
 Que é a criação de arquivos `index.ts` em cada pasta que exportam todos os arquivos da pasta.
+
+No projeto `Rick Morty App`, por exemplo, criei vários arquivos `index.ts` somente na parte `shared` propositalmente. As importações de arquivos de `shared` são muito comuns, já que o propósito dela é justamente compartilhar o código com o restante da aplicação.
+
+Observe o exemplo dos dois casos mencionados:
+
+![Imagem do alias](images/frontend-alias-use-characters.png)
+
+Nas pastas `features`, apenas utilizei `Path Aliases`, pois encher de `index.ts`, ainda mais para poucos arquivos, ficaria muito bagunçado e não faria sentido. E também, se parar para pensar, se o componente de algum `features` (`characters`, por exemplo) está sendo importado por outro lugar além do próprio `characters`, é porque esse componente provavelmente deveria ser movido para o `shared`.
 
 ### Exportação de assets
 
@@ -174,11 +213,11 @@ Utilizei o `@stencil/react-output-target` para transformar os Web Components pro
 
 Ele armazena os Componentes React em formato TypeScript numa pasta `react/` na raiz do projeto.
 
-Como o Webpack não conseguiu processar diretamente o código TypeScript, decidi compilá-lo para JavaScript e separar os arquivos de tipagem. Assim, os microfrontends importam o Javascript sem precisar de uma configuração no webpack especial (sem precisar transpilar TS de node_modules).
+Como o Webpack não conseguiu processar diretamente o código TypeScript, decidi compilá-lo para JavaScript e separar os arquivos de tipagem. Assim, os microfrontends importam o JavaScript sem precisar de uma configuração no webpack especial (sem precisar transpilar TS de node_modules).
 
 ![Imagem do script tsc](images/npm-package-tsc.png)
 
-A vantagem é que os microfrontends importam o Javascript sem precisar de uma configuração no webpack especial (sem precisar transpilar TS de node_modules). Ou seja, simplifica o lado dos microfrontends.
+A vantagem é que os microfrontends importam o JavaScript sem precisar de uma configuração no webpack especial (sem precisar transpilar TS de node_modules). Ou seja, simplifica o lado dos microfrontends.
 
 Em resumo:
 
@@ -207,7 +246,7 @@ microhub-ui/
 - Pronto para consumo direto;
 - JS + .d.ts separados.
 
-Ou seja, nos microserviços de React funcionará como um React Component <CoreButton />, mas por baixo é um Web Component universal <core-button>, que funcionará em Vue, Angular, etc. É como um Adapter Pattern entre Web Components e React.
+Ou seja, nos microfrontends de React funcionará como um React Component <CoreButton />, mas por baixo é um Web Component universal <core-button>, que funcionará em Vue, Angular, etc. É como um Adapter Pattern entre Web Components e React.
 
 ![Imagem do uso do core-button](images/npm-package--core-button-usage.png)
 Uso dos componentes do NPM Package `microhub-ui`.
@@ -228,7 +267,7 @@ Veja um exemplo de uso em que já há estilizações padrão, mas algumas classe
 
 ![Imagem do exemplo de uso da tipografia](images/npm-package-example-typography.png)
 
-Em um cenário real, eu provavelmente implementaria uma forma de importar apenas partes específicas da UI do NPM Package, mas para esse projeto foi suficiente.
+Em um cenário real, eu provavelmente implementaria uma forma de importar apenas partes específicas da UI do NPM Package, mas para este projeto foi suficiente.
 
 ## 3. Backend
 
@@ -265,7 +304,7 @@ Para definir quais origens podem acessar a API.
 
 #### `GlobalExceptionFilter`
 
-Ver o arquivo completo a princípio parece complicado, mas é simples. Vou explicá-lo e por partes.
+Ver o arquivo completo a princípio parece complicado, mas é simples. Vou explicá-lo por partes.
 
 O `@Catch()` é um decorator que permite capturar exceções em um determinado escopo.
 
@@ -273,7 +312,7 @@ Se for um erro maior que 500, imprime no console. Em um projeto real, Winston, P
 
 Se for outro tipo de erro, ele chama o método `buildErrorResponse`.
 
-Para contruir a resposta, se for um erro HTTP, chama o método `handleHttpException`. Se não, se for um erro desconhecido, chama o método `handleUnknownException`.
+Para construir a resposta, se for um erro HTTP, chama o método `handleHttpException`. Se não, se for um erro desconhecido, chama o método `handleUnknownException`.
 
 Observe o `handleHttpException`:
 
@@ -287,7 +326,7 @@ Agora, observe o `handleUnknownException`:
 
 ![Imagem do GlobalExceptionFilterHandlers](images/backend-global-exceptions-unknown.png)
 
-Observe que nesse caso as respostas são pré-definidas, que é uma medida de segurança para evitar vazamento de informações sensíveis do sistema.
+Observe que neste caso as respostas são pré-definidas, que é uma medida de segurança para evitar vazamento de informações sensíveis do sistema.
 
 #### Global Pipes
 
@@ -307,22 +346,20 @@ O sistema de módulos do NestJS é baseado no conceito de Injeção de Dependên
 
 ![Imagem do sistema de módulos](images/backend-auth-module.png)
 
-Ao definir os imports, eles são possíveis de serem injetados em outros módulos que estão definidos nesse arquivo.
+Ao definir os imports, eles são possíveis de serem injetados em outros módulos que estão definidos neste arquivo.
 Além disso, os providers podem ser injetados nos controllers e assim por diante.
 
 ### Autenticação
 
 A autenticação foi feita com JWT stateless.
 
-No Nest, os guards são classes responsáveis por verificar se o usuário tem permissão para acessar uma rota. Eles utilizam os strategies para verificar se o usuário tem permissão para acessar uma rota. E se conectam através do 'jwt' definido no extend do JwtAuthGuard, o AuthGuard('jwt'). Com isso, o Nest busca uma classe strategy que começa com 'Jwt'.
-
-E no Nest, é uma boa prática utilizar a biblioteca nativa `Passport` para autenticação, que utilizei.
+é uma boa prática utilizar a biblioteca nativa `Passport` para autenticação, que utilizei no Nest. E nele, os guards são classes responsáveis por verificar se o usuário tem permissão para acessar uma rota. Eles utilizam os strategies para verificar se o usuário tem permissão para acessar uma rota. E se conectam através do 'jwt' definido no extend do JwtAuthGuard, o AuthGuard('jwt'). Com isso, o Passport busca uma classe strategy que começa com 'Jwt'.
 
 ![Imagem do pacote NPM](images/backend-jwt-auth-guard.png)
 
 ![Imagem do pacote NPM](images/backend-jwt-strategy.png)
 
-Como o Nest abstrai bastante nessa parte, vou detalhar a ordem da execução do Guard com o Strategy.
+Como o Nest abstrai bastante nesta parte, vou detalhar a ordem da execução do Guard com o Strategy.
 
 Quando uma request chega:
 
@@ -348,7 +385,7 @@ Além disso, todas as rotas são protegidas por padrão graças à configuraçã
 
 Isso funciona porque:
 
-- O `APP_GUARD` é um token especial do NestJS que faz com que o guard em que ele está seja aplicada a todas as rotas.
+- O `APP_GUARD` é um token especial do NestJS que faz com que o guard em que ele está seja aplicado a todas as rotas.
 - O `JwtAuthGuard` é o guard que verifica se o usuário está autenticado.
 
 E isso foi feito como medida de segurança. Caso um desenvolvedor queira desabilitar a proteção de alguma rota, ele terá que manualmente definir @Public() na rota.
@@ -356,7 +393,7 @@ E isso foi feito como medida de segurança. Caso um desenvolvedor queira desabil
 ### Entities
 
 O TypeORM é um ORM que facilita a interação com o banco de dados.
-Para integrá-lo ao projeto, preciso definir minhas entidades com seu auxilio.
+Para integrá-lo ao projeto, preciso definir minhas entidades com seu auxílio.
 
 ![Imagem do User Entity](images/backend-user-entity.png)
 
@@ -364,7 +401,7 @@ O `@Exclude()` que é a abordagem padrão para esconder campos sensíveis. Remov
 
 O atributo `isActive` é um booleano que serve para a implementação do padrão de soft delete, que implementei. Nele, os usuários são apenas marcados como inativos ao invés de serem deletados do banco de dados.
 
-Assim, o histórico de dados críticos são preservados. Isso permite a reativação simples de usuários, oferece melhor performance (mais rapido UPDATE que DELETE) e permite rastros para investigações de segurança. Além de análises históricas sobre padrões de usuários, muito importante para a área de Análise de Dados.
+Assim, o histórico de dados críticos são preservados. Isso permite a reativação simples de usuáriose e permite rastros para investigações de segurança. Além de análises históricas sobre padrões de usuários, muito importante para a área de Análise de Dados.
 
 A aplicação exige um CRUD básico. Mas, resolvi adicionar o atributo `role` e uma rota protegida para ficar um pouco mais próxima de uma aplicação real, embora eu não esteja utilizando-a no frontend. É uma rota de estatística simples, que conta a quantidade de usuários ativos.
 
@@ -397,9 +434,9 @@ Alguns até um pouco mais complexos, mas seguindo a mesma lógica:
 
 ![Imagem do decorator de senha](images/backend-password-decorator.png)
 
-Esse decorator de senha em específico deveria ser bem mais completo (validando presença de letras maiúsculas, números... etc), mas como o projeto é pequeno, decidi fazer apenas com o mínimo necessário.
+Este decorator de senha em específico deveria ser bem mais completo (validando presença de letras maiúsculas, números... etc), mas como o projeto é pequeno, decidi fazer apenas com o mínimo necessário.
 
-Esse decorator eventualmente poderia precisar de algum parâmetro que definiria a força da senha. E, com base nele, a validação seria mais ou menos rigorosa em vários aspectos. Mas, como isso aumentaria a complexidade desnecessariamente (YAGNI), só valeria a pena quando realmente demandasse.
+Este decorator eventualmente poderia precisar de algum parâmetro que definiria a força da senha. E, com base nele, a validação seria mais ou menos rigorosa em vários aspectos. Mas, como isso aumentaria a complexidade desnecessariamente (YAGNI), só valeria a pena quando realmente demandasse.
 
 ### Controllers
 
@@ -409,11 +446,11 @@ Exemplo da rota `PUT /users/:id`:
 
 ![Imagem do Controller PUT /users/:id](images/backend-users-controller-put.png)
 
-Como pode perceber, são muitos decorators. Mas vários deles são de documentação do Swagger (os que iniciam com `@Api`). É importante manter o Swagger próximo do código para lembrar o desenvolvedor de atualizá-lo quando hover alguma alteração.
+Como pode perceber, são muitos decorators. Mas vários deles são de documentação do Swagger (os que iniciam com `@Api`). É importante manter o Swagger próximo do código para lembrar o desenvolvedor de atualizá-lo quando houver alguma alteração.
 
 Perceba que o userService é injetado no controller (pelo `users.module.ts`).
 
-E essa rota não é pública, pois não possui o decorator `@Public()`.
+E esta rota não é pública, pois não possui o decorator `@Public()`.
 
 ### Services
 
@@ -429,7 +466,7 @@ Os arquivos `app.controller.ts` e `app.service.ts` implementam um health check p
 
 ### Swagger
 
-O projeto foi documentado com o Swagger (`@nestjs/swagger`). Difersos decorators foram utilizados para informar as propriedades das requisições (nos controllers) e validações (nos decorators de validação dos DTOs).
+O projeto foi documentado com o Swagger (`@nestjs/swagger`). Diversos decorators foram utilizados para informar as propriedades das requisições (nos controllers) e validações (nos decorators de validação dos DTOs).
 
 ![Imagem do Swagger](images/backend-swagger.png)
 

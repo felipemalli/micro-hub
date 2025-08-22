@@ -11,4 +11,10 @@ export const swrConfig: SWRConfiguration = {
 	onError: (error) => {
 		console.error("SWR Error:", error);
 	},
+	shouldRetryOnError: (error) => {
+		if (error?.statusCode === 404) {
+			return false;
+		}
+		return true;
+	},
 };

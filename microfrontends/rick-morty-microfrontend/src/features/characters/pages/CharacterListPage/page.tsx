@@ -56,12 +56,8 @@ export const CharacterListPage: React.FC = () => {
 					<Loading message="Carregando personagens..." />
 				</div>
 			) : error ? (
-				<div className="flex flex-col items-center justify-center py-12">
-					<div className="mb-4 text-red-600">
-						<span className="text-4xl">⚠️</span>
-					</div>
-					<h3>Erro ao carregar</h3>
-					<p className="text-gray-600">Personagem não encontrado</p>
+				<div className="flex flex-col items-center justify-center pt-8 sm:pt-24">
+					<p className="text-xl">Personagem não encontrado</p>
 				</div>
 			) : (
 				<div className="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">

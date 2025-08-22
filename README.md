@@ -4,16 +4,19 @@ Projeto de microfrontends, estruturado em múltiplos repositórios independentes
 
 📖 **Documentação Detalhada:**
 
-- [🏗️ Decisões Arquiteturais](./docs/ARCHITECTURE.md)
 - [🚀 Planejamento da Arquitetura](./docs/ARCHITECTURE_PLANNING.md)
+- [🏗️ Decisões Arquiteturais](./docs/ARCHITECTURE.md)
 - [🔍 Resolução de Problemas](./docs/TROUBLESHOOTING.md)
 - [⚙️ Guia Técnico](./docs/TECHNICAL-GUIDE.md)
 
 ## Inicialização
 
 ```bash
-git clone https://github.com/microhub-project/microhub.git
-cd microhub
+git clone git@github.com:felipemalli/micro-hub.git
+```
+
+```bash
+cd micro-hub
 ```
 
 **Instalar dependências:**

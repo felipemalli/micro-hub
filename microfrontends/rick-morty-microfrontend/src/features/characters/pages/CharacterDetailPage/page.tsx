@@ -31,13 +31,7 @@ export const CharacterDetailPage = ({
 	if (error || !character) {
 		return (
 			<div className="flex flex-col gap-4 p-8 text-center">
-				<div className="text-red-600">
-					<span className="text-4xl">⚠️</span>
-				</div>
-				<h3 className="mb-2 text-lg font-semibold text-gray-800">
-					Erro ao carregar
-				</h3>
-				<p className="text-gray-600">Personagem não encontrado</p>
+				<h4>Personagem não encontrado</h4>
 				<div className="space-x-2">
 					<CoreButton onCoreClick={handleRetry}>Tentar novamente</CoreButton>
 					<CoreButton variant="outline" onCoreClick={handleBack}>
