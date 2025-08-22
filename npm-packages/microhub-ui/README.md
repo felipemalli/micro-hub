@@ -1,162 +1,116 @@
 # MicroHub UI
 
-Web Components design system built with Stencil.
+Modern Web Components design system built with Stencil for universal framework compatibility.
 
 ## Installation
 
 ```bash
-pnpm install @felipemalli-libs/microhub-ui
+npm install @felipemalli-libs/microhub-ui
 ```
 
-### React Projects
-
-For React projects, you also need to install the runtime dependency:
-
-```bash
-pnpm install @stencil/react-output-target
-```
-
-Ensure your `tsconfig.json` includes:
-
-```json
-{
-	"compilerOptions": {
-		"module": "esnext",
-		"moduleResolution": "bundler"
-	}
-}
-```
-
-## Usage
+## Quick Start
 
 ### React (Recommended)
 
-For React applications, use the React wrapper components with full TypeScript support:
-
 ```tsx
-import { CoreButton } from "@felipemalli-libs/microhub-ui/react";
+import { CoreButton, CoreInput } from "@felipemalli-libs/microhub-ui/react";
 
-function MyComponent() {
-	const handleClick = (event) => {
-		console.log("Button clicked!", event.detail);
-	};
-
-	return (
-		<CoreButton
-			variant="primary"
-			size="medium"
-			disabled={false}
-			onCoreClick={handleClick}
-		>
-			Click me
-		</CoreButton>
-	);
+function App() {
+  return (
+    <form>
+      <CoreInput
+        type="email"
+        placeholder="Enter your email"
+        required
+        onCoreInput={(e) => console.log(e.detail)}
+      />
+      <CoreButton variant="primary" type="submit">
+        Submit
+      </CoreButton>
+    </form>
+  );
 }
 ```
 
-**Benefits:**
-
-- ✅ Full TypeScript support and IntelliSense
-- ✅ Proper React event handling
-- ✅ SSR support (Next.js compatible)
-- ✅ Tree-shaking and optimal bundling
-
-### Vanilla JS/HTML
-
-```html
-<script type="module">
-	import { defineCustomElements } from "@felipemalli-libs/microhub-ui/loader";
-	defineCustomElements();
-</script>
-
-<core-button variant="primary">Click me</core-button>
-```
-
-### Vue/Angular (Web Components)
+### Other Frameworks
 
 ```js
 import { defineCustomElements } from "@felipemalli-libs/microhub-ui/loader";
 defineCustomElements();
 ```
 
-Then use as web components in your templates:
-
 ```html
-<core-button variant="primary" size="medium">Click me</core-button>
+<core-input type="email" placeholder="Enter your email" required></core-input>
+<core-button variant="primary">Submit</core-button>
 ```
 
 ## Components
 
-### CoreButton (React) / `<core-button>` (Web Component)
+### CoreButton
 
-#### Props
+| Prop       | Type                                                    | Default     |
+| ---------- | ------------------------------------------------------- | ----------- |
+| `variant`  | `'primary' \| 'secondary' \| 'danger' \| 'outline' \| 'ghost' \| 'underline'` | `'primary'` |
+| `size`     | `'small' \| 'medium' \| 'large'`                       | `'medium'`  |
+| `type`     | `'button' \| 'submit' \| 'reset'`                      | `'button'`  |
+| `disabled` | `boolean`                                              | `false`     |
 
-| Prop       | Type                                   | Default     | Description          |
-| ---------- | -------------------------------------- | ----------- | -------------------- |
-| `variant`  | `'primary' \| 'secondary' \| 'danger'` | `'primary'` | Button style variant |
-| `size`     | `'small' \| 'medium' \| 'large'`       | `'medium'`  | Button size          |
-| `type`     | `'button' \| 'submit' \| 'reset'`      | `'button'`  | Button type          |
-| `disabled` | `boolean`                              | `false`     | Disable button       |
-
-#### Events
-
-| React Handler | Web Component Event | Description                  |
-| ------------- | ------------------- | ---------------------------- |
-| `onCoreClick` | `coreClick`         | Fired when button is clicked |
-
-#### Examples
-
-**React:**
+**Events:** `onCoreClick` (React) / `coreClick` (Web Component)
 
 ```tsx
-import "@felipemalli-libs/microhub-ui/styles.css";
-import { CoreButton } from '@felipemalli-libs/microhub-ui/react';
-
-// Basic usage
-<CoreButton variant="primary">Save</CoreButton>
-
-// With event handler
-<CoreButton
-  variant="danger"
-  size="large"
-  onCoreClick={(event) => handleDelete(event.detail)}
->
+// React
+<CoreButton variant="danger" size="large" onCoreClick={handleDelete}>
   Delete
 </CoreButton>
 
-// Form submission
-<CoreButton type="submit" disabled={isLoading}>
-  {isLoading ? 'Saving...' : 'Save'}
-</CoreButton>
+// Web Component
+<core-button variant="outline" size="small">Cancel</core-button>
 ```
 
-**Web Component:**
+### CoreInput
 
-```typescript
-// In your main.ts or app initialization
-import { defineCustomElements } from "@felipemalli-libs/microhub-ui/loader";
-defineCustomElements();
+| Prop          | Type                                           | Default   |
+| ------------- | ---------------------------------------------- | --------- |
+| `type`        | `'text' \| 'email' \| 'password' \| 'number' \| 'tel' \| 'url'` | `'text'`  |
+| `placeholder` | `string`                                       | `""`      |
+| `value`       | `string`                                       | `""`      |
+| `size`        | `'small' \| 'large'`                           | `'large'` |
+| `disabled`    | `boolean`                                      | `false`   |
+| `required`    | `boolean`                                      | `false`   |
+| `error`       | `boolean`                                      | `false`   |
+| `name`        | `string`                                       | `""`      |
+| `inputId`     | `string`                                       | `""`      |
+
+**Events:** `onCoreInput`, `onCoreChange`, `onCoreFocus`, `onCoreBlur` (React) / `coreInput`, `coreChange`, `coreFocus`, `coreBlur` (Web Components)
+
+```tsx
+// React
+<CoreInput
+  type="password"
+  placeholder="Password"
+  required
+  error={hasError}
+  onCoreInput={(e) => setPassword(e.target.value)}
+/>
+
+// Web Component
+<core-input
+  type="number"
+  placeholder="Age"
+  size="small"
+  name="age"
+></core-input>
 ```
 
-```html
-<!-- Basic usage -->
-<core-button variant="primary">Save</core-button>
+## Framework Support
 
-<!-- With JavaScript event listener -->
-<script>
-	const button = document.querySelector("core-button");
-	button.addEventListener("coreClick", (event) => {
-		console.log("Clicked!", event.detail);
-	});
-</script>
-```
+| Framework  | Method                                    |
+| ---------- | ----------------------------------------- |
+| React      | `@felipemalli-libs/microhub-ui/react`     |
+| Vue        | `@felipemalli-libs/microhub-ui/loader`    |
+| Angular    | `@felipemalli-libs/microhub-ui/loader`    |
+| Vanilla JS | `@felipemalli-libs/microhub-ui/loader`    |
 
-## Framework Compatibility
+## License
 
-| Framework      | Support Level            | Import Method                          |
-| -------------- | ------------------------ | -------------------------------------- |
-| **React**      | ✅ **Native Components** | `@felipemalli-libs/microhub-ui/react`  |
-| **Vue**        | ✅ Web Components        | `@felipemalli-libs/microhub-ui/loader` |
-| **Angular**    | ✅ Web Components        | `@felipemalli-libs/microhub-ui/loader` |
-| **Vanilla JS** | ✅ Web Components        | `@felipemalli-libs/microhub-ui/loader` |
-| **Next.js**    | ✅ SSR Support           | `@felipemalli-libs/microhub-ui/react`  |
+MIT © Felipe Vahia Malliagros

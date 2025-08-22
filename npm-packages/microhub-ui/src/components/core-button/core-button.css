@@ -1,5 +1,5 @@
 .btn {
-	border: none;
+	border: 2px solid transparent;
 	border-radius: 0.5rem;
 	font-family: var(--font-family);
 	font-weight: 500;
@@ -11,6 +11,7 @@
 	text-align: center;
 	text-decoration: none;
 	line-height: 1;
+	box-sizing: border-box;
 }
 
 .btn--small {
@@ -45,8 +46,21 @@
 
 .btn--outline {
 	background-color: transparent;
-	box-shadow: inset 0 0 0 2px var(--color-primary);
+	border-color: var(--color-primary);
 	color: var(--color-primary);
+	padding: calc(0.75rem - 2px) calc(1.5rem - 2px);
+}
+
+.btn--outline.btn--small {
+	padding: calc(0.5rem - 2px) calc(1rem - 2px);
+}
+
+.btn--outline.btn--medium {
+	padding: calc(0.75rem - 2px) calc(1.5rem - 2px);
+}
+
+.btn--outline.btn--large {
+	padding: calc(1rem - 2px) calc(2rem - 2px);
 }
 
 .btn:hover:not(:disabled) {
