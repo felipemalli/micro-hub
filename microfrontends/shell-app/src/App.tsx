@@ -62,7 +62,7 @@ const App: React.FC = () => {
 			const savedUser = localStorage.getItem("currentUser");
 			const token = localStorage.getItem("accessToken");
 			const isAuth = !!(savedUser && token);
-			console.log("Shell-app: Checking auth state", {
+			console.log("Microhub Shell: Checking auth state", {
 				savedUser: !!savedUser,
 				token: !!token,
 				isAuth,
@@ -75,19 +75,19 @@ const App: React.FC = () => {
 
 		// Escutar eventos de login/logout do auth-microfrontend
 		const handleLogin = () => {
-			console.log("Shell-app: Received login event");
+			console.log("Microhub Shell: Received login event");
 			setIsAuthenticated(true);
 		};
 
 		const handleLogout = () => {
-			console.log("Shell-app: Received logout event");
+			console.log("Microhub Shell: Received logout event");
 			setIsAuthenticated(false);
 		};
 
 		// Escutar mudanças no localStorage (quando outra aba faz login/logout)
 		const handleStorageChange = (e: StorageEvent) => {
 			if (e.key === "currentUser" || e.key === "accessToken") {
-				console.log("Shell-app: Storage changed", e.key, e.newValue);
+				console.log("Microhub Shell: Storage changed", e.key, e.newValue);
 				checkAuthState();
 			}
 		};
@@ -104,7 +104,10 @@ const App: React.FC = () => {
 	}, []);
 
 	const handleAuthChange = (authenticated: boolean) => {
-		console.log("Shell-app: Auth change from microfrontend", authenticated);
+		console.log(
+			"Microhub Shell: Auth change from microfrontend",
+			authenticated
+		);
 		setIsAuthenticated(authenticated);
 	};
 

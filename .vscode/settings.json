@@ -7,7 +7,7 @@
 	"eslint.workingDirectories": [
 		"microfrontends/auth-microfrontend",
 		"microfrontends/rick-morty-microfrontend",
-		"microfrontends/shell-app",
+		"microfrontends/microhub-shell",
 		"backend"
 	]
 }

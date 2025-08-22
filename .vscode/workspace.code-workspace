@@ -9,8 +9,8 @@
 			"path": "./microfrontends/rick-morty-microfrontend"
 		},
 		{
-			"name": "Shell App",
-			"path": "./microfrontends/shell-app"
+			"name": "Microhub Shell",
+			"path": "./microfrontends/microhub-shell"
 		},
 		{
 			"name": "Backend",
@@ -26,7 +26,7 @@
 		"eslint.workingDirectories": [
 			"./microfrontends/auth-microfrontend",
 			"./microfrontends/rick-morty-microfrontend",
-			"./microfrontends/shell-app",
+			"./microfrontends/microhub-shell",
 			"./backend"
 		]
 	}

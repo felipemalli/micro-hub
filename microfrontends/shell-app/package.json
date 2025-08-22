@@ -1,7 +1,7 @@
 {
-	"name": "shell-app",
+	"name": "microhub-shell",
 	"version": "1.0.0",
-	"description": "Shell application que orquestra os microfrontends",
+	"description": "Microhub Shell application that orchestrates the microfrontends",
 	"main": "index.js",
 	"scripts": {
 		"start": "webpack serve --config config/webpack.dev.js",

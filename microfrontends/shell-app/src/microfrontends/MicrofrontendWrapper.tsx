@@ -15,7 +15,7 @@ const MicrofrontendWrapper: React.FC<MicrofrontendWrapperProps> = ({
 	const location = useLocation();
 	const listenersRef = useRef<Set<(update: any) => void>>(new Set());
 
-	// Create a history proxy that uses the shell app's navigation
+	// Create a history proxy that uses the microhub-shell's navigation
 	const sharedHistory = useMemo(() => {
 		const history = {
 			location: {
