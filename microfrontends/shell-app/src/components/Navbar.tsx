@@ -9,8 +9,8 @@ interface NavLinkProps {
 const NavLink = ({ to, icon, label }: NavLinkProps) => (
 	<Link to={to} className="nav-link">
 		<span className="flex items-center space-x-2">
-			<span>{icon}</span>
-			<span className="hidden sm:inline">{label}</span>
+			<span className="text-lg">{icon}</span>
+			<span className="hidden text-lg sm:inline">{label}</span>
 		</span>
 	</Link>
 );
@@ -22,10 +22,10 @@ export const Navbar = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
 				<div className="flex h-16 items-center justify-between">
 					<div className="flex w-full items-center justify-between space-x-8">
 						<Link to="/" className="text-2xl font-bold text-gray-800">
-							<span className="flex items-center space-x-2">
-								<span>🚀</span>
-								<span className="hidden sm:inline">Micro Hub</span>
-							</span>
+							<p className="flex items-center space-x-2">
+								<span className="text-lg">🚀</span>
+								<span className="hidden text-lg sm:inline">Micro Hub</span>
+							</p>
 						</Link>
 						<div className="flex space-x-4">
 							<NavLink to="/rickmorty" icon="👽" label="Rick & Morty" />

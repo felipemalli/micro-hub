@@ -28,7 +28,7 @@ export const CharacterListPage: React.FC = () => {
 
 	return (
 		<div className="p-6">
-			<h2 className="mb-4">Personagens</h2>
+			<h4 className="mb-4">Personagens</h4>
 			<div className="mb-6">
 				<CharacterFilters filters={filters} onFiltersChange={updateFilters} />
 				<div className="mt-4 flex gap-2">

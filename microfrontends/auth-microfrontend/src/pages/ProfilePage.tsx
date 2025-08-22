@@ -72,21 +72,17 @@ export const ProfilePage: React.FC = () => {
 				{!isEditing ? (
 					<div className="space-y-4">
 						<div>
-							<label className="mb-1 block text-sm">Nome</label>
+							<label>Nome</label>
 							<p className="text-lg text-gray-800">{user.name}</p>
 						</div>
 
 						<div>
-							<label className="mb-1 block text-sm font-medium text-gray-500">
-								Email
-							</label>
+							<label>Email</label>
 							<p className="text-lg font-medium text-gray-800">{user.email}</p>
 						</div>
 
 						<div>
-							<label className="mb-1 block text-sm font-medium text-gray-500">
-								Tipo de conta
-							</label>
+							<label>Tipo de conta</label>
 							<span
 								className={`inline-flex rounded-full px-3 py-1 text-sm font-medium ${
 									user.role === "admin"
@@ -99,9 +95,7 @@ export const ProfilePage: React.FC = () => {
 						</div>
 						{user.createdAt && (
 							<div>
-								<label className="mb-1 block text-sm font-medium text-gray-500">
-									Membro desde
-								</label>
+								<label>Membro desde</label>
 								<p className="text-lg font-medium text-gray-800">
 									{new Date(user.createdAt).toLocaleDateString("pt-BR")}
 								</p>
@@ -111,12 +105,7 @@ export const ProfilePage: React.FC = () => {
 				) : (
 					<form onSubmit={handleSubmit} className="space-y-4">
 						<div>
-							<label
-								htmlFor="name"
-								className="mb-2 block text-sm font-medium text-gray-500"
-							>
-								Nome
-							</label>
+							<label htmlFor="name">Nome</label>
 							<CoreInput
 								type="text"
 								inputId="name"
@@ -132,9 +121,7 @@ export const ProfilePage: React.FC = () => {
 							)}
 						</div>
 						<div>
-							<label className="mb-1 block text-sm font-medium text-gray-500">
-								Email (não pode ser alterado)
-							</label>
+							<label>Email (não pode ser alterado)</label>
 							<p className="text-lg font-medium text-gray-400">{user.email}</p>
 						</div>
 						<div className="flex gap-3 pt-4">

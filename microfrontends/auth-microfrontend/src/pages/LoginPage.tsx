@@ -5,7 +5,7 @@ import { useForm } from "../hooks/useForm";
 import { LoginCredentials } from "../types/auth";
 import { validation } from "../utils/validation";
 import { CoreButton, CoreInput } from "@felipemalli-libs/microhub-ui/react";
-import { AuthCard } from "../components/AuthCard";
+import { AuthContainer } from "../components/AuthContainer";
 
 export const LoginPage: React.FC = () => {
 	const navigate = useNavigate();
@@ -39,15 +39,13 @@ export const LoginPage: React.FC = () => {
 
 	return (
 		<div className="space-y-6">
-			<AuthCard
+			<AuthContainer
 				onSubmit={handleSubmit}
 				title="Entrar"
 				description="Entre com sua conta"
 			>
 				<div>
-					<label htmlFor="email" className="mb-2 block text-sm">
-						Email
-					</label>
+					<label htmlFor="email">Email</label>
 					<CoreInput
 						type="email"
 						inputId="email"
@@ -63,9 +61,7 @@ export const LoginPage: React.FC = () => {
 					)}
 				</div>
 				<div>
-					<label htmlFor="password" className="mb-2 block text-sm">
-						Senha
-					</label>
+					<label htmlFor="password">Senha</label>
 					<CoreInput
 						type="password"
 						inputId="password"
@@ -102,7 +98,7 @@ export const LoginPage: React.FC = () => {
 						</CoreButton>
 					</p>
 				</div>
-			</AuthCard>
+			</AuthContainer>
 		</div>
 	);
 };

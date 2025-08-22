@@ -27,7 +27,6 @@ class ApiClient {
 				const apiError = new Error(message);
 				apiError.name = status >= 500 ? "ServerError" : "APIError";
 
-				// Metadata para ErrorBoundary
 				(apiError as any).statusCode = status;
 				(apiError as any).shouldShowInBoundary = status >= 500;
 

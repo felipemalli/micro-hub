@@ -82,10 +82,8 @@ export const CharacterDetailPage = ({
 					/>
 				</div>
 				<div className="space-y-6">
-					<div>
-						<h1 className="mb-2 text-3xl font-bold text-gray-800">
-							{character.name}
-						</h1>
+					<div className="space-y-2">
+						<h3>{character.name}</h3>
 						<Badge variant={getStatusVariant(character.status)} size="md">
 							{character.status}
 						</Badge>

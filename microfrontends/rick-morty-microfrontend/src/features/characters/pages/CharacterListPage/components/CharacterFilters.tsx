@@ -24,9 +24,7 @@ export const CharacterFilters: React.FC<CharacterFiltersProps> = ({
 		<div className="mb-6 rounded-xl bg-gray-50 p-4">
 			<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
 				<div>
-					<label className="mb-1 block text-sm font-medium text-gray-700">
-						Nome
-					</label>
+					<label>Nome</label>
 					<CoreInput
 						type="text"
 						value={filters.name || ""}
@@ -38,9 +36,7 @@ export const CharacterFilters: React.FC<CharacterFiltersProps> = ({
 					/>
 				</div>
 				<div>
-					<label className="mb-1 block text-sm font-medium text-gray-700">
-						Status
-					</label>
+					<label>Status</label>
 					<select
 						value={filters.status || ""}
 						onChange={(e) => onFiltersChange({ status: e.target.value as any })}
@@ -53,9 +49,7 @@ export const CharacterFilters: React.FC<CharacterFiltersProps> = ({
 					</select>
 				</div>
 				<div>
-					<label className="mb-1 block text-sm font-medium text-gray-700">
-						Espécie
-					</label>
+					<label>Espécie</label>
 					<CoreInput
 						type="text"
 						value={filters.species || ""}
@@ -67,9 +61,7 @@ export const CharacterFilters: React.FC<CharacterFiltersProps> = ({
 					/>
 				</div>
 				<div>
-					<label className="mb-1 block text-sm font-medium text-gray-700">
-						Gênero
-					</label>
+					<label>Gênero</label>
 					<select
 						value={filters.gender || ""}
 						onChange={(e) => onFiltersChange({ gender: e.target.value as any })}

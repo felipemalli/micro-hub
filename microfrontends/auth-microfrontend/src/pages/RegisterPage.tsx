@@ -4,7 +4,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useForm } from "../hooks/useForm";
 import { validation } from "../utils/validation";
 import { CoreButton, CoreInput } from "@felipemalli-libs/microhub-ui/react";
-import { AuthCard } from "../components/AuthCard";
+import { AuthContainer } from "../components/AuthContainer";
 
 interface RegisterFormData {
 	name: string;
@@ -55,15 +55,13 @@ export const RegisterPage: React.FC = () => {
 	});
 
 	return (
-		<AuthCard
+		<AuthContainer
 			onSubmit={handleSubmit}
 			title="Criar Conta"
 			description="Crie sua conta para começar"
 		>
 			<div>
-				<label htmlFor="name" className="mb-2 block text-sm">
-					Nome completo
-				</label>
+				<label>Nome completo</label>
 				<CoreInput
 					type="text"
 					inputId="name"
@@ -79,9 +77,7 @@ export const RegisterPage: React.FC = () => {
 				)}
 			</div>
 			<div>
-				<label htmlFor="email" className="mb-2 block text-sm">
-					Email
-				</label>
+				<label>Email</label>
 				<CoreInput
 					type="email"
 					inputId="email"
@@ -97,9 +93,7 @@ export const RegisterPage: React.FC = () => {
 				)}
 			</div>
 			<div>
-				<label htmlFor="password" className="mb-2 block text-sm">
-					Senha
-				</label>
+				<label>Senha</label>
 				<CoreInput
 					type="password"
 					inputId="password"
@@ -115,9 +109,7 @@ export const RegisterPage: React.FC = () => {
 				)}
 			</div>
 			<div>
-				<label htmlFor="confirmPassword" className="mb-2 block text-sm">
-					Confirmar senha
-				</label>
+				<label htmlFor="confirmPassword">Confirmar senha</label>
 				<CoreInput
 					type="password"
 					inputId="confirmPassword"
@@ -153,6 +145,6 @@ export const RegisterPage: React.FC = () => {
 					</CoreButton>
 				</p>
 			</div>
-		</AuthCard>
+		</AuthContainer>
 	);
 };

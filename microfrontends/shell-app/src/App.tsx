@@ -33,7 +33,7 @@ const LoadingSpinner: React.FC = () => (
 	<div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50">
 		<div className="text-center">
 			<div className="mx-auto mb-4 h-16 w-16 animate-spin rounded-full border-b-2 border-blue-500"></div>
-			<p className="font-medium text-gray-600">Carregando...</p>
+			<p>Carregando...</p>
 		</div>
 	</div>
 );
@@ -45,7 +45,7 @@ const ErrorFallback: React.FC<{ message: string }> = ({ message }) => (
 			<h2 className="mb-2 text-xl font-bold text-gray-800">
 				Ops! Algo deu errado
 			</h2>
-			<p className="mb-4 text-gray-600">{message}</p>
+			<p className="mb-4">{message}</p>
 			<button onClick={() => window.location.reload()} className="btn-primary">
 				Tentar novamente
 			</button>

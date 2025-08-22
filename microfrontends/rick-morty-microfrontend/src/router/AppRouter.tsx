@@ -8,8 +8,8 @@ export const AppRouter: React.FC<{ isAuthenticated?: boolean }> = ({
 	return (
 		<div className="mx-auto max-w-7xl px-4 py-8">
 			<div className="mb-10 mt-4 text-center">
-				<h1 className="mb-2 bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
-					<span>🛸 </span>
+				<h1 className="mb-2 flex justify-center gap-4 bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-center text-3xl text-transparent sm:text-4xl">
+					<span className="text-3xl sm:text-3xl">🛸</span>
 					Rick & Morty
 				</h1>
 				<p className="text-lg">

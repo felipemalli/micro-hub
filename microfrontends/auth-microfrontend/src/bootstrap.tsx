@@ -1,8 +1,15 @@
 import { createRoot } from "react-dom/client";
-import { createMemoryHistory, createBrowserHistory } from "history";
+import { createMemoryHistory, createBrowserHistory, History } from "history";
 import AuthApp from "./AuthApp";
 
-const mount = (el: HTMLElement, options: any = {}) => {
+interface MountOptions {
+	sharedHistory?: History;
+	initialPath?: string;
+	defaultHistory?: History;
+	onAuthChange?: (isAuthenticated: boolean) => void;
+}
+
+const mount = (el: HTMLElement, options: MountOptions = {}) => {
 	const { sharedHistory, initialPath, defaultHistory, onAuthChange } = options;
 
 	const history =

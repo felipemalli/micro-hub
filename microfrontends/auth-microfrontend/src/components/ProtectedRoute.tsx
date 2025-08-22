@@ -33,9 +33,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 		return (
 			<div className="flex min-h-screen items-center justify-center">
 				<div className="text-center">
-					<h1 className="mb-4 text-2xl font-bold text-gray-800">
-						Acesso Negado
-					</h1>
+					<h3>Acesso Negado</h3>
 					<p className="text-gray-600">
 						Você não tem permissão para acessar esta página.
 					</p>

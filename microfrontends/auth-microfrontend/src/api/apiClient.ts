@@ -1,7 +1,23 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { storage } from "../utils/storage";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
+
+interface ApiErrorResponse {
+	message?: string;
+	error?: string;
+}
+
+interface ExtendedAxiosRequestConfig extends InternalAxiosRequestConfig {
+	_retry?: boolean;
+}
+
+interface ExtendedError extends Error {
+	statusCode?: number;
+	endpoint?: string;
+	shouldShowInBoundary?: boolean;
+	status?: number;
+}
 
 export const apiClient = axios.create({
 	baseURL: `${API_BASE_URL}/api`,
@@ -11,8 +27,7 @@ export const apiClient = axios.create({
 	},
 });
 
-// Helper para verificar se request tem token
-const hasAuthToken = (config: any): boolean => {
+const hasAuthToken = (config: InternalAxiosRequestConfig): boolean => {
 	return !!config?.headers?.Authorization;
 };
 
@@ -29,8 +44,8 @@ apiClient.interceptors.request.use(
 
 apiClient.interceptors.response.use(
 	(response) => response,
-	async (error: AxiosError) => {
-		const originalRequest = error.config as any;
+	async (error: AxiosError<ApiErrorResponse>) => {
+		const originalRequest = error.config as ExtendedAxiosRequestConfig;
 		const status = error.response?.status;
 
 		if (
@@ -41,23 +56,25 @@ apiClient.interceptors.response.use(
 			originalRequest._retry = true;
 			storage.clearAuth();
 
-			const authError = new Error("Sessão expirada. Faça login novamente.");
+			const authError: ExtendedError = new Error(
+				"Sessão expirada. Faça login novamente."
+			);
 			authError.name = "AuthenticationError";
 			return Promise.reject(authError);
 		}
 
 		const message =
-			(error.response?.data as any)?.message ||
-			(error.response?.data as any)?.error ||
+			error.response?.data?.message ||
+			error.response?.data?.error ||
 			getDefaultMessage(status);
 
-		const apiError = new Error(message);
-		apiError.name = status >= 500 ? "ServerError" : "APIError";
+		const apiError: ExtendedError = new Error(message);
+		apiError.name = status && status >= 500 ? "ServerError" : "APIError";
 
 		// Metadata para ErrorBoundary
-		(apiError as any).statusCode = status;
-		(apiError as any).endpoint = error.config?.url;
-		(apiError as any).shouldShowInBoundary = status >= 500;
+		apiError.statusCode = status;
+		apiError.endpoint = error.config?.url;
+		apiError.shouldShowInBoundary = status ? status >= 500 : false;
 
 		return Promise.reject(apiError);
 	}
@@ -78,7 +95,8 @@ export const retryRequest = async <T>(
 		try {
 			return await requestFn();
 		} catch (error) {
-			if ((error as any).status === 401) {
+			const extendedError = error as ExtendedError;
+			if (extendedError.status === 401) {
 				throw error;
 			}
 
