@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { User } from "@/entities/user.entity";
@@ -8,7 +8,7 @@ import { PasswordService } from "@/common/services/password.service";
 import { CacheService } from "@/cache/cache.service";
 
 @Injectable()
-export class UserService {
+export class UsersService {
 	constructor(
 		@InjectRepository(User)
 		private userRepository: Repository<User>,
@@ -93,7 +93,7 @@ export class UserService {
 		await this.cacheService.del(`user:${id}`);
 	}
 
-	async getUserStats(): Promise<{ total: number; active: number }> {
+	async getUserCounts(): Promise<{ total: number; active: number }> {
 		const [total, active] = await Promise.all([
 			this.userRepository.count(),
 			this.userRepository.count({ where: { isActive: true } }),

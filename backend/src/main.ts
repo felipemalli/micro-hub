@@ -46,9 +46,11 @@ async function bootstrap() {
 	const port = process.env.PORT || 4000;
 	await app.listen(port);
 
-	console.log(`🚀 Backend running on: http://localhost:${port}`);
-	console.log(`📚 Swagger docs available at: http://localhost:${port}/docs`);
-	console.log(`🏥 Health check: http://localhost:${port}/api`);
+	if (process.env.NODE_ENV !== "production") {
+		console.log(`🚀 Backend running on: http://localhost:${port}`);
+		console.log(`📚 Swagger docs available at: http://localhost:${port}/docs`);
+		console.log(`🏥 Health check: http://localhost:${port}/api`);
+	}
 }
 
 bootstrap();

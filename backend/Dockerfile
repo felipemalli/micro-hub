@@ -4,7 +4,6 @@ WORKDIR /app
 
 RUN npm install -g pnpm
 
-# Create non-root user
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S nestjs -u 1001
 
@@ -16,13 +15,12 @@ COPY . .
 
 RUN pnpm run build
 
-RUN pnpm prune --prod
-
-# Change ownership
 RUN chown -R nestjs:nodejs /app
+
+RUN pnpm prune --prod
 
 USER nestjs
 
 EXPOSE 4000
 
-CMD ["node", "dist/main.js"]
+CMD ["node", "dist/main"]

@@ -4,7 +4,7 @@ import {
 	UnauthorizedException,
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { UserService } from "@/users/services/user.service";
+import { UsersService } from "@/users/services/users.service";
 import { PasswordService } from "@/common/services/password.service";
 import { CacheService } from "@/cache/cache.service";
 import { RegisterDto } from "@/auth/dto/register.dto";
@@ -16,7 +16,7 @@ import { MESSAGES } from "@/common/constants/error-messages";
 @Injectable()
 export class AuthService {
 	constructor(
-		private userService: UserService,
+		private userService: UsersService,
 		private jwtService: JwtService,
 		private passwordService: PasswordService,
 		private cacheService: CacheService
@@ -68,14 +68,5 @@ export class AuthService {
 		};
 
 		return this.jwtService.sign(payload);
-	}
-
-	async validateToken(token: string): Promise<User> {
-		try {
-			const payload = this.jwtService.verify(token);
-			return await this.userService.findById(payload.sub);
-		} catch {
-			throw new UnauthorizedException(MESSAGES.ERROR.INVALID_CREDENTIALS);
-		}
 	}
 }

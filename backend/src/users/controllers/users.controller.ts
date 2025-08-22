@@ -15,7 +15,7 @@ import {
 	ApiBearerAuth,
 	ApiParam,
 } from "@nestjs/swagger";
-import { UserService } from "@/users/services/user.service";
+import { UsersService } from "@/users/services/users.service";
 import { JwtAuthGuard } from "@/auth/guards/jwt-auth.guard";
 import { CurrentUser } from "@/common/decorators/current-user.decorator";
 import { UpdateProfileDto } from "@/users/dto/update-profile.dto";
@@ -27,7 +27,7 @@ import { MESSAGES } from "@/common/constants/error-messages";
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class UsersController {
-	constructor(private userService: UserService) {}
+	constructor(private userService: UsersService) {}
 
 	@Get()
 	@ApiOperation({ summary: "Get all users (admin only)" })
@@ -60,7 +60,7 @@ export class UsersController {
 	}
 
 	@Get("stats")
-	@ApiOperation({ summary: "Get user statistics (admin only)" })
+	@ApiOperation({ summary: "Get user counts (admin only)" })
 	@ApiResponse({
 		status: 200,
 		description: MESSAGES.SUCCESS.STATS_RETRIEVED,
@@ -70,7 +70,7 @@ export class UsersController {
 			throw new ForbiddenException(MESSAGES.ERROR.ADMIN_ACCESS_REQUIRED);
 		}
 
-		const stats = await this.userService.getUserStats();
+		const stats = await this.userService.getUserCounts();
 
 		return {
 			message: MESSAGES.SUCCESS.STATS_RETRIEVED,
