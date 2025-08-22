@@ -69,8 +69,6 @@ Dessa forma, os erros são lidados de forma consistente em qualquer contexto.
 
 ### Histórico de navegação com History Proxy
 
-### Padronização de CSS
-
 ### Autenticação com JWT
 
 ### Interceptação de requisições
@@ -152,3 +150,21 @@ Ou seja, nos microserviços de React funcionará como um React Component <CoreBu
 
 ![Imagem do uso do core-button](images/npm-package--core-button-usage.png)
 Uso dos componentes do NPM Package `microhub-ui`.
+
+### Tipografia
+
+Para utilizar os Web Components, é necessário importar o CSS do Stencil, a segunda linha da imagem abaixo.
+
+![Imagem da importação do microhub-ui](images/frontend-import-lib.png)
+
+Eu não estava satisfeito com precisar definir para qualquer tag HTML a fonte, cor e o tamanho da fonte e ainda me preocupar em padronizar entre todos os microfrontends. Então, resolvi definir no CSS da lib que eu já havia criado.
+
+![Imagem do global.css](images/npm-package-global-css.png)
+
+Importante ressaltar que essas estilizações vindas do NPM Package podem e devem ser sobrescritas de acordo com as situações, elas são apenas um ponto de partida para a padronização do sistema.
+
+Veja um exemplo de uso em que já há estilizações padrão, mas algumas classes foram sobrescritas (como cor e tamanho no parágrafo):
+
+![Imagem do exemplo de uso da tipografia](images/npm-package-example-typography.png)
+
+Em um cenário real, eu provavelmente implementaria uma forma de importar apenas partes específicas da UI do NPM Package, mas para esse projeto foi suficiente.

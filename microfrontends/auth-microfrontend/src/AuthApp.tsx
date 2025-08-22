@@ -2,9 +2,8 @@ import "./index.css";
 import "@felipemalli-libs/microhub-ui/styles.css";
 import React, { useEffect, useState } from "react";
 import { Router } from "react-router-dom";
-import { AppRouter } from "./app/router/AppRouter";
-import { ErrorBoundary } from "./shared/components/ErrorBoundary/ErrorBoundary";
-import { AuthProvider } from "./app/providers/AuthProvider";
+import { AppRouter } from "./router/AppRouter";
+import { ErrorBoundary, AuthProvider } from "./providers";
 import { AuthAppProps } from "./types/auth";
 import { History } from "history";
 

@@ -1,18 +1,32 @@
 import React, { useState } from "react";
-import { useAuth } from "../app/providers/AuthProvider";
+import { useAuth } from "../hooks/useAuth";
+import { useForm } from "../hooks/useForm";
+import { useAsyncError } from "../hooks/useAsyncError";
+import { validation } from "../utils/validation";
 import { CoreButton, CoreInput } from "@felipemalli-libs/microhub-ui/react";
 import { useNavigate } from "react-router-dom";
-import { FormData, FormErrors } from "../types/auth";
 
-const ProfilePage: React.FC = () => {
+export const ProfilePage: React.FC = () => {
 	const { user, logout, updateProfile, loading, error, clearError } = useAuth();
 	const navigate = useNavigate();
 	const [isEditing, setIsEditing] = useState(false);
-	const [formData, setFormData] = useState<FormData>({
-		name: user?.name || "",
+	const captureAsyncError = useAsyncError();
+
+	const {
+		values: formData,
+		errors,
+		isSubmitting,
+		handleChange,
+		handleSubmit,
+		reset,
+	} = useForm({
+		initialValues: { name: user?.name || "" },
+		validate: (values) => validation.validateProfileForm(values.name),
+		onSubmit: async (values) => {
+			await updateProfile({ name: values.name.trim() });
+			setIsEditing(false);
+		},
 	});
-	const [errors, setErrors] = useState<FormErrors>({});
-	const [isUpdating, setIsUpdating] = useState(false);
 
 	const handleLogout = async () => {
 		try {
@@ -20,63 +34,15 @@ const ProfilePage: React.FC = () => {
 			navigate("/auth/login");
 		} catch (error) {
 			console.error("Logout error:", error);
-		}
-	};
-
-	const handleInput = (e: CustomEvent) => {
-		const target = e.detail?.target as HTMLInputElement;
-		if (!target) return;
-
-		const { name, value } = target;
-		setFormData((prev) => ({
-			...prev,
-			[name]: value,
-		}));
-
-		// Clear errors when user starts typing
-		if (errors[name]) {
-			setErrors((prev) => ({
-				...prev,
-				[name]: "",
-			}));
-		}
-		clearError();
-	};
-
-	const validateForm = (): boolean => {
-		const newErrors: FormErrors = {};
-
-		if (!formData.name?.trim()) {
-			newErrors.name = "Nome é obrigatório";
-		} else if (formData.name.trim().length < 2) {
-			newErrors.name = "Nome deve ter pelo menos 2 caracteres";
-		}
-
-		setErrors(newErrors);
-		return Object.keys(newErrors).length === 0;
-	};
-
-	const handleSave = async (e: React.FormEvent) => {
-		e.preventDefault();
-
-		if (!validateForm()) {
-			return;
-		}
-
-		setIsUpdating(true);
-		try {
-			await updateProfile({ name: formData.name.trim() });
-			setIsEditing(false);
-		} catch {
-			// Error is handled by AuthProvider
-		} finally {
-			setIsUpdating(false);
+			// Captura o erro no ErrorBoundary se for crítico
+			if (error instanceof Error && error.message.includes("critical")) {
+				captureAsyncError(error, "ProfilePage logout");
+			}
 		}
 	};
 
 	const handleCancel = () => {
-		setFormData({ name: user?.name || "" });
-		setErrors({});
+		reset();
 		setIsEditing(false);
 		clearError();
 	};
@@ -104,26 +70,20 @@ const ProfilePage: React.FC = () => {
 						{user.name.charAt(0).toUpperCase()}
 					</span>
 				</div>
-				<h1 className="text-3xl font-bold text-gray-800 mb-2">Perfil</h1>
-				<p className="text-gray-600">Suas informações pessoais</p>
+				<h1>Perfil</h1>
+				<p>Suas informações pessoais</p>
 			</div>
-
-			{/* Error Display */}
 			{error && (
 				<div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
 					{error}
 				</div>
 			)}
-
 			<div className="bg-white rounded-xl shadow-lg p-6 mb-6">
 				{!isEditing ? (
-					/* View Mode */
 					<div className="space-y-4">
 						<div>
-							<label className="block text-sm font-medium text-gray-500 mb-1">
-								Nome
-							</label>
-							<p className="text-lg font-medium text-gray-800">{user.name}</p>
+							<label className="block text-sm mb-1">Nome</label>
+							<p className="text-lg text-gray-800">{user.name}</p>
 						</div>
 
 						<div>
@@ -147,7 +107,6 @@ const ProfilePage: React.FC = () => {
 								{user.role === "admin" ? "Administrador" : "Usuário"}
 							</span>
 						</div>
-
 						{user.createdAt && (
 							<div>
 								<label className="block text-sm font-medium text-gray-500 mb-1">
@@ -160,8 +119,7 @@ const ProfilePage: React.FC = () => {
 						)}
 					</div>
 				) : (
-					/* Edit Mode */
-					<form onSubmit={handleSave} className="space-y-4">
+					<form onSubmit={handleSubmit} className="space-y-4">
 						<div>
 							<label
 								htmlFor="name"
@@ -176,36 +134,34 @@ const ProfilePage: React.FC = () => {
 								value={formData.name}
 								placeholder="Seu nome completo"
 								error={!!errors.name}
-								onCoreInput={handleInput}
-								disabled={isUpdating}
+								onCoreInput={handleChange}
+								disabled={isSubmitting}
 							/>
 							{errors.name && (
 								<p className="text-red-600 text-sm mt-1">{errors.name}</p>
 							)}
 						</div>
-
 						<div>
 							<label className="block text-sm font-medium text-gray-500 mb-1">
 								Email (não pode ser alterado)
 							</label>
 							<p className="text-lg font-medium text-gray-400">{user.email}</p>
 						</div>
-
 						<div className="flex gap-3 pt-4">
 							<CoreButton
 								type="submit"
-								onClick={handleSave}
+								onClick={handleSubmit}
 								variant="primary"
-								disabled={isUpdating}
+								disabled={isSubmitting}
 								className="flex-1"
 							>
-								{isUpdating ? "Salvando..." : "Salvar"}
+								{isSubmitting ? "Salvando..." : "Salvar"}
 							</CoreButton>
 							<CoreButton
 								type="button"
 								variant="secondary"
 								onClick={handleCancel}
-								disabled={isUpdating}
+								disabled={isSubmitting}
 								className="flex-1"
 							>
 								Cancelar
@@ -214,9 +170,10 @@ const ProfilePage: React.FC = () => {
 					</form>
 				)}
 			</div>
-
 			<div
-				className={`flex  ${isEditing ? "w-full justify-end" : "w-full justify-between"}`}
+				className={`flex ${
+					isEditing ? "w-full justify-end" : "w-full justify-between"
+				}`}
 			>
 				{!isEditing && (
 					<CoreButton
@@ -234,5 +191,3 @@ const ProfilePage: React.FC = () => {
 		</div>
 	);
 };
-
-export default ProfilePage;

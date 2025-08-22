@@ -1,6 +1,5 @@
 import React, {
 	createContext,
-	useContext,
 	useState,
 	useEffect,
 	ReactNode,
@@ -12,18 +11,10 @@ import {
 	LoginCredentials,
 	RegisterCredentials,
 	UpdateProfileData,
-} from "../../types/auth";
-import { authService } from "../../services/authService";
+} from "../types/auth";
+import { authApi } from "../api/authApi";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export const useAuth = () => {
-	const context = useContext(AuthContext);
-	if (context === undefined) {
-		throw new Error("useAuth must be used within an AuthProvider");
-	}
-	return context;
-};
 
 interface AuthProviderProps {
 	children: ReactNode;
@@ -44,21 +35,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
 			try {
 				setLoading(true);
 
-				if (authService.isAuthenticated()) {
-					const currentUser = authService.getCurrentUser();
+				if (authApi.isAuthenticated()) {
+					const currentUser = authApi.getCurrentUser();
 					if (currentUser) {
 						setUser(currentUser);
 						onAuthChange?.(true);
 					} else {
 						// Try to fetch fresh profile
-						const userData = await authService.getProfile();
+						const userData = await authApi.getProfile();
 						setUser(userData);
 						onAuthChange?.(true);
 					}
 				}
 			} catch (error) {
 				console.error("Auth initialization failed:", error);
-				authService.logout();
+				await authApi.logout();
 				setUser(null);
 				onAuthChange?.(false);
 			} finally {
@@ -69,34 +60,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
 		initializeAuth();
 	}, [onAuthChange]);
 
-	// Listen for logout events
-	useEffect(() => {
-		const handleLogout = () => {
-			setUser(null);
-			setError(null);
-			onAuthChange?.(false);
-		};
-
-		window.addEventListener("auth:logout", handleLogout);
-		return () => window.removeEventListener("auth:logout", handleLogout);
-	}, [onAuthChange]);
-
 	const login = useCallback(
 		async (credentials: LoginCredentials): Promise<void> => {
 			try {
-				console.log("AuthProvider: Starting login...");
 				setLoading(true);
 				setError(null);
 
-				const { user: userData } = await authService.login(credentials);
-				console.log("AuthProvider: Login successful, setting user:", userData);
+				const { user: userData } = await authApi.login(credentials);
 				setUser(userData);
 				onAuthChange?.(true);
 			} catch (error) {
-				console.error("AuthProvider: Login failed:", error);
 				const errorMessage =
 					error instanceof Error ? error.message : "Login failed";
 				setError(errorMessage);
+				// Re-lança o erro para que o useForm possa finalizar o isSubmitting
 				throw error;
 			} finally {
 				setLoading(false);
@@ -111,7 +88,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
 				setLoading(true);
 				setError(null);
 
-				const { user: userData } = await authService.register(credentials);
+				const { user: userData } = await authApi.register(credentials);
 				setUser(userData);
 				onAuthChange?.(true);
 			} catch (error) {
@@ -129,7 +106,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
 	const logout = useCallback(async (): Promise<void> => {
 		try {
 			setLoading(true);
-			await authService.logout();
+			await authApi.logout();
 			setUser(null);
 			setError(null);
 			onAuthChange?.(false);
@@ -147,18 +124,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
 	const updateProfile = useCallback(
 		async (data: UpdateProfileData): Promise<void> => {
 			if (!user) {
-				throw new Error("No user logged in");
+				throw new Error("Usuário não logado");
 			}
 
 			try {
 				setLoading(true);
 				setError(null);
 
-				const updatedUser = await authService.updateProfile(user.id, data);
+				const updatedUser = await authApi.updateProfile(user.id, data);
 				setUser(updatedUser);
 			} catch (error) {
 				const errorMessage =
-					error instanceof Error ? error.message : "Profile update failed";
+					error instanceof Error ? error.message : "Falha ao atualizar perfil";
 				setError(errorMessage);
 				throw error;
 			} finally {
@@ -181,8 +158,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
 		logout,
 		updateProfile,
 		clearError,
-		isAuthenticated: !!user && authService.isAuthenticated(),
+		isAuthenticated: !!user && authApi.isAuthenticated(),
 	};
 
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
+
+export { AuthContext };

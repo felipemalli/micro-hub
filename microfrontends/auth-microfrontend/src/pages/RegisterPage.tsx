@@ -1,107 +1,62 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../app/providers/AuthProvider";
-import { FormData, FormErrors } from "../types/auth";
+import React, { useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+import { useForm } from "../hooks/useForm";
+import { validation } from "../utils/validation";
 import { CoreButton, CoreInput } from "@felipemalli-libs/microhub-ui/react";
-import { AuthCard } from "../app/components/AuthCard";
+import { AuthCard } from "../components/AuthCard";
 
-interface RegisterFormData extends FormData {
+interface RegisterFormData {
 	name: string;
+	email: string;
+	password: string;
 	confirmPassword: string;
 }
 
-const RegisterPage: React.FC = () => {
-	const [formData, setFormData] = useState<RegisterFormData>({
-		name: "",
-		email: "",
-		password: "",
-		confirmPassword: "",
-	});
-	const [errors, setErrors] = useState<FormErrors>({});
+export const RegisterPage: React.FC = () => {
 	const navigate = useNavigate();
+	const location = useLocation();
 	const { register, loading, error, clearError, isAuthenticated } = useAuth();
 
-	// Redirect if already authenticated
 	useEffect(() => {
 		if (isAuthenticated) {
-			navigate("/auth/profile");
+			const from = location.state?.from?.pathname || "/auth/profile";
+			navigate(from, { replace: true });
 		}
-	}, [isAuthenticated, navigate]);
+	}, [isAuthenticated, navigate, location]);
 
-	// Clear errors when component mounts
 	useEffect(() => {
 		clearError();
 	}, [clearError]);
 
-	const handleCoreInput = (e: CustomEvent) => {
-		const target = e.detail?.target as HTMLInputElement;
-		if (!target) return;
-
-		const { name, value } = target;
-		setFormData((prev) => ({
-			...prev,
-			[name]: value,
-		}));
-
-		// Clear field errors when user starts typing
-		if (errors[name]) {
-			setErrors((prev) => ({
-				...prev,
-				[name]: "",
-			}));
-		}
-		clearError();
-	};
-
-	const validateForm = (): boolean => {
-		const newErrors: FormErrors = {};
-
-		if (!formData.name.trim()) {
-			newErrors.name = "Nome é obrigatório";
-		} else if (formData.name.trim().length < 2) {
-			newErrors.name = "Nome deve ter pelo menos 2 caracteres";
-		}
-
-		if (!formData.email) {
-			newErrors.email = "Email é obrigatório";
-		} else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-			newErrors.email = "Email inválido";
-		}
-
-		if (!formData.password) {
-			newErrors.password = "Senha é obrigatória";
-		} else if (formData.password.length < 6) {
-			newErrors.password = "Senha deve ter pelo menos 6 caracteres";
-		}
-
-		if (!formData.confirmPassword) {
-			newErrors.confirmPassword = "Confirmação de senha é obrigatória";
-		} else if (formData.password !== formData.confirmPassword) {
-			newErrors.confirmPassword = "Senhas não coincidem";
-		}
-
-		setErrors(newErrors);
-		return Object.keys(newErrors).length === 0;
-	};
-
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-
-		if (!validateForm()) {
-			return;
-		}
-
-		try {
+	const {
+		values: formData,
+		errors,
+		isSubmitting,
+		handleChange,
+		handleSubmit,
+	} = useForm<RegisterFormData>({
+		initialValues: {
+			name: "",
+			email: "",
+			password: "",
+			confirmPassword: "",
+		},
+		validate: (values) =>
+			validation.validateRegisterForm(
+				values.name,
+				values.email,
+				values.password,
+				values.confirmPassword
+			),
+		onSubmit: async (values) => {
 			await register({
-				name: formData.name.trim(),
-				email: formData.email.trim(),
-				password: formData.password,
+				name: values.name.trim(),
+				email: values.email.trim(),
+				password: values.password,
 			});
-			navigate("/auth/profile");
-		} catch {
-			// Error is handled by AuthProvider
-		}
-	};
+		},
+	});
 
 	return (
 		<AuthCard
@@ -114,7 +69,6 @@ const RegisterPage: React.FC = () => {
 					{error}
 				</div>
 			)}
-
 			<div>
 				<label htmlFor="name" className="block text-sm mb-2">
 					Nome completo
@@ -126,14 +80,13 @@ const RegisterPage: React.FC = () => {
 					value={formData.name}
 					placeholder="Seu nome completo"
 					error={!!errors.name}
-					onCoreInput={handleCoreInput}
-					disabled={loading}
+					onCoreInput={handleChange}
+					disabled={loading || isSubmitting}
 				/>
 				{errors.name && (
 					<p className="text-red-600 text-sm mt-1">{errors.name}</p>
 				)}
 			</div>
-
 			<div>
 				<label htmlFor="email" className="block text-sm mb-2">
 					Email
@@ -145,14 +98,13 @@ const RegisterPage: React.FC = () => {
 					value={formData.email}
 					placeholder="seu@email.com"
 					error={!!errors.email}
-					onCoreInput={handleCoreInput}
-					disabled={loading}
+					onCoreInput={handleChange}
+					disabled={loading || isSubmitting}
 				/>
 				{errors.email && (
 					<p className="text-red-600 text-sm mt-1">{errors.email}</p>
 				)}
 			</div>
-
 			<div>
 				<label htmlFor="password" className="block text-sm mb-2">
 					Senha
@@ -164,14 +116,13 @@ const RegisterPage: React.FC = () => {
 					value={formData.password}
 					placeholder="Mínimo 6 caracteres"
 					error={!!errors.password}
-					onCoreInput={handleCoreInput}
-					disabled={loading}
+					onCoreInput={handleChange}
+					disabled={loading || isSubmitting}
 				/>
 				{errors.password && (
 					<p className="text-red-600 text-sm mt-1">{errors.password}</p>
 				)}
 			</div>
-
 			<div>
 				<label htmlFor="confirmPassword" className="block text-sm mb-2">
 					Confirmar senha
@@ -183,31 +134,29 @@ const RegisterPage: React.FC = () => {
 					value={formData.confirmPassword}
 					placeholder="Repita sua senha"
 					error={!!errors.confirmPassword}
-					onCoreInput={handleCoreInput}
-					disabled={loading}
+					onCoreInput={handleChange}
+					disabled={loading || isSubmitting}
 				/>
 				{errors.confirmPassword && (
 					<p className="text-red-600 text-sm mt-1">{errors.confirmPassword}</p>
 				)}
 			</div>
-
 			<CoreButton
 				type="submit"
 				variant="primary"
-				disabled={loading}
+				disabled={loading || isSubmitting}
 				className="w-full"
 				onClick={handleSubmit}
 			>
-				{loading ? "Criando conta..." : "Criar conta"}
+				{loading || isSubmitting ? "Criando conta..." : "Criar conta"}
 			</CoreButton>
-
 			<div className="text-center">
 				<p>
 					Já tem uma conta?{" "}
 					<CoreButton
 						variant="underline"
 						onCoreClick={() => navigate("/auth/login")}
-						disabled={loading}
+						disabled={loading || isSubmitting}
 					>
 						Entrar
 					</CoreButton>
@@ -216,5 +165,3 @@ const RegisterPage: React.FC = () => {
 		</AuthCard>
 	);
 };
-
-export default RegisterPage;

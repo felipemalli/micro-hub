@@ -1,88 +1,41 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../app/providers/AuthProvider";
-import { FormData, FormErrors } from "../types/auth";
+import React, { useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+import { useForm } from "../hooks/useForm";
+import { LoginCredentials } from "../types/auth";
+import { validation } from "../utils/validation";
 import { CoreButton, CoreInput } from "@felipemalli-libs/microhub-ui/react";
-import { AuthCard } from "../app/components/AuthCard";
+import { AuthCard } from "../components/AuthCard";
 
-const LoginPage: React.FC = () => {
-	const [formData, setFormData] = useState<FormData>({
-		email: "",
-		password: "",
-	});
-	const [errors, setErrors] = useState<FormErrors>({});
+export const LoginPage: React.FC = () => {
 	const navigate = useNavigate();
-	const { login, loading, error, clearError, isAuthenticated } = useAuth();
+	const location = useLocation();
+	const { login, loading, error, isAuthenticated } = useAuth();
 
-	// Redirect if already authenticated
 	useEffect(() => {
 		if (isAuthenticated) {
-			navigate("/auth/profile");
+			const from = location.state?.from?.pathname || "/auth/profile";
+			navigate(from, { replace: true });
 		}
-	}, [isAuthenticated, navigate]);
+	}, [isAuthenticated, navigate, location]);
 
-	// Clear errors when component mounts
-	useEffect(() => {
-		clearError();
-	}, [clearError]);
-
-	const handleInput = (e: CustomEvent) => {
-		const target = e.detail?.target as HTMLInputElement;
-		if (!target) return;
-
-		const { name, value } = target;
-		setFormData((prev) => ({
-			...prev,
-			[name]: value,
-		}));
-
-		// Clear field errors when user starts typing
-		if (errors[name]) {
-			setErrors((prev) => ({
-				...prev,
-				[name]: "",
-			}));
-		}
-		clearError();
-	};
-
-	const validateForm = (): boolean => {
-		const newErrors: FormErrors = {};
-
-		if (!formData.email) {
-			newErrors.email = "Email é obrigatório";
-		} else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-			newErrors.email = "Email inválido";
-		}
-
-		if (!formData.password) {
-			newErrors.password = "Senha é obrigatória";
-		}
-
-		setErrors(newErrors);
-		return Object.keys(newErrors).length === 0;
-	};
-
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-
-		if (!validateForm()) {
-			return;
-		}
-
-		console.log("LoginPage: Submitting form...");
-		try {
+	const {
+		values: formData,
+		errors,
+		isSubmitting,
+		handleChange,
+		handleSubmit,
+	} = useForm<LoginCredentials>({
+		initialValues: { email: "", password: "" },
+		validate: (values) =>
+			validation.validateLoginForm(values.email, values.password),
+		onSubmit: async (values) => {
 			await login({
-				email: formData.email.trim(),
-				password: formData.password,
+				email: values.email.trim(),
+				password: values.password,
 			});
-			console.log("LoginPage: Login successful, navigating to profile...");
-			navigate("/auth/profile");
-		} catch (error) {
-			console.error("LoginPage: Login failed:", error);
-			// Error is handled by AuthProvider
-		}
-	};
+		},
+	});
 
 	return (
 		<div className="space-y-6">
@@ -96,7 +49,6 @@ const LoginPage: React.FC = () => {
 						{error}
 					</div>
 				)}
-
 				<div>
 					<label htmlFor="email" className="block text-sm mb-2">
 						Email
@@ -108,14 +60,13 @@ const LoginPage: React.FC = () => {
 						value={formData.email}
 						placeholder="seu@email.com"
 						error={!!errors.email}
-						onCoreInput={handleInput}
-						disabled={loading}
+						onCoreInput={handleChange}
+						disabled={loading || isSubmitting}
 					/>
 					{errors.email && (
 						<p className="text-red-600 text-sm mt-1">{errors.email}</p>
 					)}
 				</div>
-
 				<div>
 					<label htmlFor="password" className="block text-sm mb-2">
 						Senha
@@ -127,24 +78,22 @@ const LoginPage: React.FC = () => {
 						value={formData.password}
 						placeholder="Sua senha"
 						error={!!errors.password}
-						onCoreInput={handleInput}
-						disabled={loading}
+						onCoreInput={handleChange}
+						disabled={loading || isSubmitting}
 					/>
 					{errors.password && (
 						<p className="text-red-600 text-sm mt-1">{errors.password}</p>
 					)}
 				</div>
-
 				<CoreButton
 					type="submit"
-					variant="primary"
-					disabled={loading}
 					onClick={handleSubmit}
+					variant="primary"
+					disabled={loading || isSubmitting}
 					className="w-full"
 				>
-					{loading ? "Entrando..." : "Entrar"}
+					{loading || isSubmitting ? "Entrando..." : "Entrar"}
 				</CoreButton>
-
 				<div className="text-center">
 					<p>
 						Não tem uma conta?{" "}
@@ -152,7 +101,7 @@ const LoginPage: React.FC = () => {
 							type="button"
 							variant="underline"
 							onCoreClick={() => navigate("/auth/register")}
-							disabled={loading}
+							disabled={loading || isSubmitting}
 						>
 							Criar conta
 						</CoreButton>
@@ -162,5 +111,3 @@ const LoginPage: React.FC = () => {
 		</div>
 	);
 };
-
-export default LoginPage;
