@@ -10,7 +10,7 @@ import { AuthCard } from "../components/AuthCard";
 export const LoginPage: React.FC = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
-	const { login, loading, error, isAuthenticated } = useAuth();
+	const { login, loading, isAuthenticated } = useAuth();
 
 	useEffect(() => {
 		if (isAuthenticated) {
@@ -44,11 +44,6 @@ export const LoginPage: React.FC = () => {
 				title="Entrar"
 				description="Entre com sua conta"
 			>
-				{error && (
-					<div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-						{error}
-					</div>
-				)}
 				<div>
 					<label htmlFor="email" className="block text-sm mb-2">
 						Email

@@ -11,7 +11,11 @@ export const apiClient = axios.create({
 	},
 });
 
-// Request interceptor - adiciona auth header
+// Helper para verificar se request tem token
+const hasAuthToken = (config: any): boolean => {
+	return !!config?.headers?.Authorization;
+};
+
 apiClient.interceptors.request.use(
 	(config) => {
 		const token = storage.getToken();
@@ -23,47 +27,48 @@ apiClient.interceptors.request.use(
 	(error) => Promise.reject(error)
 );
 
-// Response interceptor - trata erros de forma inteligente
 apiClient.interceptors.response.use(
 	(response) => response,
 	async (error: AxiosError) => {
 		const originalRequest = error.config as any;
+		const status = error.response?.status;
 
-		// Handle 401 APENAS para rotas protegidas (que têm token)
 		if (
-			error.response?.status === 401 &&
-			!originalRequest._retry &&
-			originalRequest.headers?.Authorization // Só se tinha token
+			status === 401 &&
+			hasAuthToken(originalRequest) &&
+			!originalRequest._retry
 		) {
 			originalRequest._retry = true;
-
-			// Clear invalid token
 			storage.clearAuth();
 
-			// Criar erro específico para token expirado
 			const authError = new Error("Sessão expirada. Faça login novamente.");
 			authError.name = "AuthenticationError";
 			return Promise.reject(authError);
 		}
 
-		// Para outros erros (incluindo 401 em login/register), criar erro padrão
-		const apiError = new Error(
-			(error.response?.data as any)?.data?.message ||
-				(error.response?.data as any)?.message ||
-				(error.response?.data as any)?.error ||
-				"Erro de conexão. Tente novamente."
-		);
-		apiError.name = "APIError";
+		const message =
+			(error.response?.data as any)?.message ||
+			(error.response?.data as any)?.error ||
+			getDefaultMessage(status);
 
-		// Adicionar metadata útil para o ErrorBoundary
-		(apiError as any).statusCode = error.response?.status;
+		const apiError = new Error(message);
+		apiError.name = status >= 500 ? "ServerError" : "APIError";
+
+		// Metadata para ErrorBoundary
+		(apiError as any).statusCode = status;
 		(apiError as any).endpoint = error.config?.url;
+		(apiError as any).shouldShowInBoundary = status >= 500;
 
 		return Promise.reject(apiError);
 	}
 );
 
-// Helper para retry com backoff simples
+const getDefaultMessage = (status?: number): string => {
+	if (!status) return "Erro de conexão. Verifique sua internet.";
+	if (status >= 500) return "Erro no servidor. Tente novamente.";
+	return "Algo deu errado. Tente novamente.";
+};
+
 export const retryRequest = async <T>(
 	requestFn: () => Promise<T>,
 	maxRetries = 3,
@@ -73,15 +78,15 @@ export const retryRequest = async <T>(
 		try {
 			return await requestFn();
 		} catch (error) {
-			// Se é erro de auth, não retry
-			if ((error as any).name === "AuthenticationError") {
+			if ((error as any).status === 401) {
 				throw error;
 			}
 
 			if (attempt === maxRetries) throw error;
 
-			// Exponential backoff simples
-			const delay = baseDelay * Math.pow(2, attempt - 1);
+			const baseDelayWithBackoff = baseDelay * Math.pow(2, attempt - 1);
+			const jitter = Math.random() * 0.1;
+			const delay = baseDelayWithBackoff * (1 + jitter);
 			await new Promise((resolve) => setTimeout(resolve, delay));
 		}
 	}

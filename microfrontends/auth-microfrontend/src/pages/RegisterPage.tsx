@@ -16,7 +16,7 @@ interface RegisterFormData {
 export const RegisterPage: React.FC = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
-	const { register, loading, error, clearError, isAuthenticated } = useAuth();
+	const { register, loading, isAuthenticated } = useAuth();
 
 	useEffect(() => {
 		if (isAuthenticated) {
@@ -24,10 +24,6 @@ export const RegisterPage: React.FC = () => {
 			navigate(from, { replace: true });
 		}
 	}, [isAuthenticated, navigate, location]);
-
-	useEffect(() => {
-		clearError();
-	}, [clearError]);
 
 	const {
 		values: formData,
@@ -64,11 +60,6 @@ export const RegisterPage: React.FC = () => {
 			title="Criar Conta"
 			description="Crie sua conta para começar"
 		>
-			{error && (
-				<div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-					{error}
-				</div>
-			)}
 			<div>
 				<label htmlFor="name" className="block text-sm mb-2">
 					Nome completo

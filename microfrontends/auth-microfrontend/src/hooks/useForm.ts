@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import { useApiError } from "./useApiError";
 
 export interface FormErrors {
 	[key: string]: string;
@@ -18,6 +19,7 @@ export const useForm = <T extends Record<string, any>>({
 	const [values, setValues] = useState<T>(initialValues);
 	const [errors, setErrors] = useState<FormErrors>({});
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const handleApiError = useApiError();
 
 	const handleChange = useCallback(
 		(e: CustomEvent) => {
@@ -51,14 +53,12 @@ export const useForm = <T extends Record<string, any>>({
 			try {
 				await onSubmit(values);
 			} catch (error) {
-				// Captura erros do onSubmit e não os propaga
-				console.error("Form submission error:", error);
-				// O erro já foi tratado pelo AuthProvider que seta o error state
+				handleApiError(error);
 			} finally {
 				setIsSubmitting(false);
 			}
 		},
-		[values, validate, onSubmit]
+		[values, validate, onSubmit, handleApiError]
 	);
 
 	const reset = useCallback(() => {

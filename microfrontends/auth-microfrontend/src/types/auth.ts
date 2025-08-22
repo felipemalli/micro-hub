@@ -25,12 +25,10 @@ export interface UpdateProfileData {
 export interface AuthContextType {
 	user: User | null;
 	loading: boolean;
-	error: string | null;
 	login: (credentials: LoginCredentials) => Promise<void>;
 	register: (credentials: RegisterCredentials) => Promise<void>;
 	logout: () => Promise<void>;
 	updateProfile: (data: UpdateProfileData) => Promise<void>;
-	clearError: () => void;
 	isAuthenticated: boolean;
 }
 

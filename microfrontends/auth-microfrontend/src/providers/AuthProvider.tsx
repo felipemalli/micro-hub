@@ -13,6 +13,7 @@ import {
 	UpdateProfileData,
 } from "../types/auth";
 import { authApi } from "../api/authApi";
+import { useApiError } from "../hooks/useApiError";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -27,9 +28,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
 }) => {
 	const [user, setUser] = useState<User | null>(null);
 	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState<string | null>(null);
+	const handleApiError = useApiError();
 
-	// Initialize auth state
 	useEffect(() => {
 		const initializeAuth = async () => {
 			try {
@@ -41,7 +41,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
 						setUser(currentUser);
 						onAuthChange?.(true);
 					} else {
-						// Try to fetch fresh profile
 						const userData = await authApi.getProfile();
 						setUser(userData);
 						onAuthChange?.(true);
@@ -64,43 +63,40 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
 		async (credentials: LoginCredentials): Promise<void> => {
 			try {
 				setLoading(true);
-				setError(null);
 
 				const { user: userData } = await authApi.login(credentials);
 				setUser(userData);
 				onAuthChange?.(true);
 			} catch (error) {
-				const errorMessage =
-					error instanceof Error ? error.message : "Login failed";
-				setError(errorMessage);
-				// Re-lança o erro para que o useForm possa finalizar o isSubmitting
+				if (error instanceof Error) {
+					handleApiError(error);
+				}
 				throw error;
 			} finally {
 				setLoading(false);
 			}
 		},
-		[onAuthChange]
+		[handleApiError, onAuthChange]
 	);
 
 	const register = useCallback(
 		async (credentials: RegisterCredentials): Promise<void> => {
 			try {
 				setLoading(true);
-				setError(null);
 
 				const { user: userData } = await authApi.register(credentials);
 				setUser(userData);
 				onAuthChange?.(true);
 			} catch (error) {
-				const errorMessage =
-					error instanceof Error ? error.message : "Registration failed";
-				setError(errorMessage);
+				if (error instanceof Error) {
+					handleApiError(error);
+				}
 				throw error;
 			} finally {
 				setLoading(false);
 			}
 		},
-		[onAuthChange]
+		[handleApiError, onAuthChange]
 	);
 
 	const logout = useCallback(async (): Promise<void> => {
@@ -108,13 +104,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
 			setLoading(true);
 			await authApi.logout();
 			setUser(null);
-			setError(null);
 			onAuthChange?.(false);
 		} catch (error) {
 			console.error("Logout error:", error);
-			// Force logout even if API call fails
 			setUser(null);
-			setError(null);
 			onAuthChange?.(false);
 		} finally {
 			setLoading(false);
@@ -129,35 +122,28 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
 
 			try {
 				setLoading(true);
-				setError(null);
 
 				const updatedUser = await authApi.updateProfile(user.id, data);
 				setUser(updatedUser);
 			} catch (error) {
-				const errorMessage =
-					error instanceof Error ? error.message : "Falha ao atualizar perfil";
-				setError(errorMessage);
+				if (error instanceof Error) {
+					handleApiError(error);
+				}
 				throw error;
 			} finally {
 				setLoading(false);
 			}
 		},
-		[user]
+		[handleApiError, user]
 	);
-
-	const clearError = useCallback(() => {
-		setError(null);
-	}, []);
 
 	const value: AuthContextType = {
 		user,
 		loading,
-		error,
 		login,
 		register,
 		logout,
 		updateProfile,
-		clearError,
 		isAuthenticated: !!user && authApi.isAuthenticated(),
 	};
 

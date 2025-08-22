@@ -27,7 +27,6 @@ export const authApi = {
 
 		const { user, token } = response.data.data;
 
-		// Store securely
 		storage.setToken(token);
 		storage.setUser(user);
 
@@ -70,12 +69,10 @@ export const authApi = {
 
 	async logout(): Promise<void> {
 		try {
-			// Try to call logout endpoint
 			await apiClient.post("/auth/logout");
 		} catch {
 			console.warn("Logout API call failed, continuing with local cleanup");
 		} finally {
-			// Always clear local data
 			storage.clearAuth();
 		}
 	},

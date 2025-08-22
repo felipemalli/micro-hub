@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useForm } from "../hooks/useForm";
-import { useAsyncError } from "../hooks/useAsyncError";
+import { useApiError } from "../hooks/useApiError";
 import { validation } from "../utils/validation";
 import { CoreButton, CoreInput } from "@felipemalli-libs/microhub-ui/react";
 import { useNavigate } from "react-router-dom";
 
 export const ProfilePage: React.FC = () => {
-	const { user, logout, updateProfile, loading, error, clearError } = useAuth();
+	const { user, logout, updateProfile, loading } = useAuth();
 	const navigate = useNavigate();
 	const [isEditing, setIsEditing] = useState(false);
-	const captureAsyncError = useAsyncError();
+	const handleApiError = useApiError();
 
 	const {
 		values: formData,
@@ -33,18 +33,13 @@ export const ProfilePage: React.FC = () => {
 			await logout();
 			navigate("/auth/login");
 		} catch (error) {
-			console.error("Logout error:", error);
-			// Captura o erro no ErrorBoundary se for crítico
-			if (error instanceof Error && error.message.includes("critical")) {
-				captureAsyncError(error, "ProfilePage logout");
-			}
+			handleApiError(error);
 		}
 	};
 
 	const handleCancel = () => {
 		reset();
 		setIsEditing(false);
-		clearError();
 	};
 
 	if (!user) {
@@ -73,11 +68,6 @@ export const ProfilePage: React.FC = () => {
 				<h1>Perfil</h1>
 				<p>Suas informações pessoais</p>
 			</div>
-			{error && (
-				<div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
-					{error}
-				</div>
-			)}
 			<div className="bg-white rounded-xl shadow-lg p-6 mb-6">
 				{!isEditing ? (
 					<div className="space-y-4">

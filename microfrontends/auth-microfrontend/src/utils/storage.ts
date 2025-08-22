@@ -1,8 +1,6 @@
 import { User } from "../types/auth";
 
-// Storage utility simples e seguro
 export const storage = {
-	// Token management
 	getToken(): string | null {
 		return localStorage.getItem("access_token");
 	},
@@ -11,7 +9,6 @@ export const storage = {
 		localStorage.setItem("access_token", token);
 	},
 
-	// User management
 	getUser(): User | null {
 		const userStr = localStorage.getItem("current_user");
 		return userStr ? JSON.parse(userStr) : null;
@@ -21,13 +18,11 @@ export const storage = {
 		localStorage.setItem("current_user", JSON.stringify(user));
 	},
 
-	// Clear all auth data
 	clearAuth(): void {
 		localStorage.removeItem("access_token");
 		localStorage.removeItem("current_user");
 	},
 
-	// Check if token is expired
 	isTokenExpired(token: string): boolean {
 		try {
 			const payload = JSON.parse(atob(token.split(".")[1]));
