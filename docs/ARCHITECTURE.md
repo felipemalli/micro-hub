@@ -56,7 +56,55 @@ npm-packages/microhub-ui/
 
 ### 2 - Arquitetura do Microfrontend Principal `microhub-shell`
 
-...
+O `microhub-shell` atua como o **Host Application** na arquitetura de microfrontends, sendo responsável por orquestrar e integrar todos os microfrontends remotos através do **Webpack Module Federation**. Sua função principal é fornecer uma camada de abstração que permite carregamento dinâmico, roteamento unificado e comunicação entre aplicações independentes.
+
+#### Padrões Arquiteturais
+
+##### Module Federation Host
+
+Host que consome microfrontends remotos via ModuleFederationPlugin com carregamento dinâmico e lazy loading.
+
+##### Shared Dependencies Management
+
+Dependências compartilhadas (React, React-DOM, React Router) com configuração singleton para evitar duplicação.
+
+##### Federated Routing e Shared History API
+
+Proxy de navegação que sincroniza roteamento entre shell e microfrontends através de API unificada.
+
+##### Cross-Microfrontend Communication
+
+Sistema de eventos customizados para comunicação entre aplicações sem acoplamento direto.
+
+##### Authentication State Orchestration
+
+Gerenciamento centralizado de autenticação compartilhado via eventos e localStorage (não recomendado, será explicado adiante).
+
+#### Organização de Diretórios
+
+O shell possui uma estrutura enxuta focada na orquestração, com separação clara entre componentes de infraestrutura, wrappers de microfrontends e configurações de federação.
+
+```bash
+microfrontends/microhub-shell/
+├── src/
+│   ├── App.tsx                       # Aplicação principal com roteamento
+│   ├── bootstrap.tsx                 # Inicialização da aplicação
+│   ├── components/                   # Componentes do shell (Navbar)
+│   ├── microfrontends/               # Wrappers para microfrontends remotos
+│   │   ├── MicrofrontendWrapper.tsx  # Abstração de montagem
+│   │   ├── AuthApp.tsx               # Wrapper para auth microfrontend
+│   │   └── RickMortyApp.tsx          # Wrapper para rick-morty microfrontend
+│   └── types/                        # Definições TypeScript para módulos remotos
+├── config/                           # Configurações Webpack para Module Federation
+│   ├── webpack.common.js             # Configuração base
+│   ├── webpack.dev.js                # Configuração de desenvolvimento
+│   └── webpack.prod.js               # Configuração de produção
+└── public/                           # Assets estáticos
+```
+
+Esta arquitetura demonstra como um shell pode orquestrar múltiplos microfrontends mantendo baixo acoplamento e alta coesão, permitindo que cada aplicação evolua independentemente enquanto oferece uma experiência unificada ao usuário.
+
+![Imagem da estrutura do microfrontend de autenticação](images/microfrontend-microhub-shell-architecture.png)
 
 ### 3 - Arquitetura do Microfrontend de autenticação
 
@@ -82,10 +130,6 @@ useApiError para tratamento de erros, useForm para formulários com validação,
 
 ProtectedRoute component para controle de acesso com suporte a roles.
 
-##### Persistência Local
-
-Utilitário storage que gerencia localStorage com validação de expiração de tokens JWT.
-
 #### Organização de Diretórios
 
 O auth-microfrontend possui uma estrutura básica mas bem organizada, com separação de responsabilidades entre API, estado, componentes e páginas. Embora simples no escopo atual, os padrões implementados (Context API, hooks customizados, error boundaries) permitem expansão controlada para funcionalidades futuras.
@@ -106,13 +150,65 @@ src/
 
 ### 4 - Arquitetura do Microfrontend que consome uma API externa
 
-A arquitetura do microfrontend que consome uma API externa `rick-morty-microfrontend` foi pensada exclusivamente no consumo dessa API.
+O `rick-morty-microfrontend` foi arquitetado especificamente para demonstrar padrões de consumo de APIs externas em um contexto de microfrontends. A aplicação consome a **Rick and Morty API** implementando padrões modernos de data fetching, cache inteligente, e gerenciamento de estado otimista.
 
-...
+#### Padrões Arquiteturais
+
+##### SWR para Data Fetching e Cache Management
+
+Implementação do padrão **stale-while-revalidate** com cache automático, revalidação em background e invalidação inteligente baseada em ações do usuário.
+
+##### Feature-Driven Architecture
+
+Organização por features com estrutura completa (hooks, componentes, páginas, services e tipos) para cada funcionalidade.
+
+##### Custom Hooks Especializados
+
+Hooks customizados para encapsular lógica de data fetching, filtros, paginação e estado local.
+
+##### API Client com Interceptors
+
+Cliente HTTP com interceptors para tratamento uniforme de erros e transformação de respostas.
+
+##### Optimistic Updates
+
+Mutações otimistas via hook `useMutation` para atualizações imediatas na UI.
+
+##### Error Boundaries
+
+ErrorBoundary customizado para captura de erros React e recuperação automática.
 
 #### Organização de Diretórios
 
-Implementei um diretório `features` onde cada pasta representa uma seção específica da API consumida. Nesta versão, desenvolvi apenas a funcionalidade de personagens (diretório `characters`), mas a arquitetura foi projetada considerando o potencial completo da API do Rick and Morty, que oferece endpoints para localizações e episódios. Essas funcionalidades futuras seriam organizadas como novos diretórios dentro de `features`, mantendo a modularidade e escalabilidade da aplicação.
+A arquitetura implementa um diretório `features` onde cada pasta representa uma seção específica da API consumida. Nesta versão, desenvolvi apenas a funcionalidade de personagens (diretório `characters`), mas a estrutura foi projetada considerando o potencial completo da API do Rick and Morty, que oferece endpoints para localizações e episódios.
+
+```bash
+microfrontends/rick-morty-microfrontend/
+├── src/
+│   ├── RickMortyApp.tsx              # Aplicação principal com providers
+│   ├── bootstrap.tsx                 # Inicialização para Module Federation
+│   ├── features/                     # Features organizadas por domínio
+│   │   └── characters/               # Feature de personagens
+│   │       ├── components/           # Componentes específicos da feature
+│   │       ├── hooks/                # Hooks customizados (useCharacters, useFilters)
+│   │       ├── pages/                # Páginas da feature (List, Detail)
+│   │       ├── services/             # API clients específicos
+│   │       └── types/                # Tipos TypeScript da feature
+│   ├── shared/                       # Código compartilhado entre features
+│   │   ├── components/               # Componentes reutilizáveis (Card, Badge, Loading)
+│   │   ├── hooks/                    # Hooks utilitários (useMutation, useApiError)
+│   │   ├── services/                 # Serviços base (API client, error logger)
+│   │   ├── providers/                # Providers globais (SWR, ErrorBoundary)
+│   │   ├── config/                   # Configurações (SWR config)
+│   │   └── types/                    # Tipos compartilhados
+│   ├── router/                       # Configuração de rotas
+│   └── styles/                       # Estilos globais
+├── config/                           # Configurações Webpack para Module Federation
+│   ├── webpack.common.js             # Configuração base
+│   ├── webpack.dev.js                # Configuração de desenvolvimento
+│   └── webpack.prod.js               # Configuração de produção
+└── public/                           # Assets estáticos
+```
 
 ![Imagem da estrutura do microfrontend que consome uma API externa](images/microfrontend-rick-morty-structure.png)
 
