@@ -5,9 +5,8 @@
 	"description": "Microfrontends + Backend + Design System",
 	"private": true,
 	"scripts": {
-		"preinstall": "echo '📦 Instalando dependências do workspace...'",
 		"install:all": "pnpm install && cd backend && pnpm install && cd ../microfrontends/microhub-shell && pnpm install && cd ../auth-microfrontend && pnpm install && cd ../rick-morty-microfrontend && pnpm install",
-		"start": "echo '⏳ Aguardando inicialização dos serviços...' && trap 'pnpm run stop' EXIT INT TERM; concurrently --kill-others-on-fail --success first \"cd backend && pnpm run docker:dev && echo '✅ Backend iniciado'\" \"cd microfrontends/microhub-shell && pnpm run dev\" \"cd microfrontends/auth-microfrontend && pnpm run dev\" \"cd microfrontends/rick-morty-microfrontend && pnpm run dev\" && echo '🚀 Projeto executando no localhost:3000'",
+		"start": "concurrently --kill-others-on-fail --success first \"cd backend && pnpm run docker:dev\" \"cd microfrontends/microhub-shell && pnpm run dev\" \"cd microfrontends/auth-microfrontend && pnpm run dev\" \"cd microfrontends/rick-morty-microfrontend && pnpm run dev\"",
 		"stop": "cd backend && pnpm run docker:down",
 		"stop:backend": "cd backend && pnpm run docker:down",
 		"clean:docker": "cd backend && docker-compose -f docker-compose.dev.yml down --volumes --remove-orphans && docker system prune -f",
