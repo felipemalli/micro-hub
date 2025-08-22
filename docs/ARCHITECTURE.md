@@ -51,21 +51,20 @@ Então, criei um diretório features que em cada pasta filha incluirá uma seç�
 
 Para o backend, optei por utilizar o NestJS, pois é um framework muito utilizado no ambiente profissional. Ele abstrai bastante coisa, mas na parte técnica da documentação explicarei algumas delas como estão funcionando.
 
+Utilizei o TypeORM para o mapeamento de entidades e o Redis para o cache.
+
 A estrutura do backend é dessa forma:
 
 ```bash
-backend/
-├── src/
-│   ├── auth/
-│   ├── common/
-│   ├── config/
-│   ├── entities/
-│   ├── users/
-│   ├── interceptors/
-│   ├──`app.controller.ts
-│   ├── app.module.ts
-│   ├── app.service.ts
-│   ├── main.ts
+backend/src/
+├── app.module.ts           # Módulo raiz da aplicação
+├── main.ts                 # Ponto de entrada da aplicação
+├── auth/                   # Módulo de autenticação
+├── users/                  # Módulo de gerenciamento de usuários
+├── common/                 # Módulo global com utilitários
+├── cache/                  # Módulo de cache (Redis)
+├── config/                 # Configurações da aplicação
+└── entities/               # Modelos de dados (TypeORM)
 ```
 
 ## Melhorias possíveis

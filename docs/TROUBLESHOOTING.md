@@ -90,11 +90,11 @@ Depois, defini no container principal um estado global para controlar a autentic
 
 Isso serviria para qualquer tipo de estado, funcionando como um Redux.
 
-É uma péssima solução pois cada microfrontend deve ser independente. Com essa solução o container principal precisaria conhecer todos os microfrontends. A cada mudança de estado de um time, precisaria modificar o container principal.
+Para um projeto real, essa solução seria ruim pois cada microfrontend deve ser independente. Com essa solução o container principal precisaria conhecer todos os microfrontends. A cada mudança de estado de um time, precisaria modificar o container principal.
 
-E compartilhar estados ou autenticação via localstorage/sessionstorage seria um risco de vulnerabilidade.
+E compartilhar estados ou autenticação via localstorage/sessionstorage (como foi feito) seria um risco grave de vulnerabilidade (em especial, XSS).
 
-A forma de compartilhar estados via aplicações que acredito ser ideal envolveria conexão com o backend e SameSite cookies HTTPOnly e com tokens CSRF. Mas eu mantive assim porque não tive tempo de implementar uma solução melhor, infelizmente.
+A forma de compartilhar estados via aplicações que acredito ser ideal envolveria conexão com o backend e SameSite cookies HTTPOnly e com tokens CSRF. Não tive tempo de implementá-la.
 
 ## 2 - Padronização do CSS entre Microfrontends
 

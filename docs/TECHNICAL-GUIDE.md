@@ -4,6 +4,8 @@ Nessa seção, vou explicar como funciona o projeto.
 
 ## Backend
 
+Como o Backend foi realizado com NestJS, a documentação técnica ficará muito voltada ao funcionamento do mesmo, visto que é um framework que abstrai muito a complexidade de se trabalhar com APIs.
+
 ### Cache com Redis
 
 Implementei um sistema de cache bem simples com Redis para a busca de usuário
@@ -15,7 +17,7 @@ Verifica o cache primeiro. Se não está no cache, busca no banco. Se achou, adi
 
 As outras requisições são tratadas de forma parecida. O prazo de cache é de 5 minutos.
 
-### JWT Guard e Strategy
+### Autenticação com JWT
 
 No Nest, os guards são classes que implementam a função `canActivate`. Eles são responsáveis por verificar se o usuário tem permissão para acessar uma rota.
 
@@ -63,22 +65,88 @@ Por isso, foi necessário criar um hook para capturar os erros assíncronos. Seg
 
 ![Imagem do hook useAsyncError](images/frontend-use-async-error.png)
 
-Como pode ser visto, o react-error-boundary já possui um hook para invocar o ErrorBoundary. Então a implementação é bem simples.
+Como pode ser visto, o`react-error-boundary` já possui um hook para invocar o ErrorBoundary. Então a implementação é bem simples.
+
+Essa propriedade `shouldShowInBoundary` é uma propriedade que é acoplada ao error (como um decorator) no interceptor do axios (que é usado para as requisições). Nele, defini que erros com status >= 500, o erro é mostrado via ErrorBoundary. Pois como são erros do servidor, o usuário não pode fazer nada para resolver. Os demais, são tratados inline.
+
+Caso seja um formulário, o hook criado `useForm` chama o `handleApiError` internamente para capturar os erros caso passe pelas verificações de validação definidas.
+
+![Imagem do hook useForm](images/frontend-useform-error.png)
 
 Dessa forma, os erros são lidados de forma consistente em qualquer contexto.
 
-### Histórico de navegação com History Proxy
+### Formuláros
 
-### Autenticação com JWT
+Para envio de formulários, eu considerei utilizar o Formik ou outro framework bem estabelecido, mas, como comentado acima, optei por implementar um hook `useForm` para evitar tantas dependências.
+
+Nele, é possível passar uma função de validação e uma função de submit.
+
+![Imagem do hook useForm](images/frontend-useform-usage.png)
+
+As funções de validação são simples e estão armazenadas no arquivo `validation.ts`.
+
+### AuthApp e conexão com o backend
+
+Para armazenar o token e o usuário, foi utilizado o localstorage.
+
+O motivo do uso de localstorage foi explicado [aqui](./TROUBLESHOOTING.md#11---compartilhamento-de-estadosautenticação-entre-microfrontends).
+
+Como não é a solução ideal e deve ser substituída, não irei elaborar sobre ela neste documento.
+
+No `AuthApp`, a conexão com o backend é feita diretamente via Axios. Para aprimorar essa comunicação, poderia ser implementado um sistema de retry com exponential backoff (estratégia em que o tempo de espera entre cada tentativa aumenta de forma exponencial) e jitter (variação aleatória nesse tempo de espera para evitar sobrecarga simultânea).
+Outra alternativa seria utilizar o `SWR`, que já oferece essas soluções nativamente e ainda possibilita adicionar cache no client side, o que não foi implementado neste App pois não faria tanto sentido por ser um microfrontend de autenticação.
+
+Já no `RickMortyApp`, a conexão com o backend é feita através do `SWR`, que já oferece essas soluções nativamente e ainda possibilita adicionar cache no client side.
+
+### Rota Protegida
+
+Rotas que necessitam de autenticação são encapsuladas em um componente `ProtectedRoute` que verifica se o usuário está autenticado e redireciona para a página de login se não estiver.
+
+![Imagem do protected route](images/frontend-protected-route-app-router.png)
+
+Além disso, esse ProtectedRoute é capaz também de receber um parâmetro para identficar se o usuário possui determinado cargo (no backend, existe um campo `role` com possibilidade de ser `admin`, apesar de eu não ter utilizado isso no frontend).
+
+![Imagem do protected route](images/frontend-protected-route-component.png)
 
 ### Interceptação de requisições
 
 ### Microfrontend de Autenticação
 
+### Importação em lote e Aliases de Caminho (Barrel Export e Path Aliases)
+
+Em todos os projetos, a técnica do Path Alias foi utilizada para importar arquivos de forma mais fácil e organizada.
+Que é a importação dos arquivos através de `@/` em vez de `../`, `../../`.
+
+E a estratégia do Barrel Export para auxiliar nessa importação.
+Que é a criação de arquivos `index.ts` em cada pasta que exportam todos os arquivos da pasta.
+
+### Exportação de assets
+
+A fim de facilitar a importação de assets, foi criado um arquivo `index.ts` em cada pasta de assets que exporta todos os assets da pasta.
+
+```bash
+assets/
+├── icons/
+│   ├── alert.tsx
+│   ├── person.tsx
+│   ├── index.tsx
+│   ...
+```
+
+![Imagem do assets](images/frontend-icons.png)
+
+![Imagem do assets](images/frontend-icons-index.png)
+
+Foi realizado dessa forma para que seja possível importar os Assets como React Components e alterar sua estilização de forma mais fácil. Além disso, todos com o nome `Icon` facilita em manutenção, escalabilidade e evitar conflitos de nomes dos ícones.
+
+Exemplo de uso dos ícones:
+
+![Imagem do assets](images/frontend-icons-usage.png)
+
 ### Criação do env.d.ts
 
-Criei arquivo env.d.ts em todos os microfrontends para evitar baixar o @types/node apenas para o process.env.
-O @types/node é um pacote relativamente pesado que aumentaria o bundle. E também traria tipagens inconsistentes com o que funciona no browser.
+Criei arquivo env.d.ts em todos os microfrontends para evitar baixar o @types/node apenas para o process.env (que foi necessário para o arquivo `bootstrap.ts`).
+O @types/node é um pacote relativamente pesado que aumentaria o bundle. E também traria tipagens inconsistentes com o que de fato funciona no browser.
 
 ![Imagem do env.d.ts](images/frontend-env-d-ts.png)
 
