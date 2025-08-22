@@ -5,11 +5,13 @@ import { useFavorites } from "../../../hooks/useFavorites";
 interface FavoriteButtonProps {
 	characterId: number;
 	variant?: "icon" | "text";
+	className?: string;
 }
 
 export const FavoriteButton: React.FC<FavoriteButtonProps> = ({
 	characterId,
 	variant = "icon",
+	className,
 }) => {
 	const { isFavorite, toggleFavorite } = useFavorites();
 	const favorited = isFavorite(characterId);
@@ -23,6 +25,7 @@ export const FavoriteButton: React.FC<FavoriteButtonProps> = ({
 				toggleFavorite(characterId);
 			}}
 			title={favorited ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+			className={className}
 		>
 			{variant === "icon" ? (
 				<span className="text-lg">{favorited ? "❤️" : "🤍"}</span>

@@ -68,7 +68,11 @@ export const CharacterDetailPage = ({
 					← Voltar
 				</CoreButton>
 				<div className="flex items-center gap-2">
-					<FavoriteButton characterId={character.id} variant="text" />
+					<FavoriteButton
+						characterId={character.id}
+						variant="text"
+						className="hidden sm:block"
+					/>
 					<LikeButton characterId={character.id} />
 				</div>
 			</div>
@@ -83,6 +87,11 @@ export const CharacterDetailPage = ({
 				</div>
 				<div className="space-y-6">
 					<div className="space-y-2">
+						<FavoriteButton
+							characterId={character.id}
+							variant="text"
+							className="mb-6 block sm:hidden"
+						/>
 						<h3>{character.name}</h3>
 						<Badge variant={getStatusVariant(character.status)} size="md">
 							{character.status}

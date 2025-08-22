@@ -10,7 +10,7 @@ const NavLink = ({ to, icon, label }: NavLinkProps) => (
 	<Link to={to} className="nav-link">
 		<span className="flex items-center space-x-2">
 			<span className="text-lg">{icon}</span>
-			<span className="hidden text-lg sm:inline">{label}</span>
+			<span className="hidden text-lg sm:block">{label}</span>
 		</span>
 	</Link>
 );
@@ -24,7 +24,7 @@ export const Navbar = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
 						<Link to="/" className="text-2xl font-bold text-gray-800">
 							<p className="flex items-center space-x-2">
 								<span className="text-lg">🚀</span>
-								<span className="hidden text-lg sm:inline">Micro Hub</span>
+								<span className="hidden text-lg sm:block">Micro Hub</span>
 							</p>
 						</Link>
 						<div className="flex space-x-4">
