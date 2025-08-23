@@ -8,6 +8,7 @@ Projeto de microfrontends, estruturado em múltiplos repositórios independentes
 - [🏗️ Decisões Arquiteturais](./docs/ARCHITECTURE.md)
 - [🔍 Resolução de Problemas](./docs/TROUBLESHOOTING.md)
 - [⚙️ Guia Técnico](./docs/TECHNICAL-GUIDE.md)
+- [🎨 Design System](https://www.npmjs.com/package/@felipemalli-libs/microhub-ui)
 
 ## Pré-requisitos
 
