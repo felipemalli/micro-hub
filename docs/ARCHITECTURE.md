@@ -43,7 +43,7 @@ O design system tem uma estrutura simples focada em gerar múltiplos formatos, c
 ```bash
 npm-packages/microhub-ui/
 ├── src/
-│   ├── components/        # Web Components (core-button, core-input)
+│   ├── components/       # Web Components (core-button, core-input)
 │   ├── global/           # Estilos globais e tokens de design
 │   └── index.ts          # Ponto de entrada principal
 ├── dist/                 # Build para Web Components vanilla
@@ -82,14 +82,14 @@ Gerenciamento centralizado de autenticação compartilhado via eventos e localSt
 
 #### Organização de Diretórios
 
-O shell possui uma estrutura enxuta focada na orquestração, com separação clara entre componentes de infraestrutura, wrappers de microfrontends e configurações de federação.
+O microhub-shell possui uma estrutura enxuta focada na orquestração, com separação clara entre componentes de infraestrutura, wrappers de microfrontends e configurações de federação.
 
 ```bash
 microfrontends/microhub-shell/
 ├── src/
 │   ├── App.tsx                       # Aplicação principal com roteamento
 │   ├── bootstrap.tsx                 # Inicialização da aplicação
-│   ├── components/                   # Componentes do shell
+│   ├── components/                   # Componentes do microhub-shell
 │   ├── hooks/                        # Hooks customizados
 │   ├── microfrontends/               # Wrappers para microfrontends remotos
 │   │   ├── MicrofrontendWrapper.tsx  # Abstração de montagem
@@ -166,10 +166,6 @@ Organização por funcionalidades onde cada feature é bem estruturada e organiz
 ##### Custom Hooks Pattern
 
 useCharacters para lista com filtros, useCharacterDetail para detalhes individuais, useFavorites e useCharacterLikes para estado persistente.
-
-##### Hybrid State Management
-
-Combinação de server state (SWR), client state (React) e persistent state (localStorage) para experiência otimizada.
 
 ##### API Client Architecture
 
@@ -251,3 +247,5 @@ backend/src/
 ```
 
 ![Imagem da estrutura do backend](images/backend-folder-structure.png)
+
+**Próxima página: [⚙️ Guia Técnico](./TROUBLESHOOTING.md)**

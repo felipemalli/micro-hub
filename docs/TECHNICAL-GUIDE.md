@@ -502,3 +502,7 @@ Para facilitar a execução do projeto, foi criado um ambiente de desenvolviment
 ![Imagem do Dockerfile de desenvolvimento](images/backend-docker-compose-dev.png)
 
 Em produção, especialmente em projetos de grande escala, o foco principal está nos Dockerfiles. Isso porque cada serviço (backend, banco de dados e Redis) normalmente é executado em ambientes separados, sendo orquestrados por ferramentas como Kubernetes ou serviços de nuvem, em vez de um único Docker Compose.
+
+<a href="https://www.npmjs.com/package/@felipemalli-libs/microhub-ui" target="_blank">🎨 Design System ↗️</a>
+
+**Voltar para a [Página Principal](../README.md)**

@@ -46,3 +46,5 @@ Mas, percebi que isso ainda assim seria extremamente trabalhoso. E quando eu com
 Além disso, havia diversos problemas não resolvidos (ou resolvidos parcialmente / de forma não ideal). E não somente os que estão no [README de Resolução de Problemas](./TROUBLESHOOTING.md). Esses foram os principais. Mas também vários pequenos probleminhas de configuração que as vezes levavam muitas horas para eu conseguir uma solução e que fosse decente.
 
 Então fiquei receoso com o tempo disponível. Achei que seria muito mais prudente e seguro finalizar bem o que já estava em desenvolvimento antes de tentar implementar o BFF. E, se desse tempo, o backend que eu tinha eu poderia renomear de backend para backend-core e criar os BFFs consumindo ele.
+
+**Próxima página: [🔍 Resolução de Problemas](./TROUBLESHOOTING.md).**

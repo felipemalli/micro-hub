@@ -4,7 +4,7 @@ Projeto de microfrontends, estruturado em múltiplos repositórios independentes
 
 📖 **Documentação Detalhada:**
 
-- [🚀 Planejamento da Arquitetura](./docs/ARCHITECTURE_PLANNING.md)
+- [📋 Planejamento da Arquitetura](./docs/ARCHITECTURE_PLANNING.md)
 - [🔍 Resolução de Problemas](./docs/TROUBLESHOOTING.md)
 - [🏗️ Decisões Arquiteturais](./docs/ARCHITECTURE.md)
 - [⚙️ Guia Técnico](./docs/TECHNICAL-GUIDE.md)

@@ -142,4 +142,6 @@ Vantagens:
 
 - Bundle otimizado: Componentes carregam sob demanda.
 
-A solução final está no arquivo [TECHNICAL-GUIDE.md](./TECHNICAL-GUIDE.md#componentes-do-design-system).
+A solução final estará no arquivo de Guia Técnico.
+
+**Próxima página: [🏗️ Decisões Arquiteturais](./ARCHITECTURE.md).**
