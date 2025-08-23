@@ -6,7 +6,7 @@ export function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
 	const isDevelopment = process.env.NODE_ENV === "development";
 
 	return (
-		<div className="h-screen-minus-header my-4 flex items-center justify-center bg-gradient-to-br from-red-50 to-orange-50 sm:my-16">
+		<div className="h-screen-minus-header my-4 flex items-center justify-center bg-white bg-gradient-to-br sm:my-16">
 			<div className="flex w-full max-w-md grow flex-col items-center gap-6 rounded-lg bg-white p-8 text-center shadow-xl">
 				<AlertIcon className="size-16" />
 				<h2>Oops! Algo deu errado</h2>

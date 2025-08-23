@@ -74,7 +74,7 @@ apiClient.interceptors.response.use(
 		// Metadata para ErrorBoundary
 		apiError.statusCode = status;
 		apiError.endpoint = error.config?.url;
-		apiError.shouldShowInBoundary = status ? status >= 500 : false;
+		apiError.shouldShowInBoundary = !status || status >= 500;
 
 		return Promise.reject(apiError);
 	}
