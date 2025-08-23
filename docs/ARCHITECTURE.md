@@ -1,4 +1,4 @@
-## Arquiteturas dos Microfrontends
+## Arquiteturas
 
 ### 1 - Arquitetura do Design System `microhub-ui`
 
