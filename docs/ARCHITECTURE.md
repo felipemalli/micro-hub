@@ -1,4 +1,6 @@
-## Arquiteturas
+## Arquitetura
+
+![Arquitetura](images/architecture.png)
 
 ### 1 - Arquitetura do Design System `microhub-ui`
 
