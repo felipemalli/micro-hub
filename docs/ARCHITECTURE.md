@@ -246,4 +246,4 @@ backend/src/
 
 ![Imagem da estrutura do backend](images/backend-folder-structure.png)
 
-**Próxima página: [⚙️ Guia Técnico](./TROUBLESHOOTING.md)**
+**Próxima página: [⚙️ Guia Técnico](./TECHNICAL-GUIDE.md)**
