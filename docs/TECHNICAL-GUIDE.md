@@ -72,7 +72,7 @@ As funções de validação são simples e estão armazenadas no arquivo `valida
 
 ### AuthApp e conexão com o backend
 
-Para armazenar o token, o usuário foi utilizado o localStorage.
+Para armazenar o token e usuário, foi utilizado o localStorage.
 
 Sobre o uso de localStorage está no [README de Resolução de Problemas](./TROUBLESHOOTING.md#11---compartilhamento-de-estadosautenticação-entre-microfrontends).
 
@@ -248,7 +248,7 @@ microhub-ui/
 
 Ou seja, nos microfrontends de React funcionará como um React Component <CoreButton />, mas por baixo é um Web Component universal <core-button>, que funcionará em Vue, Angular, etc. É como um Adapter Pattern entre Web Components e React.
 
-![Imagem do uso do core-button](images/npm-package--core-button-usage.png)
+![Imagem do uso do core-button](images/npm-package-core-button-usage.png)
 Uso dos componentes do NPM Package `microhub-ui`.
 
 ### Tipografia
@@ -265,15 +265,13 @@ Importante ressaltar que essas estilizações vindas do NPM Package podem e deve
 
 Veja um exemplo de uso em que já há estilizações padrão, mas algumas classes foram sobrescritas (como cor e tamanho no parágrafo):
 
-![Imagem do exemplo de uso da tipografia](images/npm-package-example-typography.png)
+![Imagem do exemplo de uso da tipografia](images/npm-package-example.png)
 
 Em um cenário real, eu provavelmente implementaria uma forma de importar apenas partes específicas da UI do NPM Package, mas para este projeto foi suficiente.
 
 ## 3. Backend
 
 Como o Backend foi realizado com NestJS, a documentação técnica será um pouco voltada ao funcionamento do mesmo, visto que é um framework que abstrai muitas coisas.
-
-Mais sobre a arquitetura do backend no [README de Arquitetura](./ARCHITECTURE.md).
 
 ### Main
 
@@ -467,8 +465,6 @@ Os arquivos `app.controller.ts` e `app.service.ts` implementam um health check p
 ### Swagger
 
 O projeto foi documentado com o Swagger (`@nestjs/swagger`). Diversos decorators foram utilizados para informar as propriedades das requisições (nos controllers) e validações (nos decorators de validação dos DTOs).
-
-![Imagem do Swagger](images/backend-swagger.png)
 
 ### Uso de constants
 
