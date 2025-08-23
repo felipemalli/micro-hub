@@ -103,8 +103,6 @@ microfrontends/microhub-shell/
 └── public/                           # Assets estáticos
 ```
 
-Esta arquitetura mostra como uma aplicação principal pode coordenar múltiplos microfrontends mantendo-os independentes, permitindo que cada um evolua separadamente enquanto oferece uma experiência integrada ao usuário.
-
 ![Imagem da estrutura do microfrontend de shell](images/microfrontend-microhub-shell-architecture.png)
 
 ### 3 - Arquitetura do Microfrontend de autenticação
