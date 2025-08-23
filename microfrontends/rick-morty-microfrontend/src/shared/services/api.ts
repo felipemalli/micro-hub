@@ -25,10 +25,10 @@ class ApiClient {
 				const message = this.getErrorMessage(error, status);
 
 				const apiError = new Error(message);
-				apiError.name = status >= 500 ? "ServerError" : "APIError";
+				apiError.name = !status || status >= 500 ? "ServerError" : "APIError";
 
 				(apiError as any).statusCode = status;
-				(apiError as any).shouldShowInBoundary = status >= 500;
+				(apiError as any).shouldShowInBoundary = !status || status >= 500;
 
 				return Promise.reject(apiError);
 			}
