@@ -1,6 +1,6 @@
 ## Arquitetura
 
-![Arquitetura](images/architecture.png)
+![Arquitetura](images/architecture-diagram.png)
 
 ### 1 - Arquitetura do Design System `microhub-ui`
 
