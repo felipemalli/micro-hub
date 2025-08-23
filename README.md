@@ -5,8 +5,8 @@ Projeto de microfrontends, estruturado em múltiplos repositórios independentes
 📖 **Documentação Detalhada:**
 
 - [🚀 Planejamento da Arquitetura](./docs/ARCHITECTURE_PLANNING.md)
-- [🏗️ Decisões Arquiteturais](./docs/ARCHITECTURE.md)
 - [🔍 Resolução de Problemas](./docs/TROUBLESHOOTING.md)
+- [🏗️ Decisões Arquiteturais](./docs/ARCHITECTURE.md)
 - [⚙️ Guia Técnico](./docs/TECHNICAL-GUIDE.md)
 - [🎨 Design System](https://www.npmjs.com/package/@felipemalli-libs/microhub-ui)
 
