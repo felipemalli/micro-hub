@@ -373,7 +373,7 @@ Quando uma request chega:
    Lança um erro se vier um erro ou não tiver usuário.<br>
    Se vier um user, `JwtAuthGuard` injeta user no request. `request.user = user`<br>
 
-O Controller consegue saber que o usuário está autenticado através do decorator @CurrentUser(), que retorna true se o `request.user` existir.
+Assim, o Controller consegue informações do usuário através do decorator @CurrentUser().
 
 ![Imagem do decorator @CurrentUser](images/backend-current-user-decorator.png)
 
