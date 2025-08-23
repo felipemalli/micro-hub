@@ -10,7 +10,7 @@ Após testar diferentes alternativas, acredito que cheguei a uma boa solução. 
 
 A solução se baseia no fato de que preciso que todos os microfrontends utilizem o mesmo history.
 
-O container principal é o `microhub-shell`. Nele, é definido que sempre que acessar o AuthApp, ele adicionará ao seu history '/auth'.
+O container principal é o `microhub-shell` (nessas imagens aparecerá `shell-app`, que é o nome antigo). Nele, é definido que sempre que acessar o AuthApp, ele adicionará ao seu history '/auth'.
 
 ![Imagem do history do AuthApp](images/frontend-history-shell.png)
 
